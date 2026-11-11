@@ -1,0 +1,12 @@
+<svg width="80" height="100" viewBox="0 0 80 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 76L21.5 14C22 11 25.8 10.2 27.4 12.8L38 30.5L12 76Z" fill="#FFA000"/>
+  <path d="M12 76L51.5 37.5L41.8 19.2C40.5 16.7 37 16.8 35.8 19.3L12 76Z" fill="#F57C00"/>
+  <path d="M12 76L63.4 26.2C65.4 24.3 68.8 25.4 69.2 28.2L76 76L46 92.8C44.1 93.9 41.8 93.9 39.9 92.8L12 76Z" fill="#FFCA28"/>
+  <path d="M12 76L39.9 92.8C41.8 93.9 44.1 93.9 46 92.8L76 76L69.2 28.2C68.8 25.4 65.4 24.3 63.4 26.2L12 76Z" fill="url(#fbgrad)" fill-opacity="0.3"/>
+  <defs>
+    <linearGradient id="fbgrad" x1="12" y1="26" x2="76" y2="93" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.4"/>
+      <stop offset="1" stop-color="#FF6F00" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" data-page="home" data-side="right" data-dir="forward">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="only light">
+  <title>Jayesh — Full Stack &amp; Back-End Developer Portfolio</title>
+  <meta name="description" content="Portfolio of Jayesh, Full Stack Developer and Back-End Engineer specializing in Python, FastAPI, React.js, TypeScript, and Node.js.">
+  <style>:root, html, body, main.stage { background-color: #ffffff; color-scheme: only light; }</style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=20261111l">
+  <script type="module" src="script.js?v=20261111l"></script>
+</head>
+<body>
+  <a href="#home-heading" class="skip-link visually-hidden" id="skip-to-main">Skip to main content</a>
+
+  <header class="site-header" id="site-header">
+    <div class="header-inner">
+      <button type="button" class="site-logo" data-nav="home" aria-current="page" aria-label="Jayesh — Home">
+        <svg class="logo-mark" width="60" height="50" viewBox="0 0 60 50" fill="none" aria-hidden="true">
+          <path d="M18.5 5H41.5L53 25L41.5 45H18.5L7 25L18.5 5Z" stroke="currentColor" stroke-width="3.6" stroke-linejoin="round"/>
+          <path d="M35 14V28.5C35 32.6421 31.6421 36 27.5 36C24.2 36 21.5 33.9 20.5 31" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"/>
+          <path d="M27 14H40" stroke="currentColor" stroke-width="3.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <nav class="site-nav" aria-label="Primary">
+        <button
+          class="menu-button"
+          type="button"
+          popovertarget="site-menu"
+          popovertargetaction="toggle"
+          aria-controls="site-menu"
+          aria-expanded="false"
+          aria-label="Open navigation menu"
+        >
+          <span class="menu-icon" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <span class="visually-hidden">Menu</span>
+        </button>
+
+        <ul id="site-menu" class="site-menu" popover="auto">
+          <li><button type="button" class="nav-link" data-nav="about">About me</button></li>
+          <li><button type="button" class="nav-link" data-nav="skills">Skills</button></li>
+          <li><button type="button" class="nav-link" data-nav="projects">Projects</button></li>
+          <li><button type="button" class="nav-link nav-cta" data-nav="contact">CONTACT ME</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="stage">
+    <!-- Persistent GPU-animated big black parallelogram UI element -->
+    <div class="stage-parallelogram" aria-hidden="true">
+      <div class="parallelogram-surface"></div>
+    </div>
+
+    <!-- Persistent GPU-animated golden liquid overlay for Projects page -->
+    <div id="projects-liquid" class="projects-liquid" aria-hidden="true" data-liquid-side="left" data-liquid-state="idle">
+      <div class="projects-liquid-frame">
+        <div class="projects-liquid-art">
+          <svg class="liquid-svg liquid-svg--main" viewBox="0 0 1000 1000" preserveAspectRatio="none" focusable="false">
+            <path id="projects-liquid-path" d="M 0 1000 L 842 1000 C 832 835, 885 765, 962 670 C 1006 615, 1002 535, 955 498 C 900 455, 710 464, 642 408 C 576 354, 512 202, 360 202 C 210 202, 95 292, 0 384 Z" />
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- View 1: Home / Hero -->
+    <section id="view-home" class="view-section is-active" data-view="home" data-view-side="right" data-title="Jayesh — Full Stack & Back-End Developer Portfolio" aria-labelledby="home-heading">
+      <div class="view-grid">
+        <div class="pane pane--light pane--hero-copy">
+          <div class="hero-copy-inner">
+            <p class="hero-greeting">Hi, I am</p>
+            <h1 id="home-heading" class="hero-name" tabindex="-1">Jayesh</h1>
+            <p class="hero-role">Full Stack Developer / Back-End Engineer</p>
+
+            <ul class="hero-socials" aria-label="Social links">
+              <li>
+                <a href="mailto:jayeshanand160@gmail.com" class="social-tile" aria-label="Email Jayesh at jayeshanand160@gmail.com">
+                  <img class="social-icon" src="assets/icons/hero-mail.svg" alt="" width="37" height="35">
+                </a>
+              </li>
+              <li>
+                <a href="https://github.com/jayesh-lamba?tab=repositories" target="_blank" rel="noopener noreferrer" class="social-tile" aria-label="Jayesh on GitHub (opens in a new tab)">
+                  <img class="social-icon" src="assets/icons/hero-github.svg" alt="" width="35" height="34">
+                </a>
+              </li>
+              <li>
+                <a href="https://www.linkedin.com/in/jayesh-lamba-8527b2256" target="_blank" rel="noopener noreferrer" class="social-tile" aria-label="Jayesh on LinkedIn (opens in a new tab)">
+                  <img class="social-icon" src="assets/icons/hero-linkedin.svg" alt="" width="38" height="38">
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pane pane--dark pane--hero-portrait">
+          <div class="hero-portrait-frame">
+            <img
+              src="assets/images/jayesh-hero.jpg"
+              alt="Portrait of Jayesh smiling in a white collared shirt with glasses"
+              width="663"
+              height="808"
+              fetchpriority="high"
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 2: About Me & Experience -->
+    <section id="view-about" class="view-section" data-view="about" data-view-side="left" data-title="About Me & Experience — Jayesh" aria-labelledby="about-heading" hidden>
+      <div class="view-grid">
+        <div class="pane pane--dark">
+          <p class="section-eyebrow">ABOUT ME</p>
+          <h1 id="about-heading" class="section-title" tabindex="-1">Engineering Fast, Reliable Backends &amp; UIs</h1>
+          <p class="section-lead">
+            Computer Science graduate (VIT Bhopal, B.Tech CSE 2022–2026) with 2 internships and 5+ live web apps built in Python, TypeScript, React.js, FastAPI, and Node.js serving 7k+ monthly active users.
+          </p>
+
+          <ul class="compact-list">
+            <li><strong>VIT Bhopal</strong> — B.Tech in Computer Science &amp; Engineering (2022–2026)</li>
+            <li><strong>EY Techathon 6.0 (Round 2)</strong> — Pitched solution deck across 2 evaluation rounds</li>
+            <li>
+              <strong>Certifications:</strong>
+              <a href="https://www.coursera.org/account/accomplishments/verify/SGEHWY5K73ES" target="_blank" rel="noopener noreferrer">Google Networking</a>,
+              <a href="https://courses.ibmcep.cognitiveclass.ai/certificates/2dec1dacd9474d2a80f8476412777680" target="_blank" rel="noopener noreferrer">IBM Blockchain</a>,
+              <a href="https://ethnus.com/certverify" target="_blank" rel="noopener noreferrer">Ethnus Salesforce</a>, Intellipaat PCP-SDE, NPTEL Cloud
+            </li>
+          </ul>
+
+          <div class="section-actions">
+            <a href="assets/Jayesh-Resume.pdf" target="_blank" rel="noopener noreferrer" class="pipe-btn pipe-btn--light">RESUME PDF</a>
+          </div>
+        </div>
+
+        <div class="pane pane--light">
+          <p class="section-eyebrow">EXPERIENCE</p>
+          <h2 class="sub-heading">Recent Internships</h2>
+
+          <div class="info-stack">
+            <article class="info-card">
+              <h3>Assistant Back-End Engineer Intern — FlyRank Corp.</h3>
+              <p class="info-meta">Jul 2026 – Sep 2026</p>
+              <p>
+                Optimized live APIs (400+ daily visitors; 25% faster sign-off), shipped Lead-Capture Widget (1k+ daily reqs) &amp; Image Auto-Tagging, standardized contracts (-30% integration errors), earning a
+                <a href="https://internship.flyrank.ai/verify?id=FR-D10-049C9-7FC75" target="_blank" rel="noopener noreferrer">CEO Recommendation Letter</a>.
+              </p>
+            </article>
+
+            <article class="info-card">
+              <h3>Junior Full Stack Developer Intern — YuvaIntern</h3>
+              <p class="info-meta">Mar 2026 – Apr 2026</p>
+              <p>
+                Crafted React.js UIs (7k+ MAU; led demos cutting revisions by 20%), built 20 REST endpoints with auth &amp; DB flows, and reduced integration bugs by 25%.
+              </p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 3: Skills -->
+    <section id="view-skills" class="view-section" data-view="skills" data-view-side="right" data-title="Skills & Stack — Jayesh" aria-labelledby="skills-heading" hidden>
+      <div class="view-grid">
+        <div class="pane pane--light">
+          <p class="section-eyebrow">TECHNICAL STACK</p>
+          <h1 id="skills-heading" class="section-title" tabindex="-1">Skills &amp; Core Stack</h1>
+          <p class="section-lead">
+            Full-stack fluency from strongly typed React frontends to high-throughput FastAPI and Node.js services.
+          </p>
+
+          <div class="stack-group">
+            <h2 class="stack-label">Languages &amp; Frontend</h2>
+            <ul class="chip-grid">
+              <li>Python</li>
+              <li>TypeScript</li>
+              <li>JavaScript (ES6+)</li>
+              <li>C++</li>
+              <li>SQL</li>
+              <li>React.js</li>
+              <li>HTML5 &amp; CSS3</li>
+              <li>Tailwind CSS</li>
+              <li>Bootstrap</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pane pane--dark">
+          <div class="stack-group">
+            <h2 class="stack-label">Backend &amp; Databases</h2>
+            <ul class="chip-grid chip-grid--dark">
+              <li>FastAPI</li>
+              <li>Node.js</li>
+              <li>Express.js</li>
+              <li>RESTful APIs</li>
+              <li>Socket.IO</li>
+              <li>JWT Auth</li>
+              <li>MongoDB</li>
+              <li>MySQL</li>
+              <li>Firebase</li>
+            </ul>
+          </div>
+
+          <div class="stack-group">
+            <h2 class="stack-label">Cloud, Tooling &amp; CS Core</h2>
+            <ul class="chip-grid chip-grid--dark">
+              <li>Git &amp; GitHub</li>
+              <li>Vercel &amp; Render</li>
+              <li>Cloudflare Pages</li>
+              <li>Cloudinary</li>
+              <li>DSA &amp; OOP</li>
+              <li>DBMS &amp; Networking</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 4: Projects -->
+    <section id="view-projects" class="view-section" data-view="projects" data-view-side="left" data-title="Projects — Jayesh" aria-labelledby="projects-heading" hidden>
+      <div class="view-grid">
+        <div class="pane pane--dark pane--empty" aria-hidden="true"></div>
+
+        <div class="pane pane--light">
+          <p class="section-eyebrow">SELECTED WORK</p>
+          <h1 id="projects-heading" class="section-title" tabindex="-1">Projects &amp; Builds</h1>
+
+          <div class="projects-grid">
+            <article class="info-card info-card--featured" data-project="peekafuture" data-preview-src="assets/images/preview-peekafuture.jpg" data-preview-url="peekafuture.pages.dev" data-preview-label="Open Live Demo">
+              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Peekafuture — AI Career Platform</button></h3>
+              <p class="info-meta">React · TypeScript · FastAPI · Firebase</p>
+              <p>Typed schema validation &amp; Firebase Auth (-20% runtime UI errors, -25% request failures, -30% auth latency).</p>
+              <a href="https://peekafuture.pages.dev/" target="_blank" rel="noopener noreferrer" class="card-link">Open Live Demo &rarr;</a>
+            </article>
+
+            <article class="info-card" data-project="chat" data-preview-src="assets/images/preview-chat.jpg" data-preview-url="github.com/jayesh-lamba" data-preview-label="View on GitHub">
+              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Real-Time Chat Application</button></h3>
+              <p class="info-meta">React · Node · Socket.IO · JWT</p>
+              <p>12 REST APIs supporting 500+ JWT sessions, sub-50ms Socket.IO sync, and 99.9% uptime on Render.</p>
+              <a href="https://github.com/jayesh-lamba?tab=repositories" target="_blank" rel="noopener noreferrer" class="card-link">View on GitHub &rarr;</a>
+            </article>
+
+            <article class="info-card" data-project="gallery" data-preview-src="assets/images/preview-gallery.jpg" data-preview-url="my-photo-gallery-nine.vercel.app" data-preview-label="Visit Live Site">
+              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">My Gallery — Visual Showcase</button></h3>
+              <p class="info-meta">CSS Grid · Lazy Previews</p>
+              <p>Responsive gallery cutting initial load by 600ms.</p>
+              <a href="https://my-photo-gallery-nine.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Visit Live Site &rarr;</a>
+            </article>
+
+            <article class="info-card" data-project="parallax" data-preview-src="assets/images/preview-parallax.jpg" data-preview-url="adventure-web-page-zgc9.vercel.app" data-preview-label="Visit Live Site">
+              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Adventure Time Parallax</button></h3>
+              <p class="info-meta">Layered Depth · Parallax CSS</p>
+              <p>Mobile-first parallax depth (+12% engagement conversion).</p>
+              <a href="https://adventure-web-page-zgc9.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Visit Live Site &rarr;</a>
+            </article>
+
+            <article class="info-card" data-project="carousel3d" data-preview-src="assets/images/preview-carousel3d.jpg" data-preview-url="3-d-frontend-work.vercel.app" data-preview-label="Visit Live Site">
+              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">3D Rotating Carousel</button></h3>
+              <p class="info-meta">Pure CSS · 3D Perspective</p>
+              <p>Smooth pure-CSS perspective and keyframe showcase.</p>
+              <a href="https://3-d-frontend-work.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Visit Live Site &rarr;</a>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- Half-screen live project preview rendered over full-cover yellow area -->
+      <aside id="project-preview" class="project-preview" aria-label="Selected project preview" hidden>
+        <div class="preview-inner">
+          <div class="preview-header">
+            <span class="preview-eyebrow">PROJECT PREVIEW</span>
+            <h2 id="preview-title" class="preview-title">Peekafuture — AI Career Platform</h2>
+            <div class="preview-actions">
+              <a id="preview-live-link" href="https://peekafuture.pages.dev/" target="_blank" rel="noopener noreferrer" class="preview-btn preview-btn--dark">
+                Open Live Demo &rarr;
+              </a>
+              <button type="button" id="preview-close" class="preview-btn preview-btn--outline">
+                Close &times;
+              </button>
+            </div>
+          </div>
+
+          <div class="preview-viewport">
+            <div class="preview-chrome" aria-hidden="true">
+              <span class="preview-dots"><span></span><span></span><span></span></span>
+              <span id="preview-url" class="preview-url">peekafuture.pages.dev</span>
+            </div>
+            <img
+              id="preview-image"
+              class="preview-image"
+              src="assets/images/preview-peekafuture.jpg"
+              alt="Preview of Peekafuture — AI Career Platform"
+              width="1280"
+              height="800"
+            >
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- View 5: Contact Me -->
+    <section id="view-contact" class="view-section" data-view="contact" data-view-side="right" data-title="Contact Me — Jayesh" aria-labelledby="contact-heading" hidden>
+      <div class="view-grid">
+        <div class="pane pane--light">
+          <p class="section-eyebrow">GET IN TOUCH</p>
+          <h1 id="contact-heading" class="section-title" tabindex="-1">Let&rsquo;s Work Together</h1>
+          <p class="section-lead">
+            Available for Full Stack &amp; Back-End Engineer roles and impactful web projects.
+          </p>
+
+          <ul class="contact-details">
+            <li><strong>Location:</strong> Rohtak, Haryana, India</li>
+            <li><strong>Email:</strong> <a href="mailto:jayeshanand160@gmail.com">jayeshanand160@gmail.com</a></li>
+            <li><strong>Phone:</strong> <a href="tel:+919306167855">+91 9306167855</a></li>
+          </ul>
+
+          <ul class="hero-socials" aria-label="Social links">
+            <li>
+              <a href="mailto:jayeshanand160@gmail.com" class="social-tile" aria-label="Email Jayesh at jayeshanand160@gmail.com">
+                <img class="social-icon" src="assets/icons/hero-mail.svg" alt="" width="37" height="35">
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/jayesh-lamba?tab=repositories" target="_blank" rel="noopener noreferrer" class="social-tile" aria-label="Jayesh on GitHub (opens in a new tab)">
+                <img class="social-icon" src="assets/icons/hero-github.svg" alt="" width="35" height="34">
+              </a>
+            </li>
+            <li>
+              <a href="https://www.linkedin.com/in/jayesh-lamba-8527b2256" target="_blank" rel="noopener noreferrer" class="social-tile" aria-label="Jayesh on LinkedIn (opens in a new tab)">
+                <img class="social-icon" src="assets/icons/hero-linkedin.svg" alt="" width="38" height="38">
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <div class="pane pane--dark">
+          <form id="contact-form" class="contact-form" method="POST" action="mailto:jayeshanand160@gmail.com" novalidate aria-labelledby="contact-heading">
+            <div class="form-field">
+              <label class="field-label" for="contact-name">ENTER YOUR NAME<span aria-hidden="true">*</span></label>
+              <input type="text" id="contact-name" name="name" required minlength="2" autocomplete="name" enterkeyhint="next" placeholder="Your full name" data-error="contact-name-error">
+              <div id="contact-name-error" class="error-msg"><span role="img" aria-label="Error">!</span> Enter your name (at least 2 characters).</div>
+            </div>
+
+            <div class="form-field">
+              <label class="field-label" for="contact-email">ENTER YOUR EMAIL<span aria-hidden="true">*</span></label>
+              <input type="email" id="contact-email" name="email" required autocomplete="email" autocorrect="off" autocapitalize="none" spellcheck="false" enterkeyhint="next" placeholder="you@example.com" data-error="contact-email-error">
+              <div id="contact-email-error" class="error-msg"><span role="img" aria-label="Error">!</span> Enter an email like you@example.com.</div>
+            </div>
+
+            <div class="form-field">
+              <label class="field-label" for="contact-message">YOUR MESSAGE<span aria-hidden="true">*</span></label>
+              <textarea id="contact-message" name="message" rows="3" required minlength="10" enterkeyhint="done" placeholder="Tell me about the role or project..." data-error="contact-message-error"></textarea>
+              <div id="contact-message-error" class="error-msg"><span role="img" aria-label="Error">!</span> Write a message (at least 10 characters).</div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="pipe-btn pipe-btn--light pipe-btn--lg">SUBMIT</button>
+            </div>
+
+            <div id="contact-status" class="contact-status" role="status" aria-live="polite" hidden></div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
