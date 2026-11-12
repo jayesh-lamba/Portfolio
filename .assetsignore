@@ -1,0 +1,21 @@
+# Keep repository, Wrangler config, and OS clutter out of public edge assets
+.git
+.gitignore
+.assetsignore
+.wrangler
+.dev.vars*
+wrangler.jsonc
+wrangler.toml
+README.md
+package.json
+package-lock.json
+node_modules
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+
+# Raw local source duplicates (canonical copies live under assets/)
+Jayesh_Resume 6.pdf
+WhatsApp Image 2026-11-10 at 7.09.04 PM.jpeg
