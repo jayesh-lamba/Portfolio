@@ -699,11 +699,12 @@ function initStageNavigation() {
         projectsLiquid.dataset.liquidState = "idle";
       } else {
         // Keep data-liquid-side locked to the outgoing corner while draining smoothly back into it
+        const fastToYellow = nextView === "certificates" || nextView === "hackathons";
         projectsLiquid.dataset.liquidState = "leaving";
         animateProjectsLiquid(liquidProgress, 0, {
           delayMs: 0,
-          durationMs: 480,
-          fadeOutMs: 180,
+          durationMs: fastToYellow ? 420 : 480,
+          fadeOutMs: fastToYellow ? 220 : 180,
           endState: "idle",
           fromCover: startCover,
         });
@@ -755,11 +756,20 @@ function initStageNavigation() {
           : "right";
     currentView = nextId;
 
+    const isSameSide = Boolean(oldView && oldView !== nextId && prevSide === currentSide);
     root.dataset.page = nextId;
     root.dataset.side = currentSide;
     root.dataset.dir = direction;
-    root.dataset.sideStay =
-      oldView && oldView !== nextId && prevSide === currentSide ? "true" : "false";
+    root.dataset.sideStay = isSameSide ? "true" : "false";
+
+    const stageParallelogram = document.querySelector(".stage-parallelogram");
+    if (stageParallelogram) {
+      stageParallelogram.classList.remove("is-stay-pulsing");
+      if (!reducedMotionQuery.matches && isSameSide) {
+        void stageParallelogram.offsetWidth;
+        stageParallelogram.classList.add("is-stay-pulsing");
+      }
+    }
 
     const yellowCurtain = document.querySelector(".parallelogram-yellow-curtain");
     if (yellowCurtain) {
