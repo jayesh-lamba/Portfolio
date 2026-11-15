@@ -541,14 +541,14 @@ function initStageNavigation() {
 
     if (previewPanel) {
       previewPanel.classList.remove("is-visible", "is-swapping");
-      if (reducedMotionQuery.matches || drainLiquid) {
+      if (reducedMotionQuery.matches) {
         previewPanel.hidden = true;
       } else {
         previewHideTimer = setTimeout(() => {
           if (!activePreviewId) {
             previewPanel.hidden = true;
           }
-        }, 280);
+        }, drainLiquid ? 220 : 280);
       }
     }
 
@@ -660,7 +660,12 @@ function initStageNavigation() {
     }
   });
 
-  function animateLiquidSurgeToFull(targetSide, fromLiquid, fromCover) {
+  function animateLiquidSurgeToFull(
+    targetSide,
+    fromLiquid,
+    fromCover,
+    { surgeDurationMs = 345, fadeStartMs = 345, totalDurationMs = 400 } = {},
+  ) {
     if (!projectsLiquid) return;
     cancelAnimationFrame(liquidRaf);
     cancelAnimationFrame(coverRaf);
@@ -672,14 +677,11 @@ function initStageNavigation() {
     coverProgress = fromCover;
     renderLiquidShape(liquidProgress, coverProgress);
 
-    const surgeDurationMs = 360;
-    const fadeStartMs = 340;
-    const totalDurationMs = 435;
     const startedAt = performance.now();
 
     function tick(now) {
       const elapsed = now - startedAt;
-      const surgeT = Math.min(1, elapsed / surgeDurationMs);
+      const surgeT = surgeDurationMs > 0 ? Math.min(1, elapsed / surgeDurationMs) : 1;
       const easedSurge = 1 - Math.pow(1 - surgeT, 2.2);
 
       liquidProgress = fromLiquid + (1 - fromLiquid) * Math.min(1, surgeT * 1.65);
@@ -687,7 +689,8 @@ function initStageNavigation() {
       renderLiquidShape(liquidProgress, coverProgress);
 
       if (elapsed > fadeStartMs) {
-        const fadeT = Math.min(1, (elapsed - fadeStartMs) / (totalDurationMs - fadeStartMs));
+        const fadeSpan = Math.max(1, totalDurationMs - fadeStartMs);
+        const fadeT = Math.min(1, (elapsed - fadeStartMs) / fadeSpan);
         projectsLiquid.style.opacity = (1 - fadeT).toFixed(3);
       } else {
         projectsLiquid.style.opacity = "1";
@@ -708,7 +711,7 @@ function initStageNavigation() {
   }
 
   function syncProjectsLiquid(oldView, nextView, side, oldSide, { isInitial = false } = {}) {
-    if (!projectsLiquid) return false;
+    if (!projectsLiquid) return "false";
     const prevLiquid = liquidProgress;
     const prevCover = coverProgress;
     cancelAnimationFrame(liquidRaf);
@@ -725,14 +728,15 @@ function initStageNavigation() {
       const startLiq = oldView === "projects" ? prevLiquid : 0;
       const startCov = oldView === "projects" ? prevCover : 0;
       if (oldView === "projects" && startLiq >= 0.98 && startCov >= 0.96) {
-        liquidProgress = 0;
-        coverProgress = 0;
-        projectsLiquid.style.removeProperty("opacity");
-        projectsLiquid.dataset.liquidState = "idle";
-        return false;
+        animateLiquidSurgeToFull(oldSide, 1, 1, {
+          surgeDurationMs: 0,
+          fadeStartMs: 0,
+          totalDurationMs: 160,
+        });
+        return "covered";
       }
       animateLiquidSurgeToFull(oldSide, startLiq, startCov);
-      return true;
+      return "true";
     }
 
     if (nextView === "projects") {
@@ -755,7 +759,7 @@ function initStageNavigation() {
           endState: "active",
         });
       }
-      return false;
+      return "false";
     }
 
     if (oldView === "projects") {
@@ -776,14 +780,14 @@ function initStageNavigation() {
           fromCover: prevCover,
         });
       }
-      return false;
+      return "false";
     }
 
     liquidProgress = 0;
     coverProgress = 0;
     projectsLiquid.style.removeProperty("opacity");
     projectsLiquid.dataset.liquidState = "idle";
-    return false;
+    return "false";
   }
 
   function syncChrome(viewId) {
@@ -819,13 +823,13 @@ function initStageNavigation() {
     currentSide = currentSide === "right" ? "left" : "right";
     currentView = nextId;
 
-    const didLiquidHandoff = syncProjectsLiquid(oldView, nextId, currentSide, prevSide, { isInitial });
+    const liquidHandoffMode = syncProjectsLiquid(oldView, nextId, currentSide, prevSide, { isInitial });
 
     root.dataset.page = nextId;
     root.dataset.side = currentSide;
     root.dataset.dir = direction;
     root.dataset.sideStay = "false";
-    root.dataset.liquidHandoff = didLiquidHandoff ? "true" : "false";
+    root.dataset.liquidHandoff = liquidHandoffMode;
 
     const stageParallelogram = document.querySelector(".stage-parallelogram");
     if (stageParallelogram) {

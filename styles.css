@@ -744,14 +744,28 @@ html[data-liquid-handoff="true"] .stage-parallelogram {
 
 html[data-liquid-handoff="true"] .stage-parallelogram .parallelogram-surface {
   @media (prefers-reduced-motion: no-preference) {
-    transition: background-color 0.22s var(--p-ease) 0.18s;
+    transition: background-color 0.18s var(--p-ease) 0.16s;
   }
 }
 
 html[data-liquid-handoff="true"] .parallelogram-yellow-curtain {
   @media (prefers-reduced-motion: no-preference) {
-    transition: opacity 0.22s var(--p-ease) 0.18s;
+    transition: opacity 0.18s var(--p-ease) 0.16s;
   }
+}
+
+/* Already full-covered by Projects yellow overlay: keep surface/curtain yellow at t=0 so zero black shows */
+html[data-page="certificates"][data-liquid-handoff="covered"] .stage-parallelogram {
+  background-color: var(--accent-yellow);
+}
+
+html[data-page="hackathons"][data-liquid-handoff="covered"] .stage-parallelogram {
+  background-color: #f9bc24;
+}
+
+html[data-liquid-handoff="covered"] .stage-parallelogram .parallelogram-surface,
+html[data-liquid-handoff="covered"] .parallelogram-yellow-curtain {
+  transition: none;
 }
 
 @supports (overflow: clip) {
