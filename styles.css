@@ -1860,11 +1860,21 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
 
 @media (min-width: 56.25rem) {
   .project-preview {
-    clip-path: polygon(0 0, 56.67dvw 0, 47.33dvw 100dvh, 0 100dvh);
+    clip-path: polygon(
+      0 0,
+      calc(52dvw + 7.4726dvh) 0,
+      calc(52dvw - 7.4726dvh) 100dvh,
+      0 100dvh
+    );
   }
 
   #view-projects[data-view-side="right"] .project-preview {
-    clip-path: polygon(52.67dvw 0, 100dvw 0, 100dvw 100dvh, 43.33dvw 100dvh);
+    clip-path: polygon(
+      calc(48dvw + 7.4726dvh) 0,
+      100dvw 0,
+      100dvw 100dvh,
+      calc(48dvw - 7.4726dvh) 100dvh
+    );
   }
 
   .preview-inner,

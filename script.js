@@ -142,23 +142,46 @@ function initStageNavigation() {
     210, 202, 95, 292, 0, 384,
   ];
 
+  const DESKTOP_SLANT_Y = [
+    1000,
+    893, 787, 680,
+    600, 520, 440,
+    360, 280, 200,
+    133, 67, 0,
+    0, 0, 0
+  ];
+
+  function getDesktopFullCoords(side) {
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const tanTheta = Math.tan(8.5 * Math.PI / 180);
+    const sign = side === "right" ? -1 : 1;
+    const out = new Array(32);
+
+    for (let i = 0; i <= 12; i++) {
+      const y = DESKTOP_SLANT_Y[i];
+      const yNorm = y / 1000;
+      // Exact edge of the black parallelogram on desktop:
+      const distPx = 0.52 * W + sign * (0.50 * H - yNorm * H) * tanTheta;
+      const svgX = (distPx / (0.58 * W)) * 1000;
+      // Add a 4 SVG unit (~3px) buffer to guarantee 100% complete coverage into the drop-shadow
+      // with zero exposed black edge or corner:
+      out[i * 2] = Math.max(0, Math.min(1000, svgX + 4));
+      out[i * 2 + 1] = y;
+    }
+
+    const xTop = out[12 * 2];
+    out[13 * 2] = xTop * (2 / 3);
+    out[13 * 2 + 1] = 0;
+    out[14 * 2] = xTop * (1 / 3);
+    out[14 * 2 + 1] = 0;
+    out[15 * 2] = 0;
+    out[15 * 2 + 1] = 0;
+
+    return out;
+  }
+
   const FULL_POINTS = {
-    desktopLeft: [
-      816, 1000,
-      833, 893, 850, 787, 868, 680,
-      881, 600, 894, 520, 906, 440,
-      919, 360, 932, 280, 945, 200,
-      956, 133, 967, 67, 977, 0,
-      650, 0, 325, 0, 0, 0,
-    ],
-    desktopRight: [
-      977, 1000,
-      960, 893, 943, 787, 926, 680,
-      913, 600, 900, 520, 887, 440,
-      874, 360, 861, 280, 848, 200,
-      837, 133, 826, 67, 816, 0,
-      544, 0, 272, 0, 0, 0,
-    ],
     mobileLeft: [
       1000, 1000,
       1000, 890, 1000, 780, 1000, 670,
@@ -239,14 +262,9 @@ function initStageNavigation() {
       return;
     }
 
-    const fullKey = isDesktop
-      ? side === "right"
-        ? "desktopRight"
-        : "desktopLeft"
-      : side === "right"
-        ? "mobileRight"
-        : "mobileLeft";
-    const fullCoords = FULL_POINTS[fullKey];
+    const fullCoords = isDesktop
+      ? getDesktopFullCoords(side)
+      : FULL_POINTS[side === "right" ? "mobileRight" : "mobileLeft"];
     const e = 1 - Math.pow(1 - c, 2.35);
     const rippleEnv = 46 * Math.sin(Math.PI * c);
 
@@ -471,6 +489,12 @@ function initStageNavigation() {
   });
 
   desktopMediaQuery.addEventListener("change", () => {
+    if (currentView === "projects") {
+      renderLiquidShape(liquidProgress, coverProgress);
+    }
+  });
+
+  window.addEventListener("resize", () => {
     if (currentView === "projects") {
       renderLiquidShape(liquidProgress, coverProgress);
     }
