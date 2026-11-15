@@ -716,6 +716,7 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
 
 .view-section {
   --pane-exit-x: 105dvw;
+  --pane-enter-delay: 1.02s;
   position: absolute;
   inset: 0;
   z-index: 2;
@@ -723,6 +724,34 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
   inline-size: 100%;
   overflow: hidden;
   pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .view-section {
+    --pane-enter-delay: 0s;
+  }
+}
+
+html[data-liquid-handoff="true"] .view-section {
+  --pane-enter-delay: 1.24s;
+}
+
+html[data-liquid-handoff="true"] .stage-parallelogram {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 0.95s var(--p-ease) 0.4s, box-shadow 0.78s var(--p-ease) 0.34s;
+  }
+}
+
+html[data-liquid-handoff="true"] .stage-parallelogram .parallelogram-surface {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color 0.22s var(--p-ease) 0.18s;
+  }
+}
+
+html[data-liquid-handoff="true"] .parallelogram-yellow-curtain {
+  @media (prefers-reduced-motion: no-preference) {
+    transition: opacity 0.22s var(--p-ease) 0.18s;
+  }
 }
 
 @supports (overflow: clip) {
@@ -748,18 +777,20 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
   transform: translate3d(0, 0, 0);
   @media (prefers-reduced-motion: no-preference) {
     will-change: transform, opacity;
-    transition: transform 0.76s cubic-bezier(0.22, 1, 0.36, 1) 1.02s, opacity 0.58s ease-out 1.02s;
+    transition: transform 0.76s cubic-bezier(0.22, 1, 0.36, 1) var(--pane-enter-delay), opacity 0.58s ease-out var(--pane-enter-delay);
   }
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .view-section[data-view-side="right"]:not(.is-active) .pane--light,
+  .view-section[data-view-side="right"]:not(.is-active) .pane--cert-list,
   .view-section[data-view-side="left"]:not(.is-active) .pane--dark,
   .view-section[data-view-side="left"]:not(.is-active) .pane--cert-stage {
     transform: translate3d(calc(-1 * var(--pane-exit-x)), 0, 0);
   }
 
   .view-section[data-view-side="right"]:not(.is-active) .pane--dark,
+  .view-section[data-view-side="right"]:not(.is-active) .pane--cert-stage,
   .view-section[data-view-side="left"]:not(.is-active) .pane--light,
   .view-section[data-view-side="left"]:not(.is-active) .pane--cert-list {
     transform: translate3d(var(--pane-exit-x), 0, 0);
@@ -767,11 +798,108 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
 
   .view-section.is-leaving .pane {
     will-change: transform, opacity;
-    transition: transform 0.56s cubic-bezier(0.45, 0, 0.22, 1), opacity 0.44s ease-out;
+    transition: transform 0.54s cubic-bezier(0.45, 0, 0.22, 1), opacity 0.42s ease-out;
   }
 
-  html[data-side-stay="true"] .view-section.is-leaving .pane {
-    transition: transform 0.48s cubic-bezier(0.45, 0, 0.22, 1), opacity 0.36s ease-out;
+  /* Layered Inner Entrance Stagger Across All 7 Pages (Preserves Intact Exit) */
+  .view-section:not(.is-active):not(.is-leaving) :is(
+    .hero-greeting,
+    .hero-name,
+    .hero-role,
+    .hero-socials,
+    .section-eyebrow,
+    .section-title,
+    .section-lead,
+    .info-card,
+    .stack-group,
+    .cert-stage-header,
+    .cert-frame-wrapper,
+    .cert-meta-box,
+    .cert-stats-strip,
+    .cert-filter-bar,
+    .form-field,
+    .form-actions
+  ) {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition: none;
+  }
+
+  .view-section:not(.is-active):not(.is-leaving) .hero-portrait-frame {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0) scale(0.975);
+    transition: none;
+  }
+
+  .view-section.is-active :is(
+    .hero-greeting,
+    .hero-name,
+    .hero-role,
+    .hero-socials,
+    .hero-portrait-frame,
+    .section-eyebrow,
+    .section-title,
+    .section-lead,
+    .info-card,
+    .stack-group,
+    .cert-stage-header,
+    .cert-frame-wrapper,
+    .cert-meta-box,
+    .cert-stats-strip,
+    .cert-filter-bar,
+    .form-field,
+    .form-actions
+  ) {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    transition-property: opacity, transform;
+    transition-duration: 0.48s, 0.58s;
+    transition-timing-function: ease-out, cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .view-section.is-active :is(.section-eyebrow, .hero-greeting, .cert-stage-header) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.04s);
+  }
+
+  .view-section.is-active :is(.section-title, .hero-name, .cert-stats-strip) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.08s);
+  }
+
+  .view-section.is-active :is(.section-lead, .hero-role, .cert-filter-bar, .cert-frame-wrapper) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.13s);
+  }
+
+  .view-section.is-active :is(.hero-socials, .hero-portrait-frame, .cert-meta-box) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.18s);
+  }
+
+  .view-section.is-active .info-card:nth-of-type(1),
+  .view-section.is-active .stack-group:nth-of-type(1),
+  .view-section.is-active .form-field:nth-of-type(1) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.12s);
+  }
+
+  .view-section.is-active .info-card:nth-of-type(2),
+  .view-section.is-active .stack-group:nth-of-type(2),
+  .view-section.is-active .form-field:nth-of-type(2) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.18s);
+  }
+
+  .view-section.is-active .info-card:nth-of-type(3),
+  .view-section.is-active .stack-group:nth-of-type(3),
+  .view-section.is-active .form-field:nth-of-type(3) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.24s);
+  }
+
+  .view-section.is-active .info-card:nth-of-type(4),
+  .view-section.is-active .stack-group:nth-of-type(4),
+  .view-section.is-active .form-actions {
+    transition-delay: calc(var(--pane-enter-delay) + 0.3s);
+  }
+
+  .view-section.is-active .info-card:nth-of-type(n+5),
+  .view-section.is-active .stack-group:nth-of-type(n+5) {
+    transition-delay: calc(var(--pane-enter-delay) + 0.34s);
   }
 }
 
@@ -2622,6 +2750,21 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
     overflow-y: auto !important;
     padding: 0.25rem 0.75rem 1.5rem 0.35rem !important;
     scrollbar-gutter: stable;
+  }
+
+  .view-section[data-view-side="right"] .view-grid--certificates {
+    grid-template-columns: 43dvw 45dvw !important;
+    padding-inline: 3dvw 3.5dvw !important;
+  }
+
+  .view-section[data-view-side="right"] .pane--cert-list {
+    grid-column: 1 !important;
+    padding: 0.25rem 0.35rem 1.5rem 0.75rem !important;
+  }
+
+  .view-section[data-view-side="right"] .pane--cert-stage {
+    grid-column: 2 !important;
+    padding: 0.25rem 0 0.25rem 0.5rem !important;
   }
 }
 

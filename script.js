@@ -660,10 +660,80 @@ function initStageNavigation() {
     }
   });
 
-  function syncProjectsLiquid(oldView, nextView, side) {
+  function animateLiquidSurgeToFull(targetSide, fromLiquid, fromCover) {
     if (!projectsLiquid) return;
     cancelAnimationFrame(liquidRaf);
     cancelAnimationFrame(coverRaf);
+
+    projectsLiquid.dataset.liquidSide = targetSide;
+    projectsLiquid.dataset.liquidState = "active";
+    projectsLiquid.style.opacity = "1";
+    liquidProgress = fromLiquid;
+    coverProgress = fromCover;
+    renderLiquidShape(liquidProgress, coverProgress);
+
+    const surgeDurationMs = 360;
+    const fadeStartMs = 340;
+    const totalDurationMs = 435;
+    const startedAt = performance.now();
+
+    function tick(now) {
+      const elapsed = now - startedAt;
+      const surgeT = Math.min(1, elapsed / surgeDurationMs);
+      const easedSurge = 1 - Math.pow(1 - surgeT, 2.2);
+
+      liquidProgress = fromLiquid + (1 - fromLiquid) * Math.min(1, surgeT * 1.65);
+      coverProgress = fromCover + (1 - fromCover) * easedSurge;
+      renderLiquidShape(liquidProgress, coverProgress);
+
+      if (elapsed > fadeStartMs) {
+        const fadeT = Math.min(1, (elapsed - fadeStartMs) / (totalDurationMs - fadeStartMs));
+        projectsLiquid.style.opacity = (1 - fadeT).toFixed(3);
+      } else {
+        projectsLiquid.style.opacity = "1";
+      }
+
+      if (elapsed < totalDurationMs) {
+        liquidRaf = requestAnimationFrame(tick);
+      } else {
+        liquidRaf = 0;
+        liquidProgress = 0;
+        coverProgress = 0;
+        projectsLiquid.style.removeProperty("opacity");
+        projectsLiquid.dataset.liquidState = "idle";
+      }
+    }
+
+    liquidRaf = requestAnimationFrame(tick);
+  }
+
+  function syncProjectsLiquid(oldView, nextView, side, oldSide, { isInitial = false } = {}) {
+    if (!projectsLiquid) return false;
+    const prevLiquid = liquidProgress;
+    const prevCover = coverProgress;
+    cancelAnimationFrame(liquidRaf);
+    cancelAnimationFrame(coverRaf);
+
+    if (oldView === "projects") {
+      closeProjectPreview({ restoreFocus: false, drainLiquid: true });
+    }
+
+    const enteringYellow = nextView === "certificates" || nextView === "hackathons";
+    const fromYellow = oldView === "certificates" || oldView === "hackathons";
+
+    if (enteringYellow && !fromYellow && !isInitial && !reducedMotionQuery.matches) {
+      const startLiq = oldView === "projects" ? prevLiquid : 0;
+      const startCov = oldView === "projects" ? prevCover : 0;
+      if (oldView === "projects" && startLiq >= 0.98 && startCov >= 0.96) {
+        liquidProgress = 0;
+        coverProgress = 0;
+        projectsLiquid.style.removeProperty("opacity");
+        projectsLiquid.dataset.liquidState = "idle";
+        return false;
+      }
+      animateLiquidSurgeToFull(oldSide, startLiq, startCov);
+      return true;
+    }
 
     if (nextView === "projects") {
       coverProgress = 0;
@@ -685,12 +755,10 @@ function initStageNavigation() {
           endState: "active",
         });
       }
-      return;
+      return false;
     }
 
     if (oldView === "projects") {
-      const startCover = coverProgress;
-      closeProjectPreview({ restoreFocus: false, drainLiquid: true });
       if (reducedMotionQuery.matches) {
         liquidProgress = 0;
         coverProgress = 0;
@@ -699,23 +767,23 @@ function initStageNavigation() {
         projectsLiquid.dataset.liquidState = "idle";
       } else {
         // Keep data-liquid-side locked to the outgoing corner while draining smoothly back into it
-        const fastToYellow = nextView === "certificates" || nextView === "hackathons";
         projectsLiquid.dataset.liquidState = "leaving";
-        animateProjectsLiquid(liquidProgress, 0, {
+        animateProjectsLiquid(prevLiquid, 0, {
           delayMs: 0,
-          durationMs: fastToYellow ? 420 : 480,
-          fadeOutMs: fastToYellow ? 220 : 180,
+          durationMs: 480,
+          fadeOutMs: 180,
           endState: "idle",
-          fromCover: startCover,
+          fromCover: prevCover,
         });
       }
-      return;
+      return false;
     }
 
     liquidProgress = 0;
     coverProgress = 0;
     projectsLiquid.style.removeProperty("opacity");
     projectsLiquid.dataset.liquidState = "idle";
+    return false;
   }
 
   function syncChrome(viewId) {
@@ -737,7 +805,7 @@ function initStageNavigation() {
     }
   }
 
-  function switchToView(nextId, { focusHeading = false, updateHash = true } = {}) {
+  function switchToView(nextId, { focusHeading = false, updateHash = true, isInitial = false } = {}) {
     if (!sections.has(nextId) || nextId === currentView) return;
 
     const oldView = currentView;
@@ -748,27 +816,20 @@ function initStageNavigation() {
     const direction = nextIndex >= oldIndex ? "forward" : "backward";
 
     const prevSide = currentSide;
-    currentSide =
-      nextId === "certificates" || nextId === "hackathons"
-        ? "left"
-        : currentSide === "right"
-          ? "left"
-          : "right";
+    currentSide = currentSide === "right" ? "left" : "right";
     currentView = nextId;
 
-    const isSameSide = Boolean(oldView && oldView !== nextId && prevSide === currentSide);
+    const didLiquidHandoff = syncProjectsLiquid(oldView, nextId, currentSide, prevSide, { isInitial });
+
     root.dataset.page = nextId;
     root.dataset.side = currentSide;
     root.dataset.dir = direction;
-    root.dataset.sideStay = isSameSide ? "true" : "false";
+    root.dataset.sideStay = "false";
+    root.dataset.liquidHandoff = didLiquidHandoff ? "true" : "false";
 
     const stageParallelogram = document.querySelector(".stage-parallelogram");
     if (stageParallelogram) {
       stageParallelogram.classList.remove("is-stay-pulsing");
-      if (!reducedMotionQuery.matches && isSameSide) {
-        void stageParallelogram.offsetWidth;
-        stageParallelogram.classList.add("is-stay-pulsing");
-      }
     }
 
     const yellowCurtain = document.querySelector(".parallelogram-yellow-curtain");
@@ -779,8 +840,6 @@ function initStageNavigation() {
         yellowCurtain.classList.add("is-sweeping");
       }
     }
-
-    syncProjectsLiquid(oldView, nextId, currentSide);
 
     clearTimeout(leaveTimer);
     for (const [id, section] of sections) {
@@ -963,7 +1022,7 @@ function initStageNavigation() {
 
   const initialHash = normalizeHash(window.location.hash);
   if (VIEW_ORDER.includes(initialHash) && initialHash !== "home") {
-    switchToView(initialHash, { focusHeading: false, updateHash: true });
+    switchToView(initialHash, { focusHeading: false, updateHash: true, isInitial: true });
   } else {
     syncChrome("home");
   }
