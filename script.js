@@ -1044,6 +1044,22 @@ function initStageNavigation() {
 // ==========================================================================
 
 function initContactForm() {
+  for (const copyBtn of document.querySelectorAll("[data-copy-email]")) {
+    copyBtn.addEventListener("click", async () => {
+      const email = copyBtn.dataset.copyEmail || "jayeshanand160@gmail.com";
+      const origText = email;
+      try {
+        await navigator.clipboard.writeText(email);
+        copyBtn.textContent = `${email} (Copied!)`;
+        setTimeout(() => {
+          copyBtn.textContent = origText;
+        }, 2000);
+      } catch {
+        copyBtn.textContent = email;
+      }
+    });
+  }
+
   const form = document.getElementById("contact-form");
   const statusEl = document.getElementById("contact-status");
   if (!form || !statusEl) return;
@@ -1160,20 +1176,22 @@ function initContactForm() {
 
     const mailSubject = encodeURIComponent(`Portfolio Inquiry from ${senderName}`);
     const bodyLines = [`Name: ${senderName}`, `Email: ${senderEmail}`, "", senderMessage].join("\n");
-    const mailtoHref = `mailto:jayeshanand160@gmail.com?subject=${mailSubject}&body=${encodeURIComponent(bodyLines)}`;
+    const gmailHref = `https://mail.google.com/mail/?view=cm&fs=1&to=jayeshanand160@gmail.com&su=${mailSubject}&body=${encodeURIComponent(bodyLines)}`;
 
     statusEl.replaceChildren();
     const p = document.createElement("p");
     p.style.margin = "0";
-    p.textContent = `Thanks, ${senderName}! Your message is validated and ready to send to jayeshanand160@gmail.com.`;
+    p.textContent = `Thanks, ${senderName}! Your message is ready to send via Gmail or copy email.`;
 
     const actions = document.createElement("div");
     actions.className = "contact-status-actions";
 
-    const mailLink = document.createElement("a");
-    mailLink.className = "pipe-btn pipe-btn--light pipe-btn--sm";
-    mailLink.href = mailtoHref;
-    mailLink.textContent = "OPEN EMAIL DRAFT";
+    const gmailLink = document.createElement("a");
+    gmailLink.className = "pipe-btn pipe-btn--light pipe-btn--sm";
+    gmailLink.href = gmailHref;
+    gmailLink.target = "_blank";
+    gmailLink.rel = "noopener noreferrer";
+    gmailLink.textContent = "SEND VIA GMAIL";
 
     const copyBtn = document.createElement("button");
     copyBtn.type = "button";
@@ -1188,7 +1206,7 @@ function initContactForm() {
       }
     });
 
-    actions.append(mailLink, copyBtn);
+    actions.append(gmailLink, copyBtn);
     statusEl.append(p, actions);
     statusEl.hidden = false;
 

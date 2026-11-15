@@ -1263,10 +1263,24 @@ html[data-liquid-handoff="covered"] .parallelogram-yellow-curtain {
 }
 
 .pane--dark a:not(.pipe-btn):not(.card-link),
-.pane--light a:not(.pipe-btn):not(.social-tile):not(.card-link) {
+.pane--light a:not(.pipe-btn):not(.social-tile):not(.card-link),
+.contact-copy-email {
   color: inherit;
   font-weight: 600;
   text-underline-offset: 3px;
+}
+
+.contact-copy-email {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
 }
 
 .section-actions {
