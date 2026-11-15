@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261115b">
-  <script type="module" src="script.js?v=20261115b"></script>
+  <link rel="stylesheet" href="styles.css?v=20261115c">
+  <script type="module" src="script.js?v=20261115c"></script>
 </head>
 <body>
   <a href="#home-heading" class="skip-link visually-hidden" id="skip-to-main">Skip to main content</a>
@@ -287,19 +287,45 @@
             </div>
           </div>
 
-          <div class="preview-viewport">
-            <div class="preview-chrome" aria-hidden="true">
-              <span class="preview-dots"><span></span><span></span><span></span></span>
-              <span id="preview-url" class="preview-url">peekafuture.pages.dev</span>
+          <div class="preview-viewport" id="preview-viewport">
+            <div class="laptop-stage" id="laptop-stage" aria-label="Interactive 3D Laptop Preview">
+              <div class="laptop-device" id="laptop-device" style="--theme-color: #8b5cf6; --glow-color: rgba(139, 92, 246, 0.45);">
+                <!-- Laptop Screen Chassis -->
+                <div class="laptop-screen-chassis">
+                  <!-- Camera bar with status LED -->
+                  <div class="laptop-camera-bar" aria-hidden="true">
+                    <div class="laptop-camera-lens">
+                      <div class="laptop-camera-led" id="laptop-camera-led"></div>
+                    </div>
+                  </div>
+
+                  <!-- Inner Display Bezel -->
+                  <div class="laptop-display-frame">
+                    <!-- Glass sheen reflection streak -->
+                    <div class="laptop-glass-reflection" id="laptop-glass-reflection" aria-hidden="true"></div>
+
+                    <!-- Screen Content Viewport -->
+                    <div class="laptop-screen-content" id="laptop-screen-content">
+                      <!-- Rendered live by script.js -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Laptop Base / Hinge Deck -->
+                <div class="laptop-base-chassis" aria-hidden="true">
+                  <div class="laptop-thumb-notch"></div>
+                  <div class="laptop-speaker-grille laptop-speaker-grille--left">
+                    <span></span><span></span>
+                  </div>
+                  <div class="laptop-speaker-grille laptop-speaker-grille--right">
+                    <span></span>
+                  </div>
+                </div>
+
+                <!-- Ambient Glow Under Laptop -->
+                <div class="laptop-under-glow" id="laptop-under-glow" aria-hidden="true"></div>
+              </div>
             </div>
-            <img
-              id="preview-image"
-              class="preview-image"
-              src="assets/images/preview-peekafuture.jpg"
-              alt="Preview of Peekafuture — AI Career Platform"
-              width="1280"
-              height="800"
-            >
           </div>
         </div>
       </aside>

@@ -1796,67 +1796,1047 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
 
 .preview-viewport {
   pointer-events: auto;
-  inline-size: 132dvw;
-  block-size: 29.5dvh;
-  border-radius: 16px;
-  border: 2px solid #0f1117;
-  background: #0f1117;
-  overflow: hidden;
-  box-shadow: 0 24px 52px rgba(0, 0, 0, 0.42);
+  inline-size: min(100%, 36rem);
+  max-inline-size: 100%;
+  position: relative;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
   @media (prefers-reduced-motion: no-preference) {
     transition: opacity 0.18s ease, transform 0.22s ease;
   }
 }
 
-.preview-chrome {
+/* ==========================================================================
+   3D Laptop Device Mockup Preview (MacBook Style)
+   ========================================================================== */
+
+.laptop-stage {
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: min(46rem, 80dvw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1400px;
+  perspective-origin: 50% 48%;
+  pointer-events: auto;
+  user-select: none;
+  padding-block: 0.5rem 1rem;
+}
+
+.laptop-device {
+  --theme-color: #3b82f6;
+  --glow-color: rgba(59, 130, 246, 0.4);
+  position: relative;
+  inline-size: 100%;
+  max-inline-size: 580px;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* MWG Mandatory: apply identity transformation for base state */
+  translate: 0 0;
+  rotate: 0deg;
+  scale: 1;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+/* Laptop Screen Lid / Chassis */
+.laptop-screen-chassis {
+  position: relative;
+  inline-size: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: 16px 16px 0 0;
+  padding: clamp(6px, 1.2vw, 11px);
+  background: linear-gradient(to bottom, #2a2b30 0%, #1d1e22 50%, #121316 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s ease;
+}
+
+.laptop-device:hover .laptop-screen-chassis {
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.78), 0 0 35px var(--glow-color);
+}
+
+/* Camera Bar & Notch */
+.laptop-camera-bar {
+  position: absolute;
+  top: 4px;
+  inset-inline: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.laptop-camera-lens {
+  inline-size: 7px;
+  block-size: 7px;
+  border-radius: 50%;
+  background: #0a0b0d;
+  border: 1px solid rgba(255, 255, 255, 0.25);
   display: flex;
   align-items: center;
-  gap: 0.7rem;
-  block-size: 1.75rem;
-  padding-inline: 0.85rem;
-  background: #171a21;
-  border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+  justify-content: center;
 }
 
-.preview-dots {
-  display: inline-flex;
-  gap: 0.32rem;
-}
-
-.preview-dots span {
-  inline-size: 0.55rem;
-  block-size: 0.55rem;
+.laptop-camera-led {
+  inline-size: 2.5px;
+  block-size: 2.5px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.28);
+  background-color: var(--theme-color);
+  box-shadow: 0 0 5px var(--theme-color);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-.preview-dots span:nth-child(1) {
-  background: #ff5f57;
-}
-
-.preview-dots span:nth-child(2) {
-  background: #febc2e;
-}
-
-.preview-dots span:nth-child(3) {
-  background: #28c840;
-}
-
-.preview-url {
-  font-family: var(--font-heading);
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.72);
-  letter-spacing: 0.02em;
-}
-
-.preview-image {
+/* Inner Display Bezel */
+.laptop-display-frame {
+  position: relative;
   inline-size: 100%;
-  block-size: calc(100% - 1.75rem);
-  object-fit: cover;
-  object-position: left top;
-  display: block;
+  block-size: 100%;
+  border-radius: 8px;
+  background: #0e0f12;
+  overflow: hidden;
+  display: flex;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-family: var(--font-body, system-ui, sans-serif);
+  font-size: 0.75rem;
 }
+
+/* Glass Reflection Sweep */
+.laptop-glass-reflection {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  opacity: 0.32;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0.08) 60%,
+    transparent 80%
+  );
+  transition: opacity 0.3s ease;
+}
+
+/* Screen Content */
+.laptop-screen-content {
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+/* Laptop Base / Hinge Deck */
+.laptop-base-chassis {
+  position: relative;
+  inline-size: 105%;
+  inset-inline-start: -2.5%;
+  block-size: clamp(16px, 2.2vw, 24px);
+  border-radius: 0 0 14px 14px;
+  background: linear-gradient(to bottom, #40424a 0%, #2f3137 45%, #1e1f23 100%);
+  border-inline: 1px solid rgba(255, 255, 255, 0.2);
+  border-block-end: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateX(55deg);
+  transform-origin: top center;
+}
+
+.laptop-thumb-notch {
+  inline-size: 3.5rem;
+  block-size: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  border-block-start: 1px solid rgba(255, 255, 255, 0.25);
+  margin-block-start: -3px;
+}
+
+.laptop-speaker-grille {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 3px;
+}
+
+.laptop-speaker-grille--left {
+  inset-inline-start: 12px;
+}
+
+.laptop-speaker-grille--right {
+  inset-inline-end: 12px;
+}
+
+.laptop-speaker-grille span {
+  inline-size: 6px;
+  block-size: 3px;
+  border-radius: 1px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ambient Glow Shadow */
+.laptop-under-glow {
+  inline-size: 85%;
+  max-inline-size: 480px;
+  block-size: 32px;
+  margin-block-start: 2px;
+  pointer-events: none;
+  filter: blur(16px);
+  background: radial-gradient(ellipse at center, var(--glow-color) 0%, rgba(0, 0, 0, 0.45) 45%, transparent 75%);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0.5;
+}
+
+.laptop-device:hover ~ .laptop-under-glow,
+.laptop-device:hover .laptop-under-glow {
+  transform: scale(1.08);
+  opacity: 0.75;
+}
+
+
+/* ==========================================================================
+   Project Previews Inside Laptop Screen
+   ========================================================================== */
+
+/* --- Project 1: ChatApp (Real-Time Chat) --- */
+.preview-chat {
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  background: #0e0f12;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+}
+
+.chat-sidebar {
+  inline-size: clamp(6.8rem, 30%, 10.5rem);
+  background: #141519;
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.chat-sidebar-header {
+  padding: 0.45rem 0.6rem;
+  border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-app-title {
+  font-weight: 700;
+  font-size: clamp(0.68rem, 1.1vw, 0.78rem);
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.chat-online-pulse {
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 6px #34d399;
+  animation: chat-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes chat-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.chat-search-wrap {
+  padding: 0.35rem 0.5rem;
+  border-block-end: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.45);
+  font-size: clamp(0.58rem, 0.9vw, 0.66rem);
+}
+
+.chat-search-bar svg {
+  inline-size: 10px;
+  block-size: 10px;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.chat-contacts-list {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.chat-contacts-list::-webkit-scrollbar {
+  display: none;
+}
+
+.chat-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 0.55rem;
+  border-block-end: 1px solid rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.chat-contact-item:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+}
+
+.chat-contact-item.is-active {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.chat-avatar-wrap {
+  position: relative;
+  inline-size: 1.55rem;
+  block-size: 1.55rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.62rem;
+  font-weight: 600;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.chat-contact-dot {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  inline-size: 5px;
+  block-size: 5px;
+  border-radius: 50%;
+  border: 1px solid #000000;
+}
+
+.chat-contact-dot--online { background: #34d399; }
+.chat-contact-dot--away { background: #fbbf24; }
+.chat-contact-dot--offline { background: #64748b; }
+
+.chat-contact-info {
+  min-inline-size: 0;
+  flex: 1;
+}
+
+.chat-contact-name {
+  font-size: clamp(0.62rem, 1vw, 0.72rem);
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-contact-status {
+  font-size: clamp(0.52rem, 0.8vw, 0.6rem);
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Chat Main Area */
+.chat-main-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #191a1f;
+  min-inline-size: 0;
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 0.45rem 0.75rem;
+  background: #17181d;
+  border-block-end: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.chat-header-user {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.chat-header-avatar {
+  inline-size: 1.55rem;
+  block-size: 1.55rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.chat-header-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header-name {
+  font-size: clamp(0.66rem, 1vw, 0.76rem);
+  font-weight: 600;
+  color: #ffffff;
+  line-height: 1.15;
+}
+
+.chat-header-sub {
+  font-size: 0.58rem;
+  color: #34d399;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.chat-header-sub span {
+  inline-size: 4px;
+  block-size: 4px;
+  border-radius: 50%;
+  background: #34d399;
+}
+
+.chat-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.chat-icon-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+}
+
+.chat-icon-btn:hover {
+  color: #ffffff;
+}
+
+.chat-icon-btn svg {
+  inline-size: 12px;
+  block-size: 12px;
+}
+
+/* Chat Messages */
+.chat-messages-flow {
+  flex: 1;
+  padding: 0.6rem 0.75rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+.chat-message-row {
+  display: flex;
+  inline-size: 100%;
+}
+
+.chat-message-row--me {
+  justify-content: flex-end;
+}
+
+.chat-bubble {
+  max-inline-size: 82%;
+  padding: 0.35rem 0.65rem;
+  border-radius: 12px;
+  font-size: clamp(0.6rem, 0.95vw, 0.72rem);
+  line-height: 1.35;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease;
+  word-break: break-word;
+}
+
+.chat-bubble:hover {
+  transform: scale(1.015);
+}
+
+.chat-bubble--them {
+  background: #25262c;
+  color: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom-left-radius: 2px;
+}
+
+.chat-bubble--me {
+  background: #3b5bf5;
+  color: #ffffff;
+  border-bottom-right-radius: 2px;
+}
+
+/* Chat Form */
+.chat-input-form {
+  padding: 0.45rem 0.65rem;
+  background: #141519;
+  border-block-start: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+}
+
+.chat-input-wrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.chat-text-input {
+  inline-size: 100%;
+  padding-block: 0.28rem;
+  padding-inline-start: 0.65rem;
+  padding-inline-end: 1.6rem;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: clamp(0.6rem, 0.9vw, 0.7rem);
+  color: #ffffff;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.chat-text-input:focus {
+  border-color: rgba(59, 130, 246, 0.6);
+}
+
+.chat-text-input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.chat-emoji-btn {
+  position: absolute;
+  inset-inline-end: 6px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.chat-emoji-btn:hover {
+  color: #ffffff;
+}
+
+.chat-emoji-btn svg {
+  inline-size: 12px;
+  block-size: 12px;
+}
+
+.chat-send-btn {
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: #3b5bf5;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(59, 91, 245, 0.4);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.chat-send-btn:hover {
+  background: #2e4ee6;
+  transform: translateY(-1px);
+}
+
+.chat-send-btn svg {
+  inline-size: 11px;
+  block-size: 11px;
+}
+
+/* --- Project 2: Peekafuture (AI Career Platform) --- */
+.preview-peekafuture {
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0d0b18;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-y: auto;
+  padding: clamp(0.5rem, 1.2vw, 0.85rem);
+}
+
+.pf-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block-end: 0.45rem;
+  border-block-end: 1px solid rgba(139, 92, 246, 0.2);
+  flex-shrink: 0;
+}
+
+.pf-brand {
+  font-weight: 800;
+  font-size: clamp(0.7rem, 1.1vw, 0.85rem);
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pf-badge-fastapi {
+  font-size: 0.55rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(139, 92, 246, 0.15);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  color: #c4b5fd;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.pf-main-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 0.65rem;
+  padding-block-start: 0.6rem;
+  align-items: center;
+}
+
+.pf-score-card {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.6rem;
+}
+
+.pf-gauge-wrap {
+  position: relative;
+  inline-size: 4rem;
+  block-size: 4rem;
+  flex-shrink: 0;
+}
+
+.pf-gauge-svg {
+  inline-size: 100%;
+  block-size: 100%;
+  transform: rotate(-90deg);
+}
+
+.pf-gauge-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.pf-gauge-num {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #a78bfa;
+  line-height: 1;
+}
+
+.pf-gauge-lbl {
+  font-size: 0.45rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  margin-block-start: 2px;
+}
+
+.pf-score-meta h4 {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.pf-score-meta p {
+  margin: 0.15rem 0 0.35rem;
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.pf-skills-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.pf-chip {
+  padding: 0.12rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.52rem;
+  font-weight: 600;
+  background: rgba(139, 92, 246, 0.2);
+  color: #ddd6fe;
+}
+
+.pf-telemetry-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.pf-log-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.56rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.pf-log-item svg {
+  inline-size: 11px;
+  block-size: 11px;
+  color: #34d399;
+  flex-shrink: 0;
+}
+
+.pf-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block-start: 0.5rem;
+  border-block-start: 1px solid rgba(139, 92, 246, 0.2);
+  font-size: 0.56rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin-block-start: auto;
+}
+
+.pf-btn-scan {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: #8b5cf6;
+  color: #ffffff;
+  border: none;
+  font-size: 0.58rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.pf-btn-scan:hover {
+  background: #7c3aed;
+  transform: scale(1.03);
+}
+
+/* --- Project 3: Visual Showcase Gallery --- */
+.preview-gallery {
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #090b10;
+  color: #ffffff;
+  padding: 0.6rem 0.75rem;
+  overflow-y: auto;
+}
+
+.gal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block-end: 0.45rem;
+  border-block-end: 1px solid rgba(6, 182, 212, 0.2);
+  flex-shrink: 0;
+}
+
+.gal-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.gal-filter-pills {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.gal-pill {
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.52rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gal-pill.is-active,
+.gal-pill:hover {
+  background: #06b6d4;
+  border-color: #06b6d4;
+  color: #000000;
+  font-weight: 700;
+}
+
+.gal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.45rem;
+  padding-block: 0.55rem;
+  flex: 1;
+}
+
+.gal-card {
+  border-radius: 8px;
+  background: #131722;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.gal-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(6, 182, 212, 0.5);
+}
+
+.gal-card-thumb {
+  inline-size: 100%;
+  block-size: 3.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.gal-card-thumb--1 { background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%); }
+.gal-card-thumb--2 { background: linear-gradient(135deg, #064e3b 0%, #065f46 100%); }
+.gal-card-thumb--3 { background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%); }
+.gal-card-thumb--4 { background: linear-gradient(135deg, #831843 0%, #9d174d 100%); }
+
+.gal-card-info {
+  padding: 0.35rem 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.58rem;
+}
+
+.gal-card-name {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.gal-card-likes {
+  color: #06b6d4;
+  font-size: 0.52rem;
+}
+
+/* --- Project 4: Adventure Time Parallax --- */
+.preview-parallax {
+  inline-size: 100%;
+  block-size: 100%;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(to bottom, #38bdf8 0%, #7dd3fc 45%, #bae6fd 70%, #86efac 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.par-cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  filter: blur(1px);
+}
+
+.par-cloud--1 { top: 12%; left: 10%; inline-size: 3.5rem; block-size: 1.2rem; }
+.par-cloud--2 { top: 22%; right: 15%; inline-size: 4.5rem; block-size: 1.4rem; }
+
+.par-mountains {
+  position: absolute;
+  bottom: 22%;
+  inset-inline: 0;
+  block-size: 45%;
+  background: radial-gradient(ellipse 90% 60% at 50% 100%, #15803d 0%, #166534 80%);
+  border-radius: 50% 50% 0 0;
+}
+
+.par-foreground {
+  position: absolute;
+  bottom: 0;
+  inset-inline: 0;
+  block-size: 26%;
+  background: linear-gradient(to bottom, #22c55e 0%, #15803d 100%);
+  border-radius: 35% 35% 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.par-character-badge {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fef08a;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.par-controls {
+  position: absolute;
+  top: 8px;
+  inset-inline: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.par-label {
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #ffffff;
+  font-size: 0.58rem;
+  font-weight: 700;
+}
+
+/* --- Project 5: 3D Rotating Carousel --- */
+.preview-carousel3d {
+  inline-size: 100%;
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #090a10;
+  overflow: hidden;
+  perspective: 700px;
+  position: relative;
+}
+
+.c3d-title-bar {
+  position: absolute;
+  top: 8px;
+  inset-inline: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #f472b6;
+  z-index: 20;
+}
+
+.c3d-ring-stage {
+  inline-size: 110px;
+  block-size: 130px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.c3d-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+  padding: 0.45rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  background: rgba(24, 17, 36, 0.88);
+  box-shadow: 0 4px 14px rgba(236, 72, 153, 0.25);
+  font-size: 0.55rem;
+  color: #ffffff;
+  backface-visibility: hidden;
+}
+
+.c3d-card-num {
+  font-weight: 800;
+  color: #f472b6;
+  font-size: 0.72rem;
+}
+
+.c3d-card-label {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.c3d-controls {
+  position: absolute;
+  bottom: 8px;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 20;
+}
+
+.c3d-btn {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(244, 114, 182, 0.2);
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  color: #ffffff;
+  font-size: 0.58rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.c3d-btn:hover {
+  background: #ec4899;
+  border-color: #ec4899;
+}
+
 
 @media (min-width: 56.25rem) {
   .project-preview {
@@ -1923,18 +2903,9 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
   }
 
   .preview-viewport {
-    inline-size: clamp(48rem, 82dvw, 76rem);
-    block-size: clamp(19rem, 56dvh, 33rem);
-    border-radius: 20px;
-  }
-
-  .preview-chrome {
-    block-size: 2.1rem;
-    padding-inline: 1rem;
-  }
-
-  .preview-image {
-    block-size: calc(100% - 2.1rem);
+    inline-size: clamp(34rem, 46dvw, 42rem);
+    max-inline-size: none;
+    block-size: auto;
   }
 
   #view-projects .projects-grid {
