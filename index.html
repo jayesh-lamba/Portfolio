@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261115f">
-  <script type="module" src="script.js?v=20261115f"></script>
+  <link rel="stylesheet" href="styles.css?v=20261115g">
+  <script type="module" src="script.js?v=20261115g"></script>
 </head>
 <body>
   <a href="#home-heading" class="skip-link visually-hidden" id="skip-to-main">Skip to main content</a>
@@ -378,51 +378,94 @@
     </section>
 
     <!-- View 5: Certifications -->
-    <section id="view-certificates" class="view-section" data-view="certificates" data-view-side="right" data-title="Certifications &amp; Credentials — Jayesh" aria-labelledby="certificates-heading" hidden>
+    <section id="view-certificates" class="view-section" data-view="certificates" data-view-side="left" data-title="Certifications &amp; Credentials — Jayesh" aria-labelledby="certificates-heading" hidden>
       <div class="view-grid view-grid--certificates">
-        
-        <!-- Left: Interactive Certificate Preview Stage -->
-        <div class="pane pane--cert-stage" id="cert-stage-pane">
+
+        <!-- Left: Interactive Auto-Scrolling Certificate Showcase Stage -->
+        <div class="pane pane--cert-stage" id="cert-stage-pane" role="region" aria-roledescription="carousel" aria-label="Featured certifications showcase">
           <div class="cert-stage-header">
             <span class="cert-badge" id="cert-stage-badge" style="--issuer-theme: #4285F4;">
               <span class="cert-badge-dot"></span>
               <span id="cert-stage-issuer">Google</span>
             </span>
-            <span class="cert-stage-date" id="cert-stage-date">Dec 26, 2023</span>
+            <div class="cert-stage-header-meta">
+              <span class="cert-stage-date" id="cert-stage-date">Dec 26, 2023</span>
+              <span class="cert-stage-count" id="cert-stage-count" aria-hidden="true">01 / 07</span>
+            </div>
           </div>
 
           <h2 id="cert-stage-title" class="cert-stage-title">The Bits and Bytes of Computer Networking</h2>
 
           <!-- Certificate Display Frame -->
           <div class="cert-frame-wrapper" id="cert-frame-wrapper">
-            <div class="cert-frame" id="cert-frame">
-              <div class="cert-frame-glass"></div>
-              <img
-                id="cert-stage-image"
-                class="cert-stage-image"
-                src="assets/images/certificates/cert-google-networking.jpg"
-                alt="Certificate preview for The Bits and Bytes of Computer Networking"
-                width="1200"
-                height="850"
-                loading="eager"
-              >
-              <button type="button" class="cert-expand-btn" id="cert-expand-btn" aria-label="Open high-resolution fullscreen preview">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
-                </svg>
-                <span>Full View</span>
+            <div class="cert-frame-tilt" id="cert-frame-tilt">
+              <div class="cert-frame" id="cert-frame">
+                <div class="cert-frame-glass"></div>
+                <div class="cert-frame-sheen" aria-hidden="true"></div>
+
+                <div class="cert-frame-nav">
+                  <button type="button" class="cert-nav-btn cert-nav-btn--prev" id="cert-prev-btn" aria-label="Previous certificate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <button type="button" class="cert-nav-btn cert-nav-btn--next" id="cert-next-btn" aria-label="Next certificate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+
+                <div class="cert-frame-inner" id="cert-frame-inner">
+                  <img
+                    id="cert-stage-image"
+                    class="cert-stage-image"
+                    src="assets/images/certificates/cert-google-networking.jpg"
+                    alt="Certificate preview for The Bits and Bytes of Computer Networking"
+                    width="1200"
+                    height="850"
+                    loading="eager"
+                  >
+                </div>
+
+                <button type="button" class="cert-expand-btn" id="cert-expand-btn" aria-label="Open high-resolution fullscreen preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                  </svg>
+                  <span>Full View</span>
+                </button>
+
+                <div class="cert-autoplay-track" aria-hidden="true">
+                  <div class="cert-autoplay-fill" id="cert-autoplay-fill"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-scroll controls + marker dots -->
+            <div class="cert-carousel-bar">
+              <button type="button" class="cert-autoplay-btn" id="cert-autoplay-btn" aria-label="Pause auto-scroll">
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                <span class="cert-autoplay-label">Pause</span>
               </button>
+              <nav class="cert-dots" id="cert-dots" aria-label="Choose a certificate"></nav>
             </div>
           </div>
 
-          <!-- Credential Meta & Actions -->
+          <p class="visually-hidden" id="cert-carousel-status" role="status" aria-live="polite"></p>
+
+          <!-- Credential Meta, Skills & Actions -->
           <div class="cert-meta-box">
+            <ul class="cert-stage-tags" id="cert-stage-tags" aria-label="Verified skills">
+              <li>Networking</li>
+              <li>TCP/IP</li>
+              <li>DNS</li>
+              <li>Routing</li>
+              <li>Subnets</li>
+            </ul>
+
             <div class="cert-id-group">
               <span class="cert-id-label">CREDENTIAL ID</span>
               <div class="cert-id-value-wrap">
                 <code id="cert-stage-id" class="cert-stage-id">SGEHWY5K73ES</code>
                 <button type="button" id="cert-copy-btn" class="cert-copy-btn" title="Copy Credential ID" aria-label="Copy Credential ID">
-                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
@@ -434,29 +477,43 @@
             <div class="cert-actions-group">
               <a id="cert-verify-link" href="https://coursera.org/verify/SGEHWY5K73ES" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--primary">
                 <span>Verify Credential</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               </a>
               <a id="cert-doc-link" href="assets/certificates/google%20bites%20and%20bytes%20certificate.png" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--secondary">
                 <span>Original File</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
               </a>
             </div>
           </div>
         </div>
 
-        <!-- Right: Scrollable Certificate Directory / Cards -->
-        <div class="pane pane--cert-list">
+        <!-- Right: Filterable & Auto-Synced Certificate Directory -->
+        <div class="pane pane--cert-list" id="cert-list-pane">
           <div class="cert-list-header">
             <p class="section-eyebrow">VERIFIED CREDENTIALS &amp; SKILLS</p>
             <h1 id="certificates-heading" class="section-title" tabindex="-1">Certifications</h1>
             <p class="section-lead">
-              Official accreditations from Google, IBM, Salesforce, and Intellipaat in Networking, Cloud, Blockchain, Databases, and Software Engineering.
+              Official accreditations from Google, IBM, Salesforce, and Intellipaat across Networking, Cloud, Blockchain, SQL, and Software Engineering.
             </p>
+
+            <div class="cert-stats-strip" aria-label="Certification highlights">
+              <div class="cert-stat-pill"><strong>07</strong><span>Credentials</span></div>
+              <div class="cert-stat-pill"><strong>04</strong><span>Global Issuers</span></div>
+              <div class="cert-stat-pill"><strong>100%</strong><span>ID Verified</span></div>
+            </div>
+
+            <div class="cert-filter-bar" role="group" aria-label="Filter certifications by domain">
+              <button type="button" class="cert-filter-btn is-active" data-filter="all" aria-pressed="true">All (7)</button>
+              <button type="button" class="cert-filter-btn" data-filter="cloud" aria-pressed="false">Cloud &amp; Network (3)</button>
+              <button type="button" class="cert-filter-btn" data-filter="sde" aria-pressed="false">SDE &amp; AI (2)</button>
+              <button type="button" class="cert-filter-btn" data-filter="sql" aria-pressed="false">Databases &amp; SQL (2)</button>
+            </div>
           </div>
 
           <div class="cert-cards-stack">
             <!-- 1. Google Networking -->
             <article class="cert-card is-active" data-cert="google-networking"
+              data-category="cloud"
               data-title="The Bits and Bytes of Computer Networking"
               data-issuer="Google"
               data-issuer-theme="#4285F4"
@@ -465,7 +522,8 @@
               data-verify="https://coursera.org/verify/SGEHWY5K73ES"
               data-preview-src="assets/images/certificates/cert-google-networking.jpg"
               data-doc-src="assets/certificates/google%20bites%20and%20bytes%20certificate.png"
-              data-skills="Networking · TCP/IP · DNS · Routing · Subnets">
+              data-skills="Networking · TCP/IP · DNS · Routing · Subnets"
+              style="--issuer-color: #4285F4;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-google-networking.jpg" alt="" loading="lazy" width="82" height="58">
@@ -490,6 +548,7 @@
 
             <!-- 2. IBM Blockchain -->
             <article class="cert-card" data-cert="ibm-blockchain"
+              data-category="cloud"
               data-title="Blockchain Developer (CEAPBCD1IN)"
               data-issuer="IBM"
               data-issuer-theme="#0f62fe"
@@ -498,7 +557,8 @@
               data-verify="https://courses.ibmcep.cognitiveclass.ai/certificates/2dec1dacd9474d2a80f8476412777680"
               data-preview-src="assets/images/certificates/cert-ibm-blockchain.jpg"
               data-doc-src="assets/certificates/jayesh%20ibm1.pdf"
-              data-skills="Smart Contracts · Hyperledger Fabric · Consensus · Distributed Ledgers">
+              data-skills="Smart Contracts · Hyperledger Fabric · Consensus · Distributed Ledgers"
+              style="--issuer-color: #0f62fe;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-ibm-blockchain.jpg" alt="" loading="lazy" width="82" height="58">
@@ -523,6 +583,7 @@
 
             <!-- 3. Salesforce Developer -->
             <article class="cert-card" data-cert="salesforce-developer"
+              data-category="cloud"
               data-title="Salesforce Developer Certification Program"
               data-issuer="Salesforce / Ethnus"
               data-issuer-theme="#00a1e0"
@@ -531,7 +592,8 @@
               data-verify="https://ethnus.com/certverify"
               data-preview-src="assets/images/certificates/cert-salesforce-developer.jpg"
               data-doc-src="assets/certificates/Salesforce%20Developer%20Certification%20Program.pdf"
-              data-skills="Apex Code · Lightning Web Components · SOQL · CRM Architecture">
+              data-skills="Apex Code · Lightning Web Components · SOQL · CRM Architecture"
+              style="--issuer-color: #00a1e0;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-salesforce-developer.jpg" alt="" loading="lazy" width="82" height="58">
@@ -556,6 +618,7 @@
 
             <!-- 4. Intellipaat PCP-SDE -->
             <article class="cert-card" data-cert="intellipaat-sde"
+              data-category="sde"
               data-title="Professional Certification in Software Development Engineering (PCP - SDE)"
               data-issuer="Intellipaat"
               data-issuer-theme="#f37021"
@@ -564,7 +627,8 @@
               data-verify="https://intellipaat.com/"
               data-preview-src="assets/images/certificates/cert-intellipaat-sde.jpg"
               data-doc-src="assets/certificates/intellipaat-certificate.pdf"
-              data-skills="DSA · System Design · Full-Stack SDE · Cloud Systems">
+              data-skills="DSA · System Design · Full-Stack SDE · Cloud Systems"
+              style="--issuer-color: #f37021;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-intellipaat-sde.jpg" alt="" loading="lazy" width="82" height="58">
@@ -589,6 +653,7 @@
 
             <!-- 5. Intellipaat MS SQL -->
             <article class="cert-card" data-cert="intellipaat-mssql"
+              data-category="sql"
               data-title="Microsoft SQL Certification Training"
               data-issuer="Intellipaat"
               data-issuer-theme="#0078d4"
@@ -597,7 +662,8 @@
               data-verify="https://intellipaat.com/"
               data-preview-src="assets/images/certificates/cert-intellipaat-mssql.jpg"
               data-doc-src="assets/certificates/intellipaat-certificate%20(4).pdf"
-              data-skills="Microsoft SQL Server · T-SQL · Indexing · Stored Procedures">
+              data-skills="Microsoft SQL Server · T-SQL · Indexing · Stored Procedures"
+              style="--issuer-color: #0078d4;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-intellipaat-mssql.jpg" alt="" loading="lazy" width="82" height="58">
@@ -622,6 +688,7 @@
 
             <!-- 6. Intellipaat SQL Course -->
             <article class="cert-card" data-cert="intellipaat-sql"
+              data-category="sql"
               data-title="SQL Course"
               data-issuer="Intellipaat"
               data-issuer-theme="#0284c7"
@@ -630,7 +697,8 @@
               data-verify="https://intellipaat.com/"
               data-preview-src="assets/images/certificates/cert-intellipaat-sql.jpg"
               data-doc-src="assets/certificates/intellipaat-certificate%20(2).pdf"
-              data-skills="Relational DB · Complex Joins · Aggregations · Subqueries">
+              data-skills="Relational DB · Complex Joins · Aggregations · Subqueries"
+              style="--issuer-color: #0284c7;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-intellipaat-sql.jpg" alt="" loading="lazy" width="82" height="58">
@@ -655,6 +723,7 @@
 
             <!-- 7. Intellipaat Data Science -->
             <article class="cert-card" data-cert="intellipaat-datascience"
+              data-category="sde"
               data-title="Data Science Course"
               data-issuer="Intellipaat"
               data-issuer-theme="#10b981"
@@ -663,7 +732,8 @@
               data-verify="https://intellipaat.com/"
               data-preview-src="assets/images/certificates/cert-intellipaat-datascience.jpg"
               data-doc-src="assets/certificates/intellipaat-certificate%20(3).pdf"
-              data-skills="Python · Pandas · NumPy · EDA · Statistical Modeling">
+              data-skills="Python · Pandas · NumPy · EDA · Statistical Modeling"
+              style="--issuer-color: #10b981;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/certificates/cert-intellipaat-datascience.jpg" alt="" loading="lazy" width="82" height="58">
@@ -695,14 +765,17 @@
     <section id="view-hackathons" class="view-section" data-view="hackathons" data-view-side="left" data-title="Hackathons &amp; Competitions — Jayesh" aria-labelledby="hackathons-heading" hidden>
       <div class="view-grid view-grid--certificates">
 
-        <!-- Interactive Hackathon Certificate Preview Stage -->
-        <div class="pane pane--cert-stage" id="hack-stage-pane">
+        <!-- Interactive Auto-Scrolling Hackathon Showcase Stage -->
+        <div class="pane pane--cert-stage" id="hack-stage-pane" role="region" aria-roledescription="carousel" aria-label="Featured hackathons showcase">
           <div class="cert-stage-header">
             <span class="cert-badge" id="hack-stage-badge" style="--issuer-theme: #eab308;">
               <span class="cert-badge-dot"></span>
               <span id="hack-stage-issuer">EY (Unstop)</span>
             </span>
-            <span class="cert-stage-date" id="hack-stage-date">Appreciation · Round 2</span>
+            <div class="cert-stage-header-meta">
+              <span class="cert-stage-date" id="hack-stage-date">Appreciation · Round 2</span>
+              <span class="cert-stage-count" id="hack-stage-count" aria-hidden="true">01 / 11</span>
+            </div>
           </div>
 
           <h2 id="hack-stage-title" class="cert-stage-title">EY Techathon 6.0 — Round 2: Detailed Presentation Submission</h2>
@@ -710,34 +783,73 @@
 
           <!-- Certificate Display Frame -->
           <div class="cert-frame-wrapper" id="hack-frame-wrapper">
-            <div class="cert-frame" id="hack-frame">
-              <div class="cert-frame-glass"></div>
-              <img
-                id="hack-stage-image"
-                class="cert-stage-image"
-                src="assets/images/hackathons/hack-ey-round2.jpg"
-                alt="Certificate preview for EY Techathon 6.0 — Round 2: Detailed Presentation Submission"
-                width="1200"
-                height="848"
-                loading="eager"
-              >
-              <button type="button" class="cert-expand-btn" id="hack-expand-btn" aria-label="Open high-resolution fullscreen preview">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
-                </svg>
-                <span>Full View</span>
+            <div class="cert-frame-tilt" id="hack-frame-tilt">
+              <div class="cert-frame" id="hack-frame">
+                <div class="cert-frame-glass"></div>
+                <div class="cert-frame-sheen" aria-hidden="true"></div>
+
+                <div class="cert-frame-nav">
+                  <button type="button" class="cert-nav-btn cert-nav-btn--prev" id="hack-prev-btn" aria-label="Previous certificate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  </button>
+                  <button type="button" class="cert-nav-btn cert-nav-btn--next" id="hack-next-btn" aria-label="Next certificate">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+
+                <div class="cert-frame-inner" id="hack-frame-inner">
+                  <img
+                    id="hack-stage-image"
+                    class="cert-stage-image"
+                    src="assets/images/hackathons/hack-ey-round2.jpg"
+                    alt="Certificate preview for EY Techathon 6.0 — Round 2: Detailed Presentation Submission"
+                    width="1200"
+                    height="848"
+                    loading="eager"
+                  >
+                </div>
+
+                <button type="button" class="cert-expand-btn" id="hack-expand-btn" aria-label="Open high-resolution fullscreen preview">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                  </svg>
+                  <span>Full View</span>
+                </button>
+
+                <div class="cert-autoplay-track" aria-hidden="true">
+                  <div class="cert-autoplay-fill" id="hack-autoplay-fill"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Auto-scroll controls + marker dots -->
+            <div class="cert-carousel-bar">
+              <button type="button" class="cert-autoplay-btn" id="hack-autoplay-btn" aria-label="Pause auto-scroll">
+                <svg class="icon-pause" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+                <svg class="icon-play" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+                <span class="cert-autoplay-label">Pause</span>
               </button>
+              <nav class="cert-dots" id="hack-dots" aria-label="Choose a hackathon certificate"></nav>
             </div>
           </div>
 
+          <p class="visually-hidden" id="hack-carousel-status" role="status" aria-live="polite"></p>
+
           <!-- Credential Meta & Actions -->
           <div class="cert-meta-box">
+            <ul class="cert-stage-tags" id="hack-stage-tags" aria-label="Event highlights">
+              <li>Certificate of Appreciation</li>
+              <li>Team Invincibles</li>
+              <li>Round 2 Deck</li>
+              <li>VIT Bhopal</li>
+            </ul>
+
             <div class="cert-id-group">
               <span class="cert-id-label">CREDENTIAL ID</span>
               <div class="cert-id-value-wrap">
                 <code id="hack-stage-id" class="cert-stage-id">f480459e-a49d-4aa4-bb64-5a1b1bc90bd8</code>
                 <button type="button" id="hack-copy-btn" class="cert-copy-btn" title="Copy Credential ID" aria-label="Copy Credential ID">
-                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
@@ -749,38 +861,54 @@
             <div class="cert-actions-group">
               <a id="hack-verify-link" href="https://unstop.com/certificate-preview/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--primary">
                 <span>Verify Credential</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
               </a>
               <a id="hack-doc-link" href="assets/hackathons/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8.pdf" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--secondary">
                 <span>Original PDF</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
               </a>
             </div>
           </div>
         </div>
 
         <!-- Scrollable Hackathon Directory / Cards -->
-        <div class="pane pane--cert-list">
+        <div class="pane pane--cert-list" id="hack-list-pane">
           <div class="cert-list-header">
             <p class="section-eyebrow">11 VERIFIED EVENT CREDENTIALS</p>
             <h1 id="hackathons-heading" class="section-title" tabindex="-1">Hackathons</h1>
             <p class="section-lead">
               National hackathons, engineering challenges, and case study competitions across EY, Tata Group, TVS Credit, Aptiv, HPCL, L&rsquo;Or&eacute;al, and MCD.
             </p>
+
+            <div class="cert-stats-strip" aria-label="Hackathon highlights">
+              <div class="cert-stat-pill"><strong>11</strong><span>Verified Events</span></div>
+              <div class="cert-stat-pill"><strong>EY Round 2</strong><span>Appreciation</span></div>
+              <div class="cert-stat-pill"><strong>07+</strong><span>Organizers</span></div>
+            </div>
+
+            <div class="cert-filter-bar" role="group" aria-label="Filter hackathon events by track">
+              <button type="button" class="cert-filter-btn is-active" data-filter="all" aria-pressed="true">All (11)</button>
+              <button type="button" class="cert-filter-btn" data-filter="tech" aria-pressed="false">Hackathons &amp; Tech (5)</button>
+              <button type="button" class="cert-filter-btn" data-filter="corporate" aria-pressed="false">Enterprise &amp; Civic (3)</button>
+              <button type="button" class="cert-filter-btn" data-filter="case" aria-pressed="false">Case &amp; Quiz (3)</button>
+            </div>
           </div>
 
           <div class="cert-cards-stack">
             <!-- 1. EY Techathon 6.0 Round 2 -->
-            <article class="cert-card is-active" data-cert="ey-round2"
+            <article class="cert-card cert-card--featured is-active" data-cert="ey-round2"
+              data-category="tech"
               data-title="EY Techathon 6.0 — Round 2: Detailed Presentation Submission"
               data-issuer="EY (Unstop)"
               data-issuer-theme="#eab308"
               data-date="Appreciation · Round 2"
               data-submeta="Certificate of Appreciation · Team Invincibles · VIT Bhopal University"
+              data-skills="Certificate of Appreciation · Team Invincibles · Round 2 Deck · VIT Bhopal"
               data-id="f480459e-a49d-4aa4-bb64-5a1b1bc90bd8"
               data-verify="https://unstop.com/certificate-preview/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8"
               data-preview-src="assets/images/hackathons/hack-ey-round2.jpg"
-              data-doc-src="assets/hackathons/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8.pdf">
+              data-doc-src="assets/hackathons/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8.pdf"
+              style="--issuer-color: #ca8a04;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-ey-round2.jpg" alt="" loading="lazy" width="82" height="58">
@@ -788,7 +916,7 @@
                 <div class="cert-card-main">
                   <div class="cert-card-header">
                     <span class="cert-card-issuer" style="--issuer-color: #ca8a04;">EY (Unstop)</span>
-                    <span class="cert-card-date">Appreciation · Round 2</span>
+                    <span class="cert-card-honor">&starf; Appreciation · Round 2</span>
                   </div>
                   <h3 class="cert-card-title">EY Techathon 6.0 — Round 2: Detailed Presentation Submission</h3>
                   <div class="cert-card-id-row">
@@ -805,15 +933,18 @@
 
             <!-- 2. EY Techathon 6.0 Round 1 -->
             <article class="cert-card" data-cert="ey-round1"
+              data-category="tech"
               data-title="EY Techathon 6.0 — Round 1: Executive Summary Submission"
               data-issuer="EY (Unstop)"
               data-issuer-theme="#eab308"
               data-date="Participation · Round 1"
               data-submeta="Certificate of Participation · VIT Bhopal University (VIT), Bhopal"
+              data-skills="EY Techathon 6.0 · Round 1 · Executive Summary · VIT Bhopal"
               data-id="c5e41a98-74ec-45ab-9a34-68fb1e489aae"
               data-verify="https://unstop.com/certificate-preview/c5e41a98-74ec-45ab-9a34-68fb1e489aae"
               data-preview-src="assets/images/hackathons/hack-ey-round1.jpg"
-              data-doc-src="assets/hackathons/c5e41a98-74ec-45ab-9a34-68fb1e489aae.pdf">
+              data-doc-src="assets/hackathons/c5e41a98-74ec-45ab-9a34-68fb1e489aae.pdf"
+              style="--issuer-color: #ca8a04;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-ey-round1.jpg" alt="" loading="lazy" width="82" height="58">
@@ -838,15 +969,18 @@
 
             <!-- 3. TVS Credit E.P.I.C 7.0 -->
             <article class="cert-card" data-cert="tvs-epic"
+              data-category="tech"
               data-title="TVS Credit E.P.I.C 7.0 — IT Challenge"
               data-issuer="TVS Credit"
               data-issuer-theme="#1d4ed8"
               data-date="Sept 24, 2025"
               data-submeta="Certificate of Participation · Team Rog · VIT Bhopal University"
+              data-skills="Team Rog · IT Challenge · Sept 24, 2025 · VIT Bhopal"
               data-id="f57dfcca-c634-457d-a39c-1f7eb92dc682"
               data-verify="https://unstop.com/certificate-preview/f57dfcca-c634-457d-a39c-1f7eb92dc682"
               data-preview-src="assets/images/hackathons/hack-tvs-epic.jpg"
-              data-doc-src="assets/hackathons/f57dfcca-c634-457d-a39c-1f7eb92dc682.pdf">
+              data-doc-src="assets/hackathons/f57dfcca-c634-457d-a39c-1f7eb92dc682.pdf"
+              style="--issuer-color: #1d4ed8;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-tvs-epic.jpg" alt="" loading="lazy" width="82" height="58">
@@ -871,15 +1005,18 @@
 
             <!-- 4. Aptiv MobilityX -->
             <article class="cert-card" data-cert="aptiv-mobilityx"
+              data-category="tech"
               data-title="MobilityX: Innovate for Inclusion — Round 1: Concept &amp; Feasibility Deck"
               data-issuer="Aptiv"
               data-issuer-theme="#f97316"
               data-date="Round 1 · Concept Deck"
               data-submeta="Certificate of Participation · Team Elevate · Aptiv Ability Network"
+              data-skills="Team Elevate · Aptiv Ability Network · Concept Deck · VIT Bhopal"
               data-id="b71f80ab-4c28-4801-845a-6121b8bf0038"
               data-verify="https://unstop.com/certificate-preview/b71f80ab-4c28-4801-845a-6121b8bf0038"
               data-preview-src="assets/images/hackathons/hack-aptiv-mobilityx.jpg"
-              data-doc-src="assets/hackathons/b71f80ab-4c28-4801-845a-6121b8bf0038.pdf">
+              data-doc-src="assets/hackathons/b71f80ab-4c28-4801-845a-6121b8bf0038.pdf"
+              style="--issuer-color: #ea580c;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-aptiv-mobilityx.jpg" alt="" loading="lazy" width="82" height="58">
@@ -904,15 +1041,18 @@
 
             <!-- 5. Hack For Green Bharat -->
             <article class="cert-card" data-cert="green-bharat"
+              data-category="tech"
               data-title="Hack For Green Bharat Hackathon — Online Round"
               data-issuer="Tech Masters India"
               data-issuer-theme="#16a34a"
               data-date="Online Round"
               data-submeta="Certificate of Participation · Team Elevate · Tech Masters India"
+              data-skills="Team Elevate · Green Bharat · Online Round · Hackathon"
               data-id="913978ec-e70f-47cd-96cc-7626912beff4"
               data-verify="https://unstop.com/certificate-preview/913978ec-e70f-47cd-96cc-7626912beff4"
               data-preview-src="assets/images/hackathons/hack-green-bharat.jpg"
-              data-doc-src="assets/hackathons/913978ec-e70f-47cd-96cc-7626912beff4.pdf">
+              data-doc-src="assets/hackathons/913978ec-e70f-47cd-96cc-7626912beff4.pdf"
+              style="--issuer-color: #16a34a;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-green-bharat.jpg" alt="" loading="lazy" width="82" height="58">
@@ -937,15 +1077,18 @@
 
             <!-- 6. India Innovates 2026 -->
             <article class="cert-card" data-cert="india-innovates"
+              data-category="corporate"
               data-title="India Innovates 2026"
               data-issuer="MCD"
               data-issuer-theme="#e11d48"
               data-date="2026 Edition"
               data-submeta="Certificate of Participation · Municipal Corporation of Delhi · VIT Bhopal"
+              data-skills="Municipal Corp. of Delhi · Civic Innovation · 2026 · VIT Bhopal"
               data-id="98c275a0-6e24-40a4-869c-6eb84d8ac40c"
               data-verify="https://unstop.com/certificate-preview/98c275a0-6e24-40a4-869c-6eb84d8ac40c"
               data-preview-src="assets/images/hackathons/hack-india-innovates.jpg"
-              data-doc-src="assets/hackathons/98c275a0-6e24-40a4-869c-6eb84d8ac40c.pdf">
+              data-doc-src="assets/hackathons/98c275a0-6e24-40a4-869c-6eb84d8ac40c.pdf"
+              style="--issuer-color: #e11d48;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-india-innovates.jpg" alt="" loading="lazy" width="82" height="58">
@@ -970,15 +1113,18 @@
 
             <!-- 7. TATA Crucible Campus Quiz 2025 -->
             <article class="cert-card" data-cert="tata-crucible"
+              data-category="case"
               data-title="TATA Crucible Campus Quiz 2025"
               data-issuer="Tata Group"
               data-issuer-theme="#2563eb"
               data-date="2025 Edition"
               data-submeta="Certificate of Participation · Tata Group · VIT Bhopal University"
+              data-skills="Tata Group · National Campus Quiz · 2025 · VIT Bhopal"
               data-id="644ee878-8aed-4a2a-b715-6cfd15f512ef"
               data-verify="https://unstop.com/certificate-preview/644ee878-8aed-4a2a-b715-6cfd15f512ef"
               data-preview-src="assets/images/hackathons/hack-tata-crucible.jpg"
-              data-doc-src="assets/hackathons/644ee878-8aed-4a2a-b715-6cfd15f512ef.pdf">
+              data-doc-src="assets/hackathons/644ee878-8aed-4a2a-b715-6cfd15f512ef.pdf"
+              style="--issuer-color: #2563eb;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-tata-crucible.jpg" alt="" loading="lazy" width="82" height="58">
@@ -1003,15 +1149,18 @@
 
             <!-- 8. HP Power Lab 2.0 -->
             <article class="cert-card" data-cert="hp-powerlab"
+              data-category="corporate"
               data-title="HP Power Lab 2.0 — Round 1: Online Assessment"
               data-issuer="HPCL"
               data-issuer-theme="#dc2626"
               data-date="Round 1 · Assessment"
               data-submeta="Certificate of Participation · Hindustan Petroleum Corp. Ltd. · VIT Bhopal"
+              data-skills="HPCL · Round 1 · Online Assessment · VIT Bhopal"
               data-id="c3022a9c-aebc-443e-b9ff-3ef66c0da6c3"
               data-verify="https://unstop.com/certificate-preview/c3022a9c-aebc-443e-b9ff-3ef66c0da6c3"
               data-preview-src="assets/images/hackathons/hack-hp-powerlab.jpg"
-              data-doc-src="assets/hackathons/c3022a9c-aebc-443e-b9ff-3ef66c0da6c3.pdf">
+              data-doc-src="assets/hackathons/c3022a9c-aebc-443e-b9ff-3ef66c0da6c3.pdf"
+              style="--issuer-color: #dc2626;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-hp-powerlab.jpg" alt="" loading="lazy" width="82" height="58">
@@ -1036,15 +1185,18 @@
 
             <!-- 9. L'Oréal Sustainability Challenge 2025 -->
             <article class="cert-card" data-cert="loreal-sustainability"
+              data-category="corporate"
               data-title="L&rsquo;Or&eacute;al Sustainability Challenge 2025 — Online Aptitude Assessment"
               data-issuer="L'Oréal"
               data-issuer-theme="#9333ea"
               data-date="2025 Edition"
               data-submeta="Certificate of Participation · Team Rog5 · VIT Bhopal University"
+              data-skills="Team Rog5 · Sustainability · Aptitude Assessment · VIT Bhopal"
               data-id="cb0374fd-475b-4491-8aa4-201da4847b08"
               data-verify="https://unstop.com/certificate-preview/cb0374fd-475b-4491-8aa4-201da4847b08"
               data-preview-src="assets/images/hackathons/hack-loreal-sustainability.jpg"
-              data-doc-src="assets/hackathons/cb0374fd-475b-4491-8aa4-201da4847b08.pdf">
+              data-doc-src="assets/hackathons/cb0374fd-475b-4491-8aa4-201da4847b08.pdf"
+              style="--issuer-color: #9333ea;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-loreal-sustainability.jpg" alt="" loading="lazy" width="82" height="58">
@@ -1069,15 +1221,18 @@
 
             <!-- 10. NationBuilding Case Study Competition 2026 -->
             <article class="cert-card" data-cert="nationbuilding"
+              data-category="case"
               data-title="NationBuilding Case Study Competition 2026 — Online Quiz Round"
               data-issuer="Nation With NaMo"
               data-issuer-theme="#ea580c"
               data-date="2026 Edition"
               data-submeta="Certificate of Participation · Online Quiz Round"
+              data-skills="Case Study · Policy &amp; Strategy · Online Quiz · 2026"
               data-id="2adbadc6-27aa-40e1-aa0a-32ef87728e6d"
               data-verify="https://unstop.com/certificate-preview/2adbadc6-27aa-40e1-aa0a-32ef87728e6d"
               data-preview-src="assets/images/hackathons/hack-nationbuilding.jpg"
-              data-doc-src="assets/hackathons/2adbadc6-27aa-40e1-aa0a-32ef87728e6d.pdf">
+              data-doc-src="assets/hackathons/2adbadc6-27aa-40e1-aa0a-32ef87728e6d.pdf"
+              style="--issuer-color: #ea580c;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-nationbuilding.jpg" alt="" loading="lazy" width="82" height="58">
@@ -1102,15 +1257,18 @@
 
             <!-- 11. MarQing Minds -->
             <article class="cert-card" data-cert="marqing-minds"
+              data-category="case"
               data-title="MarQing Minds: Case Study Competition (Unstop Freedom Festival)"
               data-issuer="MDI Gurgaon"
               data-issuer-theme="#1e3a8a"
               data-date="Freedom Festival"
               data-submeta="Certificate of Participation · Management Development Institute (MDI), Gurgaon · VIT Bhopal"
+              data-skills="MDI Gurgaon · Unstop Freedom Festival · Marketing Case · VIT Bhopal"
               data-id="73bcc9c1-7358-4eba-b72b-391c7cbd4e0f"
               data-verify="https://unstop.com/certificate-preview/73bcc9c1-7358-4eba-b72b-391c7cbd4e0f"
               data-preview-src="assets/images/hackathons/hack-marqing-minds.jpg"
-              data-doc-src="assets/hackathons/73bcc9c1-7358-4eba-b72b-391c7cbd4e0f.pdf">
+              data-doc-src="assets/hackathons/73bcc9c1-7358-4eba-b72b-391c7cbd4e0f.pdf"
+              style="--issuer-color: #1e3a8a;">
               <div class="cert-card-layout">
                 <div class="cert-card-thumb">
                   <img src="assets/images/hackathons/hack-marqing-minds.jpg" alt="" loading="lazy" width="82" height="58">

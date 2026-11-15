@@ -746,6 +746,7 @@ function initStageNavigation() {
     const nextIndex = VIEW_ORDER.indexOf(nextId);
     const direction = nextIndex >= oldIndex ? "forward" : "backward";
 
+    const prevSide = currentSide;
     currentSide =
       nextId === "certificates" || nextId === "hackathons"
         ? "left"
@@ -757,6 +758,17 @@ function initStageNavigation() {
     root.dataset.page = nextId;
     root.dataset.side = currentSide;
     root.dataset.dir = direction;
+    root.dataset.sideStay =
+      oldView && oldView !== nextId && prevSide === currentSide ? "true" : "false";
+
+    const yellowCurtain = document.querySelector(".parallelogram-yellow-curtain");
+    if (yellowCurtain) {
+      yellowCurtain.classList.remove("is-sweeping");
+      if (!reducedMotionQuery.matches && (nextId === "certificates" || nextId === "hackathons")) {
+        void yellowCurtain.offsetWidth;
+        yellowCurtain.classList.add("is-sweeping");
+      }
+    }
 
     syncProjectsLiquid(oldView, nextId, currentSide);
 
@@ -1126,6 +1138,7 @@ function initCredentialLightbox() {
   const lightbox = document.getElementById("cert-lightbox");
   if (!lightbox) return null;
 
+  const mainContent = document.getElementById("main-content");
   const lightboxBackdrop = document.getElementById("cert-lightbox-backdrop");
   const lightboxCloseBtn = document.getElementById("lightbox-close-btn");
   const lightboxIssuer = document.getElementById("lightbox-cert-issuer");
@@ -1133,7 +1146,14 @@ function initCredentialLightbox() {
   const lightboxImage = document.getElementById("lightbox-cert-image");
   const lightboxVerifyBtn = document.getElementById("lightbox-verify-btn");
   const lightboxDocBtn = document.getElementById("lightbox-doc-btn");
+  const openListeners = new Set();
   let lastFocusBeforeModal = null;
+
+  function notifyListeners(isOpenState) {
+    for (const listener of openListeners) {
+      listener(isOpenState);
+    }
+  }
 
   function open(card) {
     if (!card) return;
@@ -1156,6 +1176,9 @@ function initCredentialLightbox() {
 
     lightbox.hidden = false;
     lightbox.setAttribute("aria-hidden", "false");
+    if (mainContent) mainContent.inert = true;
+    notifyListeners(true);
+
     requestAnimationFrame(() => {
       lightboxCloseBtn?.focus();
     });
@@ -1165,6 +1188,9 @@ function initCredentialLightbox() {
     if (lightbox.hidden) return;
     lightbox.hidden = true;
     lightbox.setAttribute("aria-hidden", "true");
+    if (mainContent) mainContent.inert = false;
+    notifyListeners(false);
+
     if (lastFocusBeforeModal && typeof lastFocusBeforeModal.focus === "function") {
       lastFocusBeforeModal.focus();
     }
@@ -1180,32 +1206,238 @@ function initCredentialLightbox() {
     }
   });
 
-  return { open, close };
+  return {
+    open,
+    close,
+    isOpen: () => !lightbox.hidden,
+    onOpenChange: (listener) => {
+      openListeners.add(listener);
+      return () => openListeners.delete(listener);
+    },
+  };
 }
 
 function initCredentialShowcase({ sectionId, prefix, lightbox }) {
   const section = document.getElementById(sectionId);
   if (!section) return;
 
+  const AUTOPLAY_INTERVAL_MS = 4200;
+  const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const desktopPointerQuery = window.matchMedia("(pointer: fine)");
+
+  const listPane = document.getElementById(`${prefix}-list-pane`);
   const stageBadge = document.getElementById(`${prefix}-stage-badge`);
   const stageIssuer = document.getElementById(`${prefix}-stage-issuer`);
   const stageDate = document.getElementById(`${prefix}-stage-date`);
+  const stageCount = document.getElementById(`${prefix}-stage-count`);
   const stageTitle = document.getElementById(`${prefix}-stage-title`);
   const stageSubmeta = document.getElementById(`${prefix}-stage-submeta`);
+  const stageTags = document.getElementById(`${prefix}-stage-tags`);
+  const frameEl = document.getElementById(`${prefix}-frame`);
+  const frameInner = document.getElementById(`${prefix}-frame-inner`);
   const stageImage = document.getElementById(`${prefix}-stage-image`);
+  const prevBtn = document.getElementById(`${prefix}-prev-btn`);
+  const nextBtn = document.getElementById(`${prefix}-next-btn`);
+  const autoplayFill = document.getElementById(`${prefix}-autoplay-fill`);
+  const autoplayBtn = document.getElementById(`${prefix}-autoplay-btn`);
+  const autoplayLabel = autoplayBtn?.querySelector(".cert-autoplay-label") || null;
+  const dotsNav = document.getElementById(`${prefix}-dots`);
+  const carouselStatus = document.getElementById(`${prefix}-carousel-status`);
   const stageId = document.getElementById(`${prefix}-stage-id`);
   const copyBtn = document.getElementById(`${prefix}-copy-btn`);
   const copyTip = document.getElementById(`${prefix}-copied-tip`);
   const verifyLink = document.getElementById(`${prefix}-verify-link`);
   const docLink = document.getElementById(`${prefix}-doc-link`);
   const expandBtn = document.getElementById(`${prefix}-expand-btn`);
+  const filterButtons = Array.from(section.querySelectorAll(".cert-filter-btn"));
 
-  const cards = Array.from(section.querySelectorAll(".cert-card"));
-  let activeCard = cards[0] || null;
+  const allCards = Array.from(section.querySelectorAll(".cert-card"));
+  let visibleCards = [...allCards];
+  let activeCard = allCards.find((card) => card.classList.contains("is-active")) || allCards[0] || null;
+  let dotButtons = [];
+  let isUserPaused = reducedMotionQuery.matches;
+  let isStageHovered = false;
+  let isListHovered = false;
+  let isLightboxOpen = lightbox?.isOpen?.() || false;
+  let autoplayTimer = 0;
   let copyTimer = 0;
+  let initialRender = true;
 
-  function selectCredential(card, { openModalOnMobile = false } = {}) {
+  function shouldAutoplay() {
+    return (
+      visibleCards.length > 1 &&
+      !isUserPaused &&
+      !isStageHovered &&
+      !isListHovered &&
+      !isLightboxOpen &&
+      section.classList.contains("is-active") &&
+      document.visibilityState === "visible"
+    );
+  }
+
+  function syncAutoplayButton() {
+    if (!autoplayBtn) return;
+    autoplayBtn.removeAttribute("aria-pressed");
+    autoplayBtn.dataset.paused = isUserPaused ? "true" : "false";
+    autoplayBtn.setAttribute(
+      "aria-label",
+      isUserPaused ? "Resume auto-scrolling showcase" : "Pause auto-scrolling showcase"
+    );
+    if (autoplayLabel) {
+      autoplayLabel.textContent = isUserPaused ? "Play" : "Pause";
+    }
+  }
+
+  function clearAutoplayTimer() {
+    if (autoplayTimer) {
+      clearTimeout(autoplayTimer);
+      autoplayTimer = 0;
+    }
+  }
+
+  function pauseAutoplay({ resetBar = false } = {}) {
+    clearAutoplayTimer();
+    if (!autoplayFill) return;
+    if (resetBar) {
+      autoplayFill.classList.remove("is-running", "is-paused");
+    } else if (autoplayFill.classList.contains("is-running")) {
+      autoplayFill.classList.add("is-paused");
+    }
+  }
+
+  function restartAutoplay() {
+    clearAutoplayTimer();
+    if (!shouldAutoplay()) {
+      pauseAutoplay({ resetBar: !section.classList.contains("is-active") });
+      return;
+    }
+
+    if (autoplayFill) {
+      autoplayFill.style.setProperty("--autoplay-duration", `${AUTOPLAY_INTERVAL_MS}ms`);
+      autoplayFill.classList.remove("is-running", "is-paused");
+      void autoplayFill.offsetWidth;
+      autoplayFill.classList.add("is-running");
+    }
+
+    autoplayTimer = setTimeout(() => {
+      stepSlide(1, { userInitiated: false });
+    }, AUTOPLAY_INTERVAL_MS);
+  }
+
+  function resumeAutoplay() {
+    if (shouldAutoplay()) {
+      restartAutoplay();
+    }
+  }
+
+  function syncListItemIntoView(card) {
+    if (!listPane || !card || window.innerWidth < 900 || isListHovered) return;
+    if (listPane.scrollHeight <= listPane.clientHeight + 2) return;
+
+    const cardRect = card.getBoundingClientRect();
+    const paneRect = listPane.getBoundingClientRect();
+    const targetTop = Math.max(
+      0,
+      cardRect.top - paneRect.top + listPane.scrollTop - listPane.clientHeight / 2 + cardRect.height / 2
+    );
+
+    listPane.scrollTo({
+      top: targetTop,
+      behavior: reducedMotionQuery.matches ? "auto" : "smooth",
+    });
+  }
+
+  function renderStageTags(skillsStr) {
+    if (!stageTags) return;
+    stageTags.replaceChildren();
+    const parts = (skillsStr || "")
+      .split("·")
+      .map((part) => part.trim())
+      .filter(Boolean);
+
+    for (const part of parts) {
+      const li = document.createElement("li");
+      li.className = "cert-stage-tag";
+      li.textContent = part;
+      stageTags.appendChild(li);
+    }
+  }
+
+  function updateCounterAndDots() {
+    const idx = Math.max(0, visibleCards.indexOf(activeCard));
+    const total = Math.max(1, visibleCards.length);
+
+    if (stageCount) {
+      stageCount.textContent = `${String(idx + 1).padStart(2, "0")} / ${String(total).padStart(2, "0")}`;
+    }
+
+    dotButtons.forEach((btn, dotIdx) => {
+      const isCurrent = dotIdx === idx;
+      if (isCurrent) {
+        btn.setAttribute("aria-current", "true");
+        btn.classList.add("is-active");
+      } else {
+        btn.removeAttribute("aria-current");
+        btn.classList.remove("is-active");
+      }
+    });
+  }
+
+  function renderDots() {
+    if (!dotsNav) return;
+    dotsNav.replaceChildren();
+
+    dotButtons = visibleCards.map((card, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "cert-dot";
+      const label = card.dataset.title || card.dataset.issuer || `Item ${idx + 1}`;
+      btn.setAttribute("aria-label", `Show ${label} (${idx + 1} of ${visibleCards.length})`);
+      btn.title = label;
+
+      btn.addEventListener("click", () => {
+        const currentIdx = visibleCards.indexOf(activeCard);
+        selectCredential(card, {
+          direction: idx >= currentIdx ? "next" : "prev",
+          userInitiated: true,
+          syncListScroll: true,
+        });
+      });
+
+      dotsNav.appendChild(btn);
+      return btn;
+    });
+
+    updateCounterAndDots();
+  }
+
+  function triggerFrameTransition(direction) {
+    if (initialRender || reducedMotionQuery.matches) return;
+
+    if (frameInner) {
+      frameInner.classList.remove("is-entering-next", "is-entering-prev");
+      void frameInner.offsetWidth;
+      frameInner.classList.add(direction === "prev" ? "is-entering-prev" : "is-entering-next");
+    }
+
+    if (frameEl) {
+      frameEl.classList.remove("is-sheening");
+      void frameEl.offsetWidth;
+      frameEl.classList.add("is-sheening");
+    }
+  }
+
+  function selectCredential(
+    card,
+    { openModalOnMobile = false, direction = null, userInitiated = false, syncListScroll = false } = {}
+  ) {
     if (!card) return;
+
+    const prevIdx = visibleCards.indexOf(activeCard);
+    const nextIdx = visibleCards.indexOf(card);
+    const effectiveDir =
+      direction || (prevIdx !== -1 && nextIdx !== -1 && nextIdx < prevIdx ? "prev" : "next");
+
     activeCard = card;
 
     const title = card.dataset.title || "";
@@ -1213,25 +1445,26 @@ function initCredentialShowcase({ sectionId, prefix, lightbox }) {
     const issuerTheme = card.dataset.issuerTheme || "#4285F4";
     const date = card.dataset.date || "";
     const submeta = card.dataset.submeta || "";
+    const skills = card.dataset.skills || "";
     const idVal = card.dataset.id || "";
     const verifyUrl = card.dataset.verify || "#";
     const previewSrc = card.dataset.previewSrc || "";
     const docSrc = card.dataset.docSrc || "";
 
-    for (const c of cards) {
+    for (const c of allCards) {
       const isCurrent = c === card;
       c.classList.toggle("is-active", isCurrent);
       c.querySelector(".cert-card-select-btn")?.setAttribute("aria-pressed", isCurrent ? "true" : "false");
     }
 
-    if (stageBadge) {
-      stageBadge.style.setProperty("--issuer-theme", issuerTheme);
-    }
+    if (stageBadge) stageBadge.style.setProperty("--issuer-theme", issuerTheme);
     if (stageIssuer) stageIssuer.textContent = issuer;
     if (stageDate) stageDate.textContent = date;
     if (stageTitle) stageTitle.textContent = title;
     if (stageSubmeta) stageSubmeta.textContent = submeta;
     if (stageId) stageId.textContent = idVal;
+    renderStageTags(skills);
+
     if (stageImage && previewSrc) {
       stageImage.src = previewSrc;
       stageImage.alt = `Certificate preview for ${title}`;
@@ -1239,17 +1472,182 @@ function initCredentialShowcase({ sectionId, prefix, lightbox }) {
     if (verifyLink) verifyLink.href = verifyUrl;
     if (docLink) docLink.href = docSrc;
 
+    updateCounterAndDots();
+    triggerFrameTransition(effectiveDir);
+
+    if (syncListScroll) {
+      syncListItemIntoView(card);
+    }
+
+    if (userInitiated && carouselStatus) {
+      const pos = Math.max(0, visibleCards.indexOf(card)) + 1;
+      carouselStatus.textContent = `Showing ${pos} of ${visibleCards.length}: ${title} (${issuer})`;
+    }
+
+    restartAutoplay();
+
     if (window.innerWidth < 900 && openModalOnMobile) {
       lightbox?.open(activeCard);
     }
   }
 
-  for (const card of cards) {
-    card.addEventListener("click", (e) => {
-      if (e.target.closest("a")) return;
-      selectCredential(card, { openModalOnMobile: true });
+  function stepSlide(delta, { userInitiated = false } = {}) {
+    if (!visibleCards.length) return;
+    const currentIdx = visibleCards.indexOf(activeCard);
+    const safeIdx = currentIdx === -1 ? 0 : currentIdx;
+    const nextIdx = (safeIdx + delta + visibleCards.length) % visibleCards.length;
+    selectCredential(visibleCards[nextIdx], {
+      direction: delta < 0 ? "prev" : "next",
+      userInitiated,
+      syncListScroll: true,
     });
   }
+
+  function applyFilter(filterKey, { userInitiated = false } = {}) {
+    for (const btn of filterButtons) {
+      const isSelected = btn.dataset.filter === filterKey;
+      btn.classList.toggle("is-active", isSelected);
+      btn.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    }
+
+    visibleCards = allCards.filter((card) => {
+      const matches = filterKey === "all" || card.dataset.category === filterKey;
+      card.hidden = !matches;
+      return matches;
+    });
+
+    if (!visibleCards.length) {
+      visibleCards = [...allCards];
+      for (const card of allCards) card.hidden = false;
+    }
+
+    renderDots();
+
+    if (!visibleCards.includes(activeCard)) {
+      selectCredential(visibleCards[0], {
+        direction: "next",
+        userInitiated,
+        syncListScroll: false,
+      });
+    } else {
+      updateCounterAndDots();
+      restartAutoplay();
+      if (userInitiated && carouselStatus && activeCard) {
+        const pos = visibleCards.indexOf(activeCard) + 1;
+        carouselStatus.textContent = `Showing ${visibleCards.length} matching items. Current: ${pos} of ${visibleCards.length}, ${activeCard.dataset.title || ""}`;
+      }
+    }
+  }
+
+  for (const card of allCards) {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      selectCredential(card, { openModalOnMobile: true, userInitiated: true });
+    });
+  }
+
+  for (const btn of filterButtons) {
+    btn.addEventListener("click", () => {
+      applyFilter(btn.dataset.filter || "all", { userInitiated: true });
+    });
+  }
+
+  prevBtn?.addEventListener("click", () => stepSlide(-1, { userInitiated: true }));
+  nextBtn?.addEventListener("click", () => stepSlide(1, { userInitiated: true }));
+
+  autoplayBtn?.addEventListener("click", () => {
+    isUserPaused = !isUserPaused;
+    syncAutoplayButton();
+    if (isUserPaused) {
+      pauseAutoplay({ resetBar: false });
+    } else {
+      restartAutoplay();
+    }
+  });
+
+  const handleHorizontalKey = (e) => {
+    if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      stepSlide(-1, { userInitiated: true });
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      stepSlide(1, { userInitiated: true });
+    }
+  };
+  dotsNav?.addEventListener("keydown", handleHorizontalKey);
+  frameEl?.addEventListener("keydown", handleHorizontalKey);
+
+  if (frameEl) {
+    frameEl.addEventListener("pointerenter", () => {
+      isStageHovered = true;
+      pauseAutoplay({ resetBar: false });
+    });
+
+    frameEl.addEventListener("pointerleave", () => {
+      isStageHovered = false;
+      frameEl.style.setProperty("--tilt-x", "0deg");
+      frameEl.style.setProperty("--tilt-y", "0deg");
+      resumeAutoplay();
+    });
+
+    if (desktopPointerQuery.matches) {
+      frameEl.addEventListener("pointermove", (e) => {
+        if (reducedMotionQuery.matches) return;
+        const rect = frameEl.getBoundingClientRect();
+        if (!rect.width || !rect.height) return;
+        const normX = (e.clientX - rect.left) / rect.width - 0.5;
+        const normY = (e.clientY - rect.top) / rect.height - 0.5;
+        frameEl.style.setProperty("--tilt-x", `${(-normY * 6).toFixed(2)}deg`);
+        frameEl.style.setProperty("--tilt-y", `${(normX * 7).toFixed(2)}deg`);
+      });
+    }
+  }
+
+  if (listPane) {
+    listPane.addEventListener("pointerenter", () => {
+      isListHovered = true;
+      pauseAutoplay({ resetBar: false });
+    });
+
+    listPane.addEventListener("pointerleave", () => {
+      isListHovered = false;
+      resumeAutoplay();
+    });
+  }
+
+  lightbox?.onOpenChange?.((isOpenState) => {
+    isLightboxOpen = isOpenState;
+    if (isOpenState) {
+      pauseAutoplay({ resetBar: false });
+    } else {
+      resumeAutoplay();
+    }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      resumeAutoplay();
+    } else {
+      pauseAutoplay({ resetBar: false });
+    }
+  });
+
+  reducedMotionQuery.addEventListener("change", (e) => {
+    if (e.matches) {
+      isUserPaused = true;
+      syncAutoplayButton();
+      pauseAutoplay({ resetBar: true });
+    }
+  });
+
+  const sectionObserver = new MutationObserver(() => {
+    if (section.classList.contains("is-active")) {
+      restartAutoplay();
+    } else {
+      pauseAutoplay({ resetBar: true });
+    }
+  });
+  sectionObserver.observe(section, { attributes: true, attributeFilter: ["class"] });
 
   copyBtn?.addEventListener("click", async () => {
     const textToCopy = stageId?.textContent?.trim() || "";
@@ -1282,6 +1680,14 @@ function initCredentialShowcase({ sectionId, prefix, lightbox }) {
   expandBtn?.addEventListener("click", handleOpenLightbox);
   stageImage?.addEventListener("click", handleOpenLightbox);
   stageImage?.style.setProperty("cursor", "pointer");
+
+  syncAutoplayButton();
+  renderDots();
+  if (activeCard) {
+    selectCredential(activeCard, { direction: "next", userInitiated: false });
+  }
+  initialRender = false;
+  restartAutoplay();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
