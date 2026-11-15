@@ -1799,6 +1799,7 @@ function initLiveShowcase() {
   const panels = Array.from(root.querySelectorAll(".showcase-screen-panel[data-screen]"));
   if (!tabs.length || !panels.length) return;
 
+  const SHOWCASE_ORDER = ["instagram", "linkedin"];
   const SHOWCASE_PLATFORMS = {
     instagram: {
       label: "INSTAGRAM",
@@ -1814,6 +1815,8 @@ function initLiveShowcase() {
     },
   };
 
+  const phoneStage = root.querySelector(".showcase-phone-stage");
+  const finePointerQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
   const DURATION_MS = 6000;
   const TICK_MS = 50;
   const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -1822,6 +1825,65 @@ function initLiveShowcase() {
   let elapsedMs = 0;
   let isPaused = reduceMotionQuery.matches;
   let timerId = null;
+  let switchPulseTimer = null;
+  let tiltRaf = null;
+  let pendingTilt = null;
+
+  const resetPhoneTilt = () => {
+    if (!phoneStage) return;
+    phoneStage.style.removeProperty("--tilt-x");
+    phoneStage.style.removeProperty("--tilt-y");
+    phoneStage.style.removeProperty("--glare-x");
+    phoneStage.style.removeProperty("--glare-y");
+    phoneStage.style.removeProperty("--glare-alpha");
+  };
+
+  if (phoneStage) {
+    phoneStage.addEventListener("pointermove", (event) => {
+      if (reduceMotionQuery.matches || !finePointerQuery.matches) return;
+      const rect = phoneStage.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const px = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      const py = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
+      pendingTilt = {
+        rx: ((0.5 - py) * 7.5).toFixed(2),
+        ry: ((px - 0.5) * 9.5).toFixed(2),
+        gx: (px * 100).toFixed(1),
+        gy: (py * 100).toFixed(1),
+      };
+      if (tiltRaf === null) {
+        tiltRaf = window.requestAnimationFrame(() => {
+          tiltRaf = null;
+          if (!pendingTilt) return;
+          phoneStage.style.setProperty("--tilt-x", `${pendingTilt.rx}deg`);
+          phoneStage.style.setProperty("--tilt-y", `${pendingTilt.ry}deg`);
+          phoneStage.style.setProperty("--glare-x", `${pendingTilt.gx}%`);
+          phoneStage.style.setProperty("--glare-y", `${pendingTilt.gy}%`);
+          phoneStage.style.setProperty("--glare-alpha", "1");
+        });
+      }
+    });
+
+    phoneStage.addEventListener("pointerleave", () => {
+      if (tiltRaf !== null) {
+        window.cancelAnimationFrame(tiltRaf);
+        tiltRaf = null;
+      }
+      pendingTilt = null;
+      resetPhoneTilt();
+    });
+  }
+
+  const triggerSwitchPulse = () => {
+    if (reduceMotionQuery.matches) return;
+    window.clearTimeout(switchPulseTimer);
+    delete root.dataset.switching;
+    void root.offsetWidth;
+    root.dataset.switching = "true";
+    switchPulseTimer = window.setTimeout(() => {
+      delete root.dataset.switching;
+    }, 680);
+  };
 
   const setProgress = (ratio) => {
     const clamped = Math.max(0, Math.min(1, ratio));
@@ -1838,9 +1900,16 @@ function initLiveShowcase() {
     if (playIcon) playIcon.hidden = !isPaused;
   };
 
-  const setPlatform = (nextPlatform, { resetTimer = true } = {}) => {
+  const setPlatform = (nextPlatform, { resetTimer = true, animateSwitch = true } = {}) => {
     const config = SHOWCASE_PLATFORMS[nextPlatform] || SHOWCASE_PLATFORMS.instagram;
-    currentPlatform = SHOWCASE_PLATFORMS[nextPlatform] ? nextPlatform : "instagram";
+    const resolved = SHOWCASE_PLATFORMS[nextPlatform] ? nextPlatform : "instagram";
+    const isChanging = resolved !== currentPlatform;
+    if (isChanging) {
+      const prevIdx = SHOWCASE_ORDER.indexOf(currentPlatform);
+      const nextIdx = SHOWCASE_ORDER.indexOf(resolved);
+      root.dataset.direction = nextIdx >= prevIdx ? "forward" : "backward";
+    }
+    currentPlatform = resolved;
     root.dataset.platform = currentPlatform;
 
     if (platformLabel) platformLabel.textContent = config.label;
@@ -1866,6 +1935,10 @@ function initLiveShowcase() {
     panels.forEach((panel) => {
       panel.classList.toggle("is-active", panel.dataset.screen === currentPlatform);
     });
+
+    if (isChanging && animateSwitch) {
+      triggerSwitchPulse();
+    }
 
     if (resetTimer) {
       elapsedMs = 0;
@@ -1968,6 +2041,9 @@ function initLiveShowcase() {
       isPaused = true;
       stopLoop();
       setProgress(1);
+      window.clearTimeout(switchPulseTimer);
+      delete root.dataset.switching;
+      resetPhoneTilt();
     } else {
       isPaused = false;
       elapsedMs = 0;
@@ -1978,7 +2054,7 @@ function initLiveShowcase() {
   });
 
   syncPauseButton();
-  setPlatform("instagram", { resetTimer: true });
+  setPlatform("instagram", { resetTimer: true, animateSwitch: false });
   startLoop();
 }
 

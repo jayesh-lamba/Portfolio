@@ -323,6 +323,7 @@ html[data-side="left"] .stage-parallelogram.is-stay-pulsing {
   color: var(--ink-dark);
   padding-inline: clamp(1rem, 3.5vw, 3.5rem);
   padding-block: 0.35rem;
+  pointer-events: none;
 }
 
 .site-header.is-measuring * {
@@ -341,6 +342,7 @@ html[data-side="left"] .stage-parallelogram.is-stay-pulsing {
 .header-inner > * {
   flex-shrink: 0;
   white-space: nowrap;
+  pointer-events: auto;
 }
 
 .site-logo {
@@ -4114,6 +4116,17 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 /* Dark Pane: Titanium iPhone Live Showcase */
+@media (min-width: 56.25rem) {
+  #view-contact .view-grid {
+    padding-block: clamp(3.55rem, 6.2dvh, 4.35rem) clamp(0.65rem, 1.3dvh, 1.15rem);
+  }
+
+  #view-contact .pane--showcase {
+    padding-block: 0;
+    overflow: visible;
+  }
+}
+
 #view-contact .pane--showcase {
   align-items: center;
   justify-content: safe center;
@@ -4122,20 +4135,41 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 .live-showcase {
   --showcase-accent: #e1306c;
   --showcase-accent-2: #f77737;
-  --showcase-glow: rgba(225, 48, 108, 0.38);
+  --showcase-glow: rgba(225, 48, 108, 0.44);
   --showcase-progress: 0;
+  --showcase-spring: linear(0, 0.009, 0.035 2.1%, 0.141, 0.723 11.7%, 0.938 15.8%, 1.077 20.1%, 1.14 24.4%, 1.153 27.4%, 1.147 30.8%, 1.053 43.3%, 1.01 51.3%, 0.99 59.3%, 0.99 69%, 1 84.5%, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(0.55rem, 1.3dvh, 0.85rem);
+  gap: clamp(0.45rem, 1dvh, 0.72rem);
   inline-size: 100%;
   user-select: none;
+}
+
+@supports not (transition-timing-function: linear(0, 1)) {
+  .live-showcase {
+    --showcase-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
 }
 
 .live-showcase[data-platform="linkedin"] {
   --showcase-accent: #0a66c2;
   --showcase-accent-2: #38bdf8;
-  --showcase-glow: rgba(10, 102, 194, 0.42);
+  --showcase-glow: rgba(10, 102, 194, 0.48);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #view-contact.is-active .showcase-badge {
+    animation: showcase-stage-rise 0.56s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
+  }
+
+  #view-contact.is-active .showcase-phone-stage {
+    animation: showcase-stage-rise 0.68s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both;
+  }
+
+  #view-contact.is-active .showcase-controls {
+    animation: showcase-stage-rise 0.56s cubic-bezier(0.22, 1, 0.36, 1) 0.22s both;
+  }
 }
 
 .showcase-badge {
@@ -4145,17 +4179,17 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   overflow: hidden;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.09);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.16);
 }
 
 .showcase-badge-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.38rem 0.55rem 0.38rem 0.82rem;
+  gap: 0.52rem;
+  padding: 0.4rem 0.6rem 0.4rem 0.88rem;
 }
 
 .showcase-live-dot {
@@ -4184,17 +4218,17 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 .showcase-badge-text {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 0.67rem;
+  font-size: 0.69rem;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.92);
+  color: rgba(255, 255, 255, 0.94);
   white-space: nowrap;
 }
 
 .showcase-pause-btn {
   display: inline-grid;
   place-items: center;
-  inline-size: 1.4rem;
-  block-size: 1.4rem;
+  inline-size: 1.45rem;
+  block-size: 1.45rem;
   padding: 0;
   margin-inline-start: 0.15rem;
   border-radius: 999px;
@@ -4231,57 +4265,105 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 .showcase-phone-stage {
+  --tilt-x: 0deg;
+  --tilt-y: 0deg;
+  --phone-lift: 0px;
+  --glare-x: 28%;
+  --glare-y: 22%;
+  --glare-alpha: 0;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-inline: 1rem;
+  perspective: 1200px;
+}
+
+.showcase-phone-stage:hover {
+  --phone-lift: -4px;
 }
 
 .showcase-glow {
   position: absolute;
-  inset: -14% -24%;
+  inset: -3% -22%;
   border-radius: 50%;
-  background: radial-gradient(circle, var(--showcase-glow) 0%, transparent 70%);
-  filter: blur(38px);
+  background:
+    radial-gradient(circle at 48% 48%, var(--showcase-glow) 0%, rgba(255, 255, 255, 0.045) 42%, transparent 74%);
+  filter: blur(44px);
   pointer-events: none;
   z-index: 0;
-  opacity: 0.92;
-  transition: background 0.6s ease;
+  opacity: 0.96;
+  transition: background 0.6s ease, opacity 0.4s ease;
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background 0.6s ease, opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+.live-showcase[data-switching="true"] .showcase-glow {
+  @media (prefers-reduced-motion: no-preference) {
+    transform: scale(1.12);
+    opacity: 1;
+  }
 }
 
 .iphone-chassis {
-  --phone-h: clamp(410px, 60dvh, 575px);
+  --phone-h: clamp(475px, min(74dvh, 57vw), 675px);
   position: relative;
   z-index: 1;
-  inline-size: calc(var(--phone-h) * 0.492);
+  inline-size: calc(var(--phone-h) * 0.506);
   block-size: var(--phone-h);
-  padding: 9px;
-  border-radius: 46px;
-  background: linear-gradient(155deg, #2d2d36 0%, #16161b 45%, #24242b 100%);
-  border: 3.5px solid #42424d;
+  padding: 10px;
+  border-radius: 50px;
+  background: linear-gradient(148deg, #3c3c48 0%, #17171d 38%, #222229 66%, #353540 100%);
+  border: 3.5px solid #4e4e5c;
+  transform-style: preserve-3d;
   box-shadow:
-    0 28px 60px rgba(0, 0, 0, 0.78),
-    0 0 0 1px rgba(255, 255, 255, 0.14),
-    inset 0 1px 2px rgba(255, 255, 255, 0.25);
+    0 34px 72px rgba(0, 0, 0, 0.84),
+    0 0 0 1px rgba(255, 255, 255, 0.16),
+    inset 0 1px 3px rgba(255, 255, 255, 0.34),
+    inset 0 -2px 5px rgba(0, 0, 0, 0.65);
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
   @media (prefers-reduced-motion: no-preference) {
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    transform: rotateX(var(--tilt-x)) rotateY(var(--tilt-y)) translate3d(0, var(--phone-lift), 0);
+    transition:
+      transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.4s ease,
+      border-color 0.4s ease;
   }
 }
 
+.iphone-chassis::before {
+  content: "";
+  position: absolute;
+  inset: -3.5px;
+  border-radius: 50px;
+  padding: 1.5px;
+  background: linear-gradient(
+    132deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.08) 28%,
+    rgba(255, 255, 255, 0.02) 55%,
+    rgba(255, 255, 255, 0.24) 84%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
 .iphone-chassis:hover {
+  border-color: #626273;
   box-shadow:
-    0 34px 70px rgba(0, 0, 0, 0.86),
-    0 0 28px var(--showcase-glow),
-    inset 0 1px 2px rgba(255, 255, 255, 0.3);
-  @media (prefers-reduced-motion: no-preference) {
-    transform: translateY(-3px);
-  }
+    0 42px 86px rgba(0, 0, 0, 0.9),
+    0 0 42px var(--showcase-glow),
+    0 0 0 1px rgba(255, 255, 255, 0.24),
+    inset 0 1px 3px rgba(255, 255, 255, 0.42);
 }
 
 .iphone-btn {
   position: absolute;
-  background: linear-gradient(180deg, #565664, #34343c);
+  background: linear-gradient(180deg, #646474, #34343c);
   pointer-events: none;
 }
 
@@ -4322,33 +4404,33 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   inset-block-start: 4px;
   inset-inline-start: 50%;
   transform: translateX(-50%);
-  inline-size: 38px;
+  inline-size: 42px;
   block-size: 2.5px;
   border-radius: 99px;
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .iphone-screen {
   position: relative;
   inline-size: 100%;
   block-size: 100%;
-  border-radius: 37px;
+  border-radius: 40px;
   overflow: hidden;
   background: #07070a;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .iphone-statusbar {
   position: absolute;
-  inset-block-start: 10px;
-  inset-inline: 18px;
+  inset-block-start: 11px;
+  inset-inline: 20px;
   z-index: 4;
   display: flex;
   align-items: center;
   justify-content: space-between;
   color: #ffffff;
   font-family: var(--font-heading);
-  font-size: 10.5px;
+  font-size: 11.5px;
   font-weight: 700;
   pointer-events: none;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
@@ -4362,38 +4444,44 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 
 .iphone-island {
   position: absolute;
-  inset-block-start: 9px;
+  inset-block-start: 10px;
   inset-inline-start: 50%;
   transform: translateX(-50%);
   z-index: 5;
-  inline-size: 92px;
-  block-size: 22px;
-  padding-inline: 8px;
+  inline-size: 102px;
+  block-size: 25px;
+  padding-inline: 9px;
   border-radius: 999px;
   background: #000000;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.7);
   pointer-events: none;
 }
 
+.live-showcase[data-switching="true"] .iphone-island {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: showcase-island-pop 0.58s var(--showcase-spring) both;
+  }
+}
+
 .iphone-island-dot {
-  inline-size: 7px;
-  block-size: 7px;
+  inline-size: 8px;
+  block-size: 8px;
   border-radius: 50%;
   background: var(--showcase-accent);
-  box-shadow: 0 0 8px var(--showcase-accent);
+  box-shadow: 0 0 10px var(--showcase-accent);
   transition: background-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .iphone-island-cam {
-  inline-size: 10px;
-  block-size: 10px;
+  inline-size: 11px;
+  block-size: 11px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #3b4b8b, #0c0d14 70%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: radial-gradient(circle at 35% 35%, #4658a6, #0c0d14 70%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .showcase-screens {
@@ -4401,6 +4489,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   inline-size: 100%;
   block-size: 100%;
   z-index: 1;
+  perspective: 960px;
 }
 
 .showcase-screen-panel {
@@ -4412,15 +4501,53 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   opacity: 0;
   pointer-events: none;
   @media (prefers-reduced-motion: no-preference) {
-    transform: scale(1.035);
-    transition: opacity 0.55s ease, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translate3d(-16%, 0, 0) scale(0.96);
+    transition:
+      opacity 0.44s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+.live-showcase[data-direction="backward"] .showcase-screen-panel {
+  @media (prefers-reduced-motion: no-preference) {
+    transform: translate3d(16%, 0, 0) scale(0.96);
   }
 }
 
 .showcase-screen-panel.is-active {
   opacity: 1;
+  z-index: 2;
   @media (prefers-reduced-motion: no-preference) {
-    transform: scale(1);
+    transform: translate3d(0, 0, 0) scale(1);
+    animation: showcase-panel-in-forward 0.54s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+.live-showcase[data-direction="backward"] .showcase-screen-panel.is-active {
+  @media (prefers-reduced-motion: no-preference) {
+    animation-name: showcase-panel-in-backward;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-ig-profile-row,
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-ig-tag-pill,
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-ig-btn-row,
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-li-hero-card,
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-li-card:nth-of-type(2) {
+    animation: showcase-item-rise 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-ig-tile:nth-child(1) {
+    animation: showcase-item-rise 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  }
+
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-ig-tile:nth-child(2) {
+    animation: showcase-item-rise 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+  }
+
+  .live-showcase[data-switching="true"] .showcase-screen-panel.is-active .mock-ig-tile:nth-child(3) {
+    animation: showcase-item-rise 0.48s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
   }
 }
 
@@ -4435,8 +4562,8 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   flex: none;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 36px 12px 7px;
+  gap: 6px;
+  padding: 39px 14px 8px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   background: rgba(11, 13, 17, 0.96);
   z-index: 3;
@@ -4452,7 +4579,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 .mock-ig-handle {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 13.5px;
   letter-spacing: -0.01em;
   color: #ffffff;
 }
@@ -4554,9 +4681,9 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 
 .mock-ig-avatar-ring {
   flex: none;
-  inline-size: 54px;
-  block-size: 54px;
-  padding: 2px;
+  inline-size: 62px;
+  block-size: 62px;
+  padding: 2.5px;
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.06));
 }
@@ -4578,62 +4705,62 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 
 .mock-ig-name {
   font-weight: 600;
-  font-size: 11px;
+  font-size: 12.5px;
   color: #ffffff;
-  margin-block-end: 4px;
+  margin-block-end: 5px;
 }
 
 .mock-ig-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   text-align: left;
-  gap: 6px;
+  gap: 8px;
 }
 
 .mock-ig-stats strong {
   display: block;
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 700;
   line-height: 1.15;
 }
 
 .mock-ig-stats span {
   display: block;
-  font-size: 8.8px;
+  font-size: 9.8px;
   color: rgba(255, 255, 255, 0.78);
 }
 
 .mock-ig-tag-pill {
-  margin-block-start: 9px;
+  margin-block-start: 11px;
 }
 
 .mock-ig-tag-pill span {
   display: inline-flex;
   align-items: center;
-  padding: 2.5px 8px;
+  padding: 3.5px 10px;
   border-radius: 999px;
   background: #14171d;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  font-size: 8.8px;
+  font-size: 9.8px;
   font-weight: 600;
   color: #f3f5f8;
 }
 
 .mock-ig-btn-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 27px;
-  gap: 5px;
-  margin-block-start: 10px;
+  grid-template-columns: 1fr 1fr 31px;
+  gap: 6px;
+  margin-block-start: 12px;
 }
 
 .mock-ig-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 5.5px 8px;
-  border-radius: 7px;
+  padding: 7px 10px;
+  border-radius: 8px;
   background: #252931;
-  font-size: 9.5px;
+  font-size: 10.5px;
   font-weight: 600;
   color: #ffffff;
 }
@@ -4667,7 +4794,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding-block: 7px;
+  padding-block: 9px;
 }
 
 .mock-ig-tabs .is-on {
@@ -4691,7 +4818,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 .mock-ig-tile--portrait {
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 2 / 3;
 }
 
 .mock-ig-tile img {
@@ -4713,15 +4840,15 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   flex: none;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 36px 10px 7px;
+  gap: 7px;
+  padding: 39px 12px 8px;
   background: #1b1f23;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   z-index: 3;
 }
 
 .mock-li-back {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
   color: rgba(255, 255, 255, 0.88);
 }
@@ -4730,26 +4857,26 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   flex: 1;
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 3.5px 9px;
+  gap: 6px;
+  padding: 4.5px 10px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.24);
   background: rgba(255, 255, 255, 0.03);
-  font-size: 9.5px;
+  font-size: 10.5px;
   color: rgba(255, 255, 255, 0.88);
 }
 
 .mock-li-badge {
-  inline-size: 19px;
-  block-size: 19px;
-  border-radius: 4px;
+  inline-size: 21px;
+  block-size: 21px;
+  border-radius: 4.5px;
   background: #0a66c2;
   color: #ffffff;
   display: inline-grid;
   place-items: center;
   font-family: var(--font-heading);
   font-weight: 800;
-  font-size: 10.5px;
+  font-size: 11.5px;
 }
 
 .mock-li-hero-card,
@@ -4760,7 +4887,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 .mock-li-cover {
-  block-size: 56px;
+  block-size: 64px;
   overflow: hidden;
 }
 
@@ -4773,10 +4900,10 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 .mock-li-avatar-wrap {
   position: relative;
   z-index: 2;
-  margin-block-start: -28px;
-  margin-inline-start: 11px;
-  inline-size: 56px;
-  block-size: 56px;
+  margin-block-start: -32px;
+  margin-inline-start: 12px;
+  inline-size: 64px;
+  block-size: 64px;
   border-radius: 50%;
   border: 2.5px solid #1b1f23;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.48);
@@ -4794,7 +4921,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 .mock-li-identity {
-  padding: 6px 11px 10px;
+  padding: 7px 13px 11px;
 }
 
 .mock-li-name-row {
@@ -4806,42 +4933,42 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 .mock-li-name {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 14.5px;
   color: #ffffff;
 }
 
 .mock-li-shield {
   display: inline-grid;
   place-items: center;
-  inline-size: 12px;
-  block-size: 12px;
+  inline-size: 13px;
+  block-size: 13px;
   border-radius: 50%;
   border: 1.4px solid rgba(255, 255, 255, 0.72);
   color: rgba(255, 255, 255, 0.85);
-  font-size: 7.5px;
+  font-size: 8px;
 }
 
 .mock-li-pronouns {
-  font-size: 8.5px;
+  font-size: 9.2px;
   color: rgba(255, 255, 255, 0.56);
 }
 
 .mock-li-headline {
-  margin: 3px 0 5px;
-  font-size: 9px;
-  line-height: 1.34;
+  margin: 4px 0 6px;
+  font-size: 9.8px;
+  line-height: 1.36;
   color: rgba(255, 255, 255, 0.9);
 }
 
 .mock-li-school {
-  margin: 0 0 2px;
-  font-size: 8.8px;
+  margin: 0 0 2.5px;
+  font-size: 9.4px;
   color: rgba(255, 255, 255, 0.82);
 }
 
 .mock-li-location {
-  margin: 0 0 7px;
-  font-size: 8.5px;
+  margin: 0 0 8px;
+  font-size: 9px;
   color: rgba(255, 255, 255, 0.56);
 }
 
@@ -4971,20 +5098,20 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 
 .mock-li-logo {
   flex: none;
-  inline-size: 28px;
-  block-size: 28px;
-  border-radius: 4px;
+  inline-size: 31px;
+  block-size: 31px;
+  border-radius: 4.5px;
   object-fit: contain;
   background: #ffffff;
-  padding: 1px;
+  padding: 1.5px;
   display: block;
 }
 
 .mock-li-org-dot {
   flex: none;
-  inline-size: 28px;
-  block-size: 28px;
-  border-radius: 4px;
+  inline-size: 31px;
+  block-size: 31px;
+  border-radius: 4.5px;
   display: inline-grid;
   place-items: center;
 }
@@ -4997,15 +5124,15 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 
 .mock-li-exp-item strong {
   display: block;
-  font-size: 9.6px;
-  line-height: 1.25;
+  font-size: 10.4px;
+  line-height: 1.26;
   color: #ffffff;
 }
 
 .mock-li-exp-item p {
-  margin: 1px 0 0;
-  font-size: 8.3px;
-  line-height: 1.3;
+  margin: 1.5px 0 0;
+  font-size: 9px;
+  line-height: 1.32;
   color: rgba(255, 255, 255, 0.72);
 }
 
@@ -5096,8 +5223,64 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   position: absolute;
   inset: 0;
   z-index: 6;
-  background: linear-gradient(118deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.02) 28%, transparent 52%);
+  border-radius: inherit;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      119deg,
+      rgba(255, 255, 255, 0.25) 0%,
+      rgba(255, 255, 255, 0.11) 13%,
+      rgba(255, 255, 255, 0.21) 20%,
+      rgba(255, 255, 255, 0.05) 29%,
+      transparent 42%,
+      rgba(255, 255, 255, 0.04) 85%,
+      rgba(255, 255, 255, 0.15) 100%
+    );
   pointer-events: none;
+}
+
+.iphone-glare::before {
+  content: "";
+  position: absolute;
+  inset-block: -30%;
+  inset-inline-start: 0;
+  inline-size: 66%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.06) 26%,
+    rgba(255, 255, 255, 0.34) 48%,
+    rgba(255, 255, 255, 0.14) 56%,
+    rgba(255, 255, 255, 0.04) 74%,
+    transparent 100%
+  );
+  filter: blur(5px);
+  opacity: 0;
+  transform: translate3d(-180%, 0, 0) rotate(22deg);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  #view-contact.is-active .iphone-glare::before {
+    animation: iphone-glare-glide 5.8s cubic-bezier(0.25, 0.1, 0.25, 1) 0.4s infinite;
+  }
+
+  #view-contact.is-active .live-showcase[data-switching="true"] .iphone-glare::before {
+    animation: iphone-glare-flash 0.68s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+.iphone-glare::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle 210px at var(--glare-x, 28%) var(--glare-y, 22%),
+    rgba(255, 255, 255, 0.24) 0%,
+    rgba(255, 255, 255, 0.07) 38%,
+    transparent 70%
+  );
+  opacity: calc(0.18 + var(--glare-alpha, 0) * 0.78);
+  transition: opacity 0.32s ease;
 }
 
 .showcase-screen-link {
@@ -5106,10 +5289,10 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   z-index: 7;
   display: flex;
   align-items: flex-end;
-  padding: 0 11px 22px;
+  padding: 0 13px 23px;
   text-decoration: none !important;
   color: #ffffff;
-  border-radius: 37px;
+  border-radius: 40px;
 }
 
 .showcase-screen-link:focus-visible {
@@ -5121,22 +5304,28 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   inline-size: 100%;
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6.5px 8px;
-  border-radius: 15px;
-  background: rgba(10, 10, 14, 0.86);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  gap: 9px;
+  padding: 8.5px 11px;
+  border-radius: 17px;
+  background: rgba(10, 10, 14, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.58);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.62), inset 0 1px 0 rgba(255, 255, 255, 0.14);
   @media (prefers-reduced-motion: no-preference) {
-    transition: transform 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+    transition: transform 0.28s var(--showcase-spring), border-color 0.24s ease, background-color 0.24s ease;
+  }
+}
+
+.live-showcase[data-switching="true"] .showcase-overlay-card {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: showcase-card-pop 0.56s var(--showcase-spring) both;
   }
 }
 
 .showcase-screen-link:hover .showcase-overlay-card {
-  border-color: rgba(255, 255, 255, 0.36);
-  background: rgba(16, 16, 22, 0.92);
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(16, 16, 22, 0.94);
   @media (prefers-reduced-motion: no-preference) {
     transform: translateY(-2px);
   }
@@ -5144,9 +5333,9 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 
 .showcase-card-icon {
   flex: none;
-  inline-size: 28px;
-  block-size: 28px;
-  border-radius: 9px;
+  inline-size: 34px;
+  block-size: 34px;
+  border-radius: 10px;
   display: grid;
   place-items: center;
 }
@@ -5160,8 +5349,8 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 .showcase-card-icon img {
-  inline-size: 15px;
-  block-size: 15px;
+  inline-size: 17px;
+  block-size: 17px;
   filter: brightness(0) invert(1);
 }
 
@@ -5170,12 +5359,12 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   min-inline-size: 0;
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 1.5px;
 }
 
 .showcase-card-meta strong {
   font-family: var(--font-heading);
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 700;
   color: #ffffff;
   white-space: nowrap;
@@ -5184,15 +5373,15 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
 }
 
 .showcase-card-meta span {
-  font-size: 8.5px;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.74);
   white-space: nowrap;
 }
 
 .showcase-card-arrow {
   flex: none;
-  inline-size: 23px;
-  block-size: 23px;
+  inline-size: 27px;
+  block-size: 27px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.14);
   display: grid;
@@ -5206,68 +5395,99 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   inset-inline-start: 50%;
   transform: translateX(-50%);
   z-index: 8;
-  inline-size: 86px;
+  inline-size: 96px;
   block-size: 4px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.52);
+  background: rgba(255, 255, 255, 0.56);
   pointer-events: none;
 }
 
 .iphone-ground-shadow {
-  inline-size: 62%;
-  block-size: 14px;
+  inline-size: 66%;
+  block-size: 16px;
   margin-block-start: -4px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.75) 0%, transparent 72%);
-  filter: blur(8px);
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.82) 0%, transparent 72%);
+  filter: blur(9px);
   pointer-events: none;
 }
 
-/* Bottom Platform Switcher Pills */
+/* Bottom Platform Switcher Segmented Dock */
 .showcase-controls {
-  display: flex;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.48),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.showcase-tab-glider {
+  position: absolute;
+  inset-block: 4px;
+  inset-inline-start: 4px;
+  inline-size: calc(50% - 6px);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow: 0 4px 18px var(--showcase-glow);
+  pointer-events: none;
+  z-index: 0;
+  transition: box-shadow 0.35s ease;
+  @media (prefers-reduced-motion: no-preference) {
+    transition: transform 0.5s var(--showcase-spring), box-shadow 0.35s ease;
+  }
+}
+
+.live-showcase[data-platform="linkedin"] .showcase-tab-glider {
+  transform: translate3d(calc(100% + 4px), 0, 0);
 }
 
 .showcase-tab {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
-  gap: 0.48rem;
-  padding: 0.44rem 0.95rem;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.48rem 1.05rem;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.78);
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   letter-spacing: 0.03em;
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  white-space: nowrap;
+  transition: color 0.22s ease;
 }
 
 .showcase-tab:hover {
-  background: rgba(255, 255, 255, 0.13);
   color: #ffffff;
 }
 
 .showcase-tab[aria-selected="true"] {
-  background: rgba(255, 255, 255, 0.16);
-  border-color: rgba(255, 255, 255, 0.48);
   color: #ffffff;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
 .showcase-tab[aria-selected="true"]::after {
   content: "";
   position: absolute;
-  inset-inline: 22%;
+  inset-inline: 26%;
   inset-block-end: 3px;
   border-block-end: 2px solid var(--showcase-accent);
   border-radius: 999px;
+  transition: border-color 0.3s ease;
 }
 
 .showcase-tab-dot {
@@ -5294,6 +5514,104 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   50% {
     transform: scale(1.9);
     opacity: 0;
+  }
+}
+
+@keyframes showcase-stage-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes showcase-panel-in-forward {
+  from {
+    opacity: 0;
+    transform: translate3d(18%, 0, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes showcase-panel-in-backward {
+  from {
+    opacity: 0;
+    transform: translate3d(-18%, 0, 0) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes showcase-item-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes showcase-island-pop {
+  0% {
+    transform: translateX(-50%) scaleX(1) scaleY(1);
+  }
+  40% {
+    transform: translateX(-50%) scaleX(1.2) scaleY(1.06);
+  }
+  100% {
+    transform: translateX(-50%) scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes showcase-card-pop {
+  from {
+    opacity: 0.65;
+    transform: translate3d(0, 9px, 0) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes iphone-glare-glide {
+  0%, 8% {
+    opacity: 0;
+    transform: translate3d(-180%, 0, 0) rotate(22deg);
+  }
+  18% {
+    opacity: 0.92;
+  }
+  42% {
+    opacity: 0.78;
+  }
+  54%, 100% {
+    opacity: 0;
+    transform: translate3d(290%, 0, 0) rotate(22deg);
+  }
+}
+
+@keyframes iphone-glare-flash {
+  0% {
+    opacity: 0;
+    transform: translate3d(-150%, 0, 0) rotate(22deg);
+  }
+  30% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(280%, 0, 0) rotate(22deg);
   }
 }
 
@@ -5347,7 +5665,7 @@ html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   }
 
   .iphone-chassis {
-    --phone-h: 510px;
+    --phone-h: min(630px, 152vw);
   }
 
   html[data-page="contact"] :is(.site-logo, .menu-button) {
