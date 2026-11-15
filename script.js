@@ -1781,10 +1781,212 @@ function initCredentialShowcase({ sectionId, prefix, lightbox }) {
   restartAutoplay();
 }
 
+function initLiveShowcase() {
+  const root = document.getElementById("live-showcase");
+  const contactSection = document.getElementById("view-contact");
+  if (!root || !contactSection) return;
+
+  const platformLabel = document.getElementById("showcase-platform-label");
+  const pauseBtn = document.getElementById("showcase-autoplay");
+  const pauseIcon = pauseBtn?.querySelector(".showcase-pause-icon");
+  const playIcon = pauseBtn?.querySelector(".showcase-play-icon");
+  const visitLink = document.getElementById("showcase-visit-link");
+  const cardIcon = document.getElementById("showcase-card-icon");
+  const iconIg = cardIcon?.querySelector(".showcase-icon-ig");
+  const iconLi = cardIcon?.querySelector(".showcase-icon-li");
+  const cardTitle = document.getElementById("showcase-card-title");
+  const tabs = Array.from(root.querySelectorAll('.showcase-tab[role="tab"]'));
+  const panels = Array.from(root.querySelectorAll(".showcase-screen-panel[data-screen]"));
+  if (!tabs.length || !panels.length) return;
+
+  const SHOWCASE_PLATFORMS = {
+    instagram: {
+      label: "INSTAGRAM",
+      url: "https://www.instagram.com/hi_its_jayesh/",
+      title: "@hi_its_jayesh",
+      aria: "Visit Jayesh Lamba on Instagram @hi_its_jayesh (opens in a new tab)",
+    },
+    linkedin: {
+      label: "LINKEDIN",
+      url: "https://www.linkedin.com/in/jayesh-lamba-8527b2256",
+      title: "Jayesh Lamba",
+      aria: "Visit Jayesh Lamba on LinkedIn (opens in a new tab)",
+    },
+  };
+
+  const DURATION_MS = 6000;
+  const TICK_MS = 50;
+  const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let currentPlatform = "instagram";
+  let elapsedMs = 0;
+  let isPaused = reduceMotionQuery.matches;
+  let timerId = null;
+
+  const setProgress = (ratio) => {
+    const clamped = Math.max(0, Math.min(1, ratio));
+    root.style.setProperty("--showcase-progress", clamped.toFixed(4));
+  };
+
+  const syncPauseButton = () => {
+    if (!pauseBtn) return;
+    pauseBtn.setAttribute(
+      "aria-label",
+      isPaused ? "Resume live showcase rotation" : "Pause live showcase rotation",
+    );
+    if (pauseIcon) pauseIcon.hidden = isPaused;
+    if (playIcon) playIcon.hidden = !isPaused;
+  };
+
+  const setPlatform = (nextPlatform, { resetTimer = true } = {}) => {
+    const config = SHOWCASE_PLATFORMS[nextPlatform] || SHOWCASE_PLATFORMS.instagram;
+    currentPlatform = SHOWCASE_PLATFORMS[nextPlatform] ? nextPlatform : "instagram";
+    root.dataset.platform = currentPlatform;
+
+    if (platformLabel) platformLabel.textContent = config.label;
+    if (cardTitle) cardTitle.textContent = config.title;
+    if (visitLink) {
+      visitLink.href = config.url;
+      visitLink.setAttribute("aria-label", config.aria);
+    }
+
+    if (cardIcon) {
+      cardIcon.classList.toggle("showcase-card-icon--instagram", currentPlatform === "instagram");
+      cardIcon.classList.toggle("showcase-card-icon--linkedin", currentPlatform === "linkedin");
+    }
+    if (iconIg) iconIg.hidden = currentPlatform !== "instagram";
+    if (iconLi) iconLi.hidden = currentPlatform !== "linkedin";
+
+    tabs.forEach((tab) => {
+      const selected = tab.dataset.target === currentPlatform;
+      tab.setAttribute("aria-selected", selected ? "true" : "false");
+      tab.setAttribute("tabindex", selected ? "0" : "-1");
+    });
+
+    panels.forEach((panel) => {
+      panel.classList.toggle("is-active", panel.dataset.screen === currentPlatform);
+    });
+
+    if (resetTimer) {
+      elapsedMs = 0;
+      setProgress(isPaused ? 1 : 0);
+    }
+  };
+
+  const stopLoop = () => {
+    if (timerId !== null) {
+      window.clearInterval(timerId);
+      timerId = null;
+    }
+  };
+
+  const startLoop = () => {
+    stopLoop();
+    if (isPaused || document.hidden || !contactSection.classList.contains("is-active")) {
+      if (isPaused) setProgress(1);
+      return;
+    }
+
+    timerId = window.setInterval(() => {
+      if (isPaused || document.hidden || !contactSection.classList.contains("is-active")) {
+        return;
+      }
+      elapsedMs += TICK_MS;
+      if (elapsedMs >= DURATION_MS) {
+        const nextPlatform = currentPlatform === "instagram" ? "linkedin" : "instagram";
+        setPlatform(nextPlatform, { resetTimer: true });
+      } else {
+        setProgress(elapsedMs / DURATION_MS);
+      }
+    }, TICK_MS);
+  };
+
+  tabs.forEach((tab, index) => {
+    tab.addEventListener("click", () => {
+      const target = tab.dataset.target || "instagram";
+      setPlatform(target, { resetTimer: true });
+      startLoop();
+    });
+
+    tab.addEventListener("keydown", (event) => {
+      let nextIdx = -1;
+      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+        nextIdx = (index + 1) % tabs.length;
+      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+        nextIdx = (index - 1 + tabs.length) % tabs.length;
+      } else if (event.key === "Home") {
+        nextIdx = 0;
+      } else if (event.key === "End") {
+        nextIdx = tabs.length - 1;
+      }
+      if (nextIdx >= 0) {
+        event.preventDefault();
+        const nextTab = tabs[nextIdx];
+        setPlatform(nextTab.dataset.target || "instagram", { resetTimer: true });
+        nextTab.focus();
+        startLoop();
+      }
+    });
+  });
+
+  pauseBtn?.addEventListener("click", () => {
+    isPaused = !isPaused;
+    syncPauseButton();
+    if (isPaused) {
+      stopLoop();
+      setProgress(1);
+    } else {
+      elapsedMs = 0;
+      setProgress(0);
+      startLoop();
+    }
+  });
+
+  const sectionObserver = new MutationObserver(() => {
+    if (contactSection.classList.contains("is-active")) {
+      if (!isPaused) {
+        elapsedMs = 0;
+        setProgress(0);
+        startLoop();
+      }
+    } else {
+      stopLoop();
+    }
+  });
+  sectionObserver.observe(contactSection, { attributes: true, attributeFilter: ["class"] });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      stopLoop();
+    } else {
+      startLoop();
+    }
+  });
+
+  reduceMotionQuery.addEventListener?.("change", (event) => {
+    if (event.matches) {
+      isPaused = true;
+      stopLoop();
+      setProgress(1);
+    } else {
+      isPaused = false;
+      elapsedMs = 0;
+      setProgress(0);
+      startLoop();
+    }
+    syncPauseButton();
+  });
+
+  syncPauseButton();
+  setPlatform("instagram", { resetTimer: true });
+  startLoop();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initStageNavigation();
   initContactForm();
+  initLiveShowcase();
   const credentialLightbox = initCredentialLightbox();
   initCredentialShowcase({
     sectionId: "view-certificates",
