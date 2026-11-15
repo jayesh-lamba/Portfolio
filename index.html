@@ -6,12 +6,13 @@
   <meta name="color-scheme" content="only light">
   <title>Jayesh — Full Stack &amp; Back-End Developer Portfolio</title>
   <meta name="description" content="Portfolio of Jayesh, Full Stack Developer and Back-End Engineer specializing in Python, FastAPI, React.js, TypeScript, and Node.js.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 50'%3E%3Cpath d='M18.5 5H41.5L53 25L41.5 45H18.5L7 25Z' fill='%23fdc435' stroke='%23000' stroke-width='3.6' stroke-linejoin='round'/%3E%3Cpath d='M35 14V28.5C35 32.64 31.64 36 27.5 36C24.2 36 21.5 33.9 20.5 31M27 14H40' fill='none' stroke='%23000' stroke-width='3.8' stroke-linecap='round'/%3E%3C/svg%3E">
   <style>:root, html, body, main.stage { background-color: #ffffff; color-scheme: only light; }</style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261115e">
-  <script type="module" src="script.js?v=20261115e"></script>
+  <link rel="stylesheet" href="styles.css?v=20261115f">
+  <script type="module" src="script.js?v=20261115f"></script>
 </head>
 <body>
   <a href="#home-heading" class="skip-link visually-hidden" id="skip-to-main">Skip to main content</a>
@@ -49,6 +50,7 @@
           <li><button type="button" class="nav-link" data-nav="skills">Skills</button></li>
           <li><button type="button" class="nav-link" data-nav="projects">Projects</button></li>
           <li><button type="button" class="nav-link" data-nav="certificates">Certifications</button></li>
+          <li><button type="button" class="nav-link" data-nav="hackathons">Hackathons</button></li>
           <li><button type="button" class="nav-link nav-cta" data-nav="contact">CONTACT ME</button></li>
         </ul>
       </nav>
@@ -128,7 +130,10 @@
 
           <ul class="compact-list">
             <li><strong>VIT Bhopal</strong> — B.Tech in Computer Science &amp; Engineering (2022–2026)</li>
-            <li><strong>EY Techathon 6.0 (Round 2)</strong> — Pitched solution deck across 2 evaluation rounds</li>
+            <li>
+              <strong>EY Techathon 6.0 (Round 2)</strong> — Pitched solution deck across 2 evaluation rounds —
+              <button type="button" class="text-link" data-nav="hackathons" style="background:none;border:none;padding:0;color:#fcba03;text-decoration:underline;cursor:pointer;font-weight:700;">View all 11 hackathon credentials &rarr;</button>
+            </li>
             <li>
               <strong>Certifications:</strong>
               Google Networking, IBM Blockchain, Ethnus Salesforce, Intellipaat PCP-SDE, Microsoft SQL &amp; Data Science —
@@ -686,7 +691,454 @@
       </div>
     </section>
 
-    <!-- View 6: Contact Me -->
+    <!-- View 6: Hackathons & Competitions -->
+    <section id="view-hackathons" class="view-section" data-view="hackathons" data-view-side="left" data-title="Hackathons &amp; Competitions — Jayesh" aria-labelledby="hackathons-heading" hidden>
+      <div class="view-grid view-grid--certificates">
+
+        <!-- Interactive Hackathon Certificate Preview Stage -->
+        <div class="pane pane--cert-stage" id="hack-stage-pane">
+          <div class="cert-stage-header">
+            <span class="cert-badge" id="hack-stage-badge" style="--issuer-theme: #eab308;">
+              <span class="cert-badge-dot"></span>
+              <span id="hack-stage-issuer">EY (Unstop)</span>
+            </span>
+            <span class="cert-stage-date" id="hack-stage-date">Appreciation · Round 2</span>
+          </div>
+
+          <h2 id="hack-stage-title" class="cert-stage-title">EY Techathon 6.0 — Round 2: Detailed Presentation Submission</h2>
+          <p id="hack-stage-submeta" class="cert-stage-submeta">Certificate of Appreciation · Team Invincibles · VIT Bhopal University</p>
+
+          <!-- Certificate Display Frame -->
+          <div class="cert-frame-wrapper" id="hack-frame-wrapper">
+            <div class="cert-frame" id="hack-frame">
+              <div class="cert-frame-glass"></div>
+              <img
+                id="hack-stage-image"
+                class="cert-stage-image"
+                src="assets/images/hackathons/hack-ey-round2.jpg"
+                alt="Certificate preview for EY Techathon 6.0 — Round 2: Detailed Presentation Submission"
+                width="1200"
+                height="848"
+                loading="eager"
+              >
+              <button type="button" class="cert-expand-btn" id="hack-expand-btn" aria-label="Open high-resolution fullscreen preview">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                </svg>
+                <span>Full View</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Credential Meta & Actions -->
+          <div class="cert-meta-box">
+            <div class="cert-id-group">
+              <span class="cert-id-label">CREDENTIAL ID</span>
+              <div class="cert-id-value-wrap">
+                <code id="hack-stage-id" class="cert-stage-id">f480459e-a49d-4aa4-bb64-5a1b1bc90bd8</code>
+                <button type="button" id="hack-copy-btn" class="cert-copy-btn" title="Copy Credential ID" aria-label="Copy Credential ID">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copied-tooltip" id="hack-copied-tip">Copied!</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="cert-actions-group">
+              <a id="hack-verify-link" href="https://unstop.com/certificate-preview/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--primary">
+                <span>Verify Credential</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              <a id="hack-doc-link" href="assets/hackathons/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8.pdf" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--secondary">
+                <span>Original PDF</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scrollable Hackathon Directory / Cards -->
+        <div class="pane pane--cert-list">
+          <div class="cert-list-header">
+            <p class="section-eyebrow">11 VERIFIED EVENT CREDENTIALS</p>
+            <h1 id="hackathons-heading" class="section-title" tabindex="-1">Hackathons</h1>
+            <p class="section-lead">
+              National hackathons, engineering challenges, and case study competitions across EY, Tata Group, TVS Credit, Aptiv, HPCL, L&rsquo;Or&eacute;al, and MCD.
+            </p>
+          </div>
+
+          <div class="cert-cards-stack">
+            <!-- 1. EY Techathon 6.0 Round 2 -->
+            <article class="cert-card is-active" data-cert="ey-round2"
+              data-title="EY Techathon 6.0 — Round 2: Detailed Presentation Submission"
+              data-issuer="EY (Unstop)"
+              data-issuer-theme="#eab308"
+              data-date="Appreciation · Round 2"
+              data-submeta="Certificate of Appreciation · Team Invincibles · VIT Bhopal University"
+              data-id="f480459e-a49d-4aa4-bb64-5a1b1bc90bd8"
+              data-verify="https://unstop.com/certificate-preview/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8"
+              data-preview-src="assets/images/hackathons/hack-ey-round2.jpg"
+              data-doc-src="assets/hackathons/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-ey-round2.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #ca8a04;">EY (Unstop)</span>
+                    <span class="cert-card-date">Appreciation · Round 2</span>
+                  </div>
+                  <h3 class="cert-card-title">EY Techathon 6.0 — Round 2: Detailed Presentation Submission</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>f480459e-a49d-4aa4-bb64-5a1b1bc90bd8</code></span>
+                    <span class="cert-card-skills">Team Invincibles · Appreciation</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="true">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/f480459e-a49d-4aa4-bb64-5a1b1bc90bd8" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 2. EY Techathon 6.0 Round 1 -->
+            <article class="cert-card" data-cert="ey-round1"
+              data-title="EY Techathon 6.0 — Round 1: Executive Summary Submission"
+              data-issuer="EY (Unstop)"
+              data-issuer-theme="#eab308"
+              data-date="Participation · Round 1"
+              data-submeta="Certificate of Participation · VIT Bhopal University (VIT), Bhopal"
+              data-id="c5e41a98-74ec-45ab-9a34-68fb1e489aae"
+              data-verify="https://unstop.com/certificate-preview/c5e41a98-74ec-45ab-9a34-68fb1e489aae"
+              data-preview-src="assets/images/hackathons/hack-ey-round1.jpg"
+              data-doc-src="assets/hackathons/c5e41a98-74ec-45ab-9a34-68fb1e489aae.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-ey-round1.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #ca8a04;">EY (Unstop)</span>
+                    <span class="cert-card-date">Round 1 · Summary</span>
+                  </div>
+                  <h3 class="cert-card-title">EY Techathon 6.0 — Round 1: Executive Summary Submission</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>c5e41a98-74ec-45ab-9a34-68fb1e489aae</code></span>
+                    <span class="cert-card-skills">VIT Bhopal University</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/c5e41a98-74ec-45ab-9a34-68fb1e489aae" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 3. TVS Credit E.P.I.C 7.0 -->
+            <article class="cert-card" data-cert="tvs-epic"
+              data-title="TVS Credit E.P.I.C 7.0 — IT Challenge"
+              data-issuer="TVS Credit"
+              data-issuer-theme="#1d4ed8"
+              data-date="Sept 24, 2025"
+              data-submeta="Certificate of Participation · Team Rog · VIT Bhopal University"
+              data-id="f57dfcca-c634-457d-a39c-1f7eb92dc682"
+              data-verify="https://unstop.com/certificate-preview/f57dfcca-c634-457d-a39c-1f7eb92dc682"
+              data-preview-src="assets/images/hackathons/hack-tvs-epic.jpg"
+              data-doc-src="assets/hackathons/f57dfcca-c634-457d-a39c-1f7eb92dc682.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-tvs-epic.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #1d4ed8;">TVS Credit</span>
+                    <span class="cert-card-date">Sept 24, 2025</span>
+                  </div>
+                  <h3 class="cert-card-title">TVS Credit E.P.I.C 7.0 — IT Challenge</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>f57dfcca-c634-457d-a39c-1f7eb92dc682</code></span>
+                    <span class="cert-card-skills">Team Rog · IT Challenge</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/f57dfcca-c634-457d-a39c-1f7eb92dc682" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 4. Aptiv MobilityX -->
+            <article class="cert-card" data-cert="aptiv-mobilityx"
+              data-title="MobilityX: Innovate for Inclusion — Round 1: Concept &amp; Feasibility Deck"
+              data-issuer="Aptiv"
+              data-issuer-theme="#f97316"
+              data-date="Round 1 · Concept Deck"
+              data-submeta="Certificate of Participation · Team Elevate · Aptiv Ability Network"
+              data-id="b71f80ab-4c28-4801-845a-6121b8bf0038"
+              data-verify="https://unstop.com/certificate-preview/b71f80ab-4c28-4801-845a-6121b8bf0038"
+              data-preview-src="assets/images/hackathons/hack-aptiv-mobilityx.jpg"
+              data-doc-src="assets/hackathons/b71f80ab-4c28-4801-845a-6121b8bf0038.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-aptiv-mobilityx.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #ea580c;">Aptiv</span>
+                    <span class="cert-card-date">Round 1 · Deck</span>
+                  </div>
+                  <h3 class="cert-card-title">MobilityX: Innovate for Inclusion — Round 1</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>b71f80ab-4c28-4801-845a-6121b8bf0038</code></span>
+                    <span class="cert-card-skills">Team Elevate · VIT Bhopal</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/b71f80ab-4c28-4801-845a-6121b8bf0038" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 5. Hack For Green Bharat -->
+            <article class="cert-card" data-cert="green-bharat"
+              data-title="Hack For Green Bharat Hackathon — Online Round"
+              data-issuer="Tech Masters India"
+              data-issuer-theme="#16a34a"
+              data-date="Online Round"
+              data-submeta="Certificate of Participation · Team Elevate · Tech Masters India"
+              data-id="913978ec-e70f-47cd-96cc-7626912beff4"
+              data-verify="https://unstop.com/certificate-preview/913978ec-e70f-47cd-96cc-7626912beff4"
+              data-preview-src="assets/images/hackathons/hack-green-bharat.jpg"
+              data-doc-src="assets/hackathons/913978ec-e70f-47cd-96cc-7626912beff4.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-green-bharat.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #16a34a;">Tech Masters India</span>
+                    <span class="cert-card-date">Online Round</span>
+                  </div>
+                  <h3 class="cert-card-title">Hack For Green Bharat Hackathon</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>913978ec-e70f-47cd-96cc-7626912beff4</code></span>
+                    <span class="cert-card-skills">Team Elevate · Sustainability</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/913978ec-e70f-47cd-96cc-7626912beff4" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 6. India Innovates 2026 -->
+            <article class="cert-card" data-cert="india-innovates"
+              data-title="India Innovates 2026"
+              data-issuer="MCD"
+              data-issuer-theme="#e11d48"
+              data-date="2026 Edition"
+              data-submeta="Certificate of Participation · Municipal Corporation of Delhi · VIT Bhopal"
+              data-id="98c275a0-6e24-40a4-869c-6eb84d8ac40c"
+              data-verify="https://unstop.com/certificate-preview/98c275a0-6e24-40a4-869c-6eb84d8ac40c"
+              data-preview-src="assets/images/hackathons/hack-india-innovates.jpg"
+              data-doc-src="assets/hackathons/98c275a0-6e24-40a4-869c-6eb84d8ac40c.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-india-innovates.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #e11d48;">MCD (Delhi)</span>
+                    <span class="cert-card-date">2026 Edition</span>
+                  </div>
+                  <h3 class="cert-card-title">India Innovates 2026</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>98c275a0-6e24-40a4-869c-6eb84d8ac40c</code></span>
+                    <span class="cert-card-skills">Civic Innovation · VIT Bhopal</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/98c275a0-6e24-40a4-869c-6eb84d8ac40c" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 7. TATA Crucible Campus Quiz 2025 -->
+            <article class="cert-card" data-cert="tata-crucible"
+              data-title="TATA Crucible Campus Quiz 2025"
+              data-issuer="Tata Group"
+              data-issuer-theme="#2563eb"
+              data-date="2025 Edition"
+              data-submeta="Certificate of Participation · Tata Group · VIT Bhopal University"
+              data-id="644ee878-8aed-4a2a-b715-6cfd15f512ef"
+              data-verify="https://unstop.com/certificate-preview/644ee878-8aed-4a2a-b715-6cfd15f512ef"
+              data-preview-src="assets/images/hackathons/hack-tata-crucible.jpg"
+              data-doc-src="assets/hackathons/644ee878-8aed-4a2a-b715-6cfd15f512ef.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-tata-crucible.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #2563eb;">Tata Group</span>
+                    <span class="cert-card-date">2025 Edition</span>
+                  </div>
+                  <h3 class="cert-card-title">TATA Crucible Campus Quiz 2025</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>644ee878-8aed-4a2a-b715-6cfd15f512ef</code></span>
+                    <span class="cert-card-skills">Campus Quiz · VIT Bhopal</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/644ee878-8aed-4a2a-b715-6cfd15f512ef" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 8. HP Power Lab 2.0 -->
+            <article class="cert-card" data-cert="hp-powerlab"
+              data-title="HP Power Lab 2.0 — Round 1: Online Assessment"
+              data-issuer="HPCL"
+              data-issuer-theme="#dc2626"
+              data-date="Round 1 · Assessment"
+              data-submeta="Certificate of Participation · Hindustan Petroleum Corp. Ltd. · VIT Bhopal"
+              data-id="c3022a9c-aebc-443e-b9ff-3ef66c0da6c3"
+              data-verify="https://unstop.com/certificate-preview/c3022a9c-aebc-443e-b9ff-3ef66c0da6c3"
+              data-preview-src="assets/images/hackathons/hack-hp-powerlab.jpg"
+              data-doc-src="assets/hackathons/c3022a9c-aebc-443e-b9ff-3ef66c0da6c3.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-hp-powerlab.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #dc2626;">HPCL</span>
+                    <span class="cert-card-date">Round 1 · Assessment</span>
+                  </div>
+                  <h3 class="cert-card-title">HP Power Lab 2.0 — Round 1</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>c3022a9c-aebc-443e-b9ff-3ef66c0da6c3</code></span>
+                    <span class="cert-card-skills">Online Assessment · VIT Bhopal</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/c3022a9c-aebc-443e-b9ff-3ef66c0da6c3" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 9. L'Oréal Sustainability Challenge 2025 -->
+            <article class="cert-card" data-cert="loreal-sustainability"
+              data-title="L&rsquo;Or&eacute;al Sustainability Challenge 2025 — Online Aptitude Assessment"
+              data-issuer="L'Oréal"
+              data-issuer-theme="#9333ea"
+              data-date="2025 Edition"
+              data-submeta="Certificate of Participation · Team Rog5 · VIT Bhopal University"
+              data-id="cb0374fd-475b-4491-8aa4-201da4847b08"
+              data-verify="https://unstop.com/certificate-preview/cb0374fd-475b-4491-8aa4-201da4847b08"
+              data-preview-src="assets/images/hackathons/hack-loreal-sustainability.jpg"
+              data-doc-src="assets/hackathons/cb0374fd-475b-4491-8aa4-201da4847b08.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-loreal-sustainability.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #9333ea;">L&rsquo;Or&eacute;al</span>
+                    <span class="cert-card-date">2025 Edition</span>
+                  </div>
+                  <h3 class="cert-card-title">L&rsquo;Or&eacute;al Sustainability Challenge 2025</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>cb0374fd-475b-4491-8aa4-201da4847b08</code></span>
+                    <span class="cert-card-skills">Team Rog5 · Aptitude Round</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/cb0374fd-475b-4491-8aa4-201da4847b08" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 10. NationBuilding Case Study Competition 2026 -->
+            <article class="cert-card" data-cert="nationbuilding"
+              data-title="NationBuilding Case Study Competition 2026 — Online Quiz Round"
+              data-issuer="Nation With NaMo"
+              data-issuer-theme="#ea580c"
+              data-date="2026 Edition"
+              data-submeta="Certificate of Participation · Online Quiz Round"
+              data-id="2adbadc6-27aa-40e1-aa0a-32ef87728e6d"
+              data-verify="https://unstop.com/certificate-preview/2adbadc6-27aa-40e1-aa0a-32ef87728e6d"
+              data-preview-src="assets/images/hackathons/hack-nationbuilding.jpg"
+              data-doc-src="assets/hackathons/2adbadc6-27aa-40e1-aa0a-32ef87728e6d.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-nationbuilding.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #ea580c;">Nation With NaMo</span>
+                    <span class="cert-card-date">2026 Edition</span>
+                  </div>
+                  <h3 class="cert-card-title">NationBuilding Case Study Competition 2026</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>2adbadc6-27aa-40e1-aa0a-32ef87728e6d</code></span>
+                    <span class="cert-card-skills">Case Study · Online Quiz</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/2adbadc6-27aa-40e1-aa0a-32ef87728e6d" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 11. MarQing Minds -->
+            <article class="cert-card" data-cert="marqing-minds"
+              data-title="MarQing Minds: Case Study Competition (Unstop Freedom Festival)"
+              data-issuer="MDI Gurgaon"
+              data-issuer-theme="#1e3a8a"
+              data-date="Freedom Festival"
+              data-submeta="Certificate of Participation · Management Development Institute (MDI), Gurgaon · VIT Bhopal"
+              data-id="73bcc9c1-7358-4eba-b72b-391c7cbd4e0f"
+              data-verify="https://unstop.com/certificate-preview/73bcc9c1-7358-4eba-b72b-391c7cbd4e0f"
+              data-preview-src="assets/images/hackathons/hack-marqing-minds.jpg"
+              data-doc-src="assets/hackathons/73bcc9c1-7358-4eba-b72b-391c7cbd4e0f.pdf">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/hackathons/hack-marqing-minds.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #1e3a8a;">MDI Gurgaon</span>
+                    <span class="cert-card-date">Freedom Festival</span>
+                  </div>
+                  <h3 class="cert-card-title">MarQing Minds: Case Study Competition</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>73bcc9c1-7358-4eba-b72b-391c7cbd4e0f</code></span>
+                    <span class="cert-card-skills">Unstop Freedom Festival</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://unstop.com/certificate-preview/73bcc9c1-7358-4eba-b72b-391c7cbd4e0f" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 7: Contact Me -->
     <section id="view-contact" class="view-section" data-view="contact" data-view-side="right" data-title="Contact Me — Jayesh" aria-labelledby="contact-heading" hidden>
       <div class="view-grid">
         <div class="pane pane--light">

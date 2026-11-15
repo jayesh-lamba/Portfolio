@@ -2384,51 +2384,60 @@ html[data-side="left"] .site-header.is-wide .site-menu li .nav-cta[aria-current=
   z-index: 2;
 }
 
-html[data-page="certificates"] .stage-parallelogram {
+html[data-page="certificates"] .stage-parallelogram,
+html[data-page="hackathons"] .stage-parallelogram {
   box-shadow: none !important;
   transition: box-shadow 0.6s var(--p-ease), transform 0.95s var(--p-ease) 0.18s;
 }
 
-html[data-page="certificates"] .stage-parallelogram .parallelogram-surface {
+html[data-page="certificates"] .stage-parallelogram .parallelogram-surface,
+html[data-page="hackathons"] .stage-parallelogram .parallelogram-surface {
   background-color: var(--accent-yellow) !important;
   transition: background-color 0.8s var(--p-ease);
 }
 
-html[data-page="certificates"] .parallelogram-yellow-curtain {
+html[data-page="certificates"] .parallelogram-yellow-curtain,
+html[data-page="hackathons"] .parallelogram-yellow-curtain {
   opacity: 1;
   transform: scaleY(1);
 }
 
-html[data-page="certificates"] .site-logo {
+html[data-page="certificates"] .site-logo,
+html[data-page="hackathons"] .site-logo {
   color: #000000 !important;
 }
 
-html[data-page="certificates"] .menu-button {
+html[data-page="certificates"] .menu-button,
+html[data-page="hackathons"] .menu-button {
   color: #000000 !important;
 }
 
-html[data-page="certificates"] .site-header.is-wide .site-menu {
+html[data-page="certificates"] .site-header.is-wide .site-menu,
+html[data-page="hackathons"] .site-header.is-wide .site-menu {
   background: linear-gradient(135deg, rgba(244, 246, 250, 0.92) 0%, rgba(232, 236, 244, 0.78) 100%) !important;
   border-color: rgba(0, 0, 0, 0.14) !important;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
 }
 
-html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-link {
+html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-link,
+html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-link {
   color: #000000 !important;
 }
 
-html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-link[aria-current="page"] {
+html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-link[aria-current="page"],
+html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-link[aria-current="page"] {
   background-color: rgba(0, 0, 0, 0.08) !important;
   border-color: rgba(0, 0, 0, 0.16) !important;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
 }
 
-html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-cta {
+html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-cta,
+html[data-page="hackathons"] .site-header.is-wide .site-menu li .nav-cta {
   background-color: #000000 !important;
   color: #ffffff !important;
 }
 
-/* Certifications Layout */
+/* Certifications & Hackathons Layout */
 .view-grid--certificates {
   inline-size: 100%;
   block-size: 100%;
@@ -2461,6 +2470,15 @@ html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-cta {
     overflow-y: auto !important;
     padding-inline-end: 0.75rem;
   }
+}
+
+.cert-stage-submeta {
+  margin: -0.25rem 0 0;
+  font-family: var(--font-heading);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.72);
+  letter-spacing: 0.01em;
 }
 
 /* Cert Stage (Left Plaque) */
@@ -3088,5 +3106,33 @@ html[data-page="certificates"] .site-header.is-wide .site-menu li .nav-cta {
   .cert-card-title {
     font-size: 0.88rem;
   }
+
+  .cert-lightbox-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .cert-lightbox-info {
+    flex-wrap: wrap;
+    gap: 0.45rem;
+  }
+
+  .lightbox-title {
+    white-space: normal;
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  .cert-lightbox-actions {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+}
+
+.lightbox-badge {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 

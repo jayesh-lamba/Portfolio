@@ -97,7 +97,7 @@ function initNavbar() {
 // ==========================================================================
 
 function initStageNavigation() {
-  const VIEW_ORDER = ["home", "about", "skills", "projects", "certificates", "contact"];
+  const VIEW_ORDER = ["home", "about", "skills", "projects", "certificates", "hackathons", "contact"];
   const root = document.documentElement;
   const stage = document.getElementById("main-content");
   const sections = new Map(
@@ -746,7 +746,12 @@ function initStageNavigation() {
     const nextIndex = VIEW_ORDER.indexOf(nextId);
     const direction = nextIndex >= oldIndex ? "forward" : "backward";
 
-    currentSide = currentSide === "right" ? "left" : "right";
+    currentSide =
+      nextId === "certificates" || nextId === "hackathons"
+        ? "left"
+        : currentSide === "right"
+          ? "left"
+          : "right";
     currentView = nextId;
 
     root.dataset.page = nextId;
@@ -833,6 +838,7 @@ function initStageNavigation() {
 
       const activeMenu = document.getElementById("site-menu");
       if (activeMenu?.matches(":popover-open, .\\:popover-open")) return;
+      if (document.getElementById("cert-lightbox")?.hidden === false) return;
 
       const pane = event.target.closest?.(".pane");
       if (pane && pane.scrollHeight > pane.clientHeight + 2) {
@@ -889,6 +895,7 @@ function initStageNavigation() {
 
       if (Math.abs(dy) < 48 || Math.abs(dy) <= Math.abs(dx) * 1.25) return;
       if (touchPane && Math.abs(touchPane.scrollTop - touchPaneStartTop) > 4) return;
+      if (document.getElementById("cert-lightbox")?.hidden === false) return;
       if (event.target.closest?.("input, textarea")) return;
 
       const now = performance.now();
@@ -903,6 +910,7 @@ function initStageNavigation() {
   // Keyboard PageUp/PageDown (and ArrowUp/Down when not inside form controls or overflowing panes)
   document.addEventListener("keydown", (event) => {
     if (event.defaultPrevented) return;
+    if (document.getElementById("cert-lightbox")?.hidden === false) return;
     if (event.key === "Escape" && currentView === "projects" && activePreviewId) {
       event.preventDefault();
       closeProjectPreview({ restoreFocus: true });
@@ -1114,22 +1122,10 @@ function initContactForm() {
 // 4. Interactive Certifications Showcase & Lightbox Preview
 // ==========================================================================
 
-function initCertificates() {
-  const stagePane = document.getElementById("cert-stage-pane");
-  const stageBadge = document.getElementById("cert-stage-badge");
-  const stageIssuer = document.getElementById("cert-stage-issuer");
-  const stageDate = document.getElementById("cert-stage-date");
-  const stageTitle = document.getElementById("cert-stage-title");
-  const stageImage = document.getElementById("cert-stage-image");
-  const stageId = document.getElementById("cert-stage-id");
-  const copyBtn = document.getElementById("cert-copy-btn");
-  const copyTip = document.getElementById("cert-copied-tip");
-  const verifyLink = document.getElementById("cert-verify-link");
-  const docLink = document.getElementById("cert-doc-link");
-  const expandBtn = document.getElementById("cert-expand-btn");
-
-  const cards = Array.from(document.querySelectorAll(".cert-card"));
+function initCredentialLightbox() {
   const lightbox = document.getElementById("cert-lightbox");
+  if (!lightbox) return null;
+
   const lightboxBackdrop = document.getElementById("cert-lightbox-backdrop");
   const lightboxCloseBtn = document.getElementById("lightbox-close-btn");
   const lightboxIssuer = document.getElementById("lightbox-cert-issuer");
@@ -1137,100 +1133,17 @@ function initCertificates() {
   const lightboxImage = document.getElementById("lightbox-cert-image");
   const lightboxVerifyBtn = document.getElementById("lightbox-verify-btn");
   const lightboxDocBtn = document.getElementById("lightbox-doc-btn");
-
-  let activeCard = cards[0] || null;
-  let copyTimer = 0;
   let lastFocusBeforeModal = null;
 
-  function selectCertificate(card, { openModalOnMobile = false } = {}) {
+  function open(card) {
     if (!card) return;
-    activeCard = card;
+    lastFocusBeforeModal = document.activeElement;
 
-    const certId = card.dataset.cert || "";
     const title = card.dataset.title || "";
     const issuer = card.dataset.issuer || "";
-    const issuerTheme = card.dataset.issuerTheme || "#4285F4";
-    const date = card.dataset.date || "";
-    const idVal = card.dataset.id || "";
     const verifyUrl = card.dataset.verify || "#";
     const previewSrc = card.dataset.previewSrc || "";
     const docSrc = card.dataset.docSrc || "";
-
-    for (const c of cards) {
-      const isCurrent = c === card;
-      c.classList.toggle("is-active", isCurrent);
-      c.querySelector(".cert-card-select-btn")?.setAttribute("aria-pressed", isCurrent ? "true" : "false");
-    }
-
-    if (stageBadge) {
-      stageBadge.style.setProperty("--issuer-theme", issuerTheme);
-    }
-    if (stageIssuer) stageIssuer.textContent = issuer;
-    if (stageDate) stageDate.textContent = date;
-    if (stageTitle) stageTitle.textContent = title;
-    if (stageId) stageId.textContent = idVal;
-    if (stageImage && previewSrc) {
-      stageImage.src = previewSrc;
-      stageImage.alt = `Certificate preview for ${title}`;
-    }
-    if (verifyLink) verifyLink.href = verifyUrl;
-    if (docLink) docLink.href = docSrc;
-
-    // Mobile viewport handling
-    if (window.innerWidth < 900 && openModalOnMobile) {
-      openLightbox();
-    }
-  }
-
-  for (const card of cards) {
-    card.addEventListener("click", (e) => {
-      if (e.target.closest("a")) return; // Let direct verify links open naturally
-      selectCertificate(card, { openModalOnMobile: true });
-    });
-  }
-
-  // Copy Credential ID with Accessible Tooltip Feedback
-  copyBtn?.addEventListener("click", async () => {
-    const textToCopy = stageId?.textContent?.trim() || "";
-    if (!textToCopy) return;
-
-    try {
-      await navigator.clipboard.writeText(textToCopy);
-      if (copyTip) {
-        copyTip.classList.add("is-active");
-        clearTimeout(copyTimer);
-        copyTimer = setTimeout(() => {
-          copyTip.classList.remove("is-active");
-        }, 2000);
-      }
-    } catch {
-      // Fallback
-      const ta = document.createElement("textarea");
-      ta.value = textToCopy;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand("copy");
-      document.body.removeChild(ta);
-      if (copyTip) {
-        copyTip.classList.add("is-active");
-        clearTimeout(copyTimer);
-        copyTimer = setTimeout(() => {
-          copyTip.classList.remove("is-active");
-        }, 2000);
-      }
-    }
-  });
-
-  // Lightbox Modal Controls
-  function openLightbox() {
-    if (!lightbox || !activeCard) return;
-    lastFocusBeforeModal = document.activeElement;
-
-    const title = activeCard.dataset.title || "";
-    const issuer = activeCard.dataset.issuer || "";
-    const verifyUrl = activeCard.dataset.verify || "#";
-    const previewSrc = activeCard.dataset.previewSrc || "";
-    const docSrc = activeCard.dataset.docSrc || "";
 
     if (lightboxIssuer) lightboxIssuer.textContent = issuer;
     if (lightboxTitle) lightboxTitle.textContent = title;
@@ -1248,8 +1161,8 @@ function initCertificates() {
     });
   }
 
-  function closeLightbox() {
-    if (!lightbox || lightbox.hidden) return;
+  function close() {
+    if (lightbox.hidden) return;
     lightbox.hidden = true;
     lightbox.setAttribute("aria-hidden", "true");
     if (lastFocusBeforeModal && typeof lastFocusBeforeModal.focus === "function") {
@@ -1257,24 +1170,133 @@ function initCertificates() {
     }
   }
 
-  expandBtn?.addEventListener("click", openLightbox);
-  stageImage?.addEventListener("click", openLightbox);
-  stageImage?.style.setProperty("cursor", "pointer");
-
-  lightboxCloseBtn?.addEventListener("click", closeLightbox);
-  lightboxBackdrop?.addEventListener("click", closeLightbox);
+  lightboxCloseBtn?.addEventListener("click", close);
+  lightboxBackdrop?.addEventListener("click", close);
 
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && lightbox && !lightbox.hidden) {
+    if (e.key === "Escape" && !lightbox.hidden) {
       e.preventDefault();
-      closeLightbox();
+      close();
     }
   });
+
+  return { open, close };
+}
+
+function initCredentialShowcase({ sectionId, prefix, lightbox }) {
+  const section = document.getElementById(sectionId);
+  if (!section) return;
+
+  const stageBadge = document.getElementById(`${prefix}-stage-badge`);
+  const stageIssuer = document.getElementById(`${prefix}-stage-issuer`);
+  const stageDate = document.getElementById(`${prefix}-stage-date`);
+  const stageTitle = document.getElementById(`${prefix}-stage-title`);
+  const stageSubmeta = document.getElementById(`${prefix}-stage-submeta`);
+  const stageImage = document.getElementById(`${prefix}-stage-image`);
+  const stageId = document.getElementById(`${prefix}-stage-id`);
+  const copyBtn = document.getElementById(`${prefix}-copy-btn`);
+  const copyTip = document.getElementById(`${prefix}-copied-tip`);
+  const verifyLink = document.getElementById(`${prefix}-verify-link`);
+  const docLink = document.getElementById(`${prefix}-doc-link`);
+  const expandBtn = document.getElementById(`${prefix}-expand-btn`);
+
+  const cards = Array.from(section.querySelectorAll(".cert-card"));
+  let activeCard = cards[0] || null;
+  let copyTimer = 0;
+
+  function selectCredential(card, { openModalOnMobile = false } = {}) {
+    if (!card) return;
+    activeCard = card;
+
+    const title = card.dataset.title || "";
+    const issuer = card.dataset.issuer || "";
+    const issuerTheme = card.dataset.issuerTheme || "#4285F4";
+    const date = card.dataset.date || "";
+    const submeta = card.dataset.submeta || "";
+    const idVal = card.dataset.id || "";
+    const verifyUrl = card.dataset.verify || "#";
+    const previewSrc = card.dataset.previewSrc || "";
+    const docSrc = card.dataset.docSrc || "";
+
+    for (const c of cards) {
+      const isCurrent = c === card;
+      c.classList.toggle("is-active", isCurrent);
+      c.querySelector(".cert-card-select-btn")?.setAttribute("aria-pressed", isCurrent ? "true" : "false");
+    }
+
+    if (stageBadge) {
+      stageBadge.style.setProperty("--issuer-theme", issuerTheme);
+    }
+    if (stageIssuer) stageIssuer.textContent = issuer;
+    if (stageDate) stageDate.textContent = date;
+    if (stageTitle) stageTitle.textContent = title;
+    if (stageSubmeta) stageSubmeta.textContent = submeta;
+    if (stageId) stageId.textContent = idVal;
+    if (stageImage && previewSrc) {
+      stageImage.src = previewSrc;
+      stageImage.alt = `Certificate preview for ${title}`;
+    }
+    if (verifyLink) verifyLink.href = verifyUrl;
+    if (docLink) docLink.href = docSrc;
+
+    if (window.innerWidth < 900 && openModalOnMobile) {
+      lightbox?.open(activeCard);
+    }
+  }
+
+  for (const card of cards) {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return;
+      selectCredential(card, { openModalOnMobile: true });
+    });
+  }
+
+  copyBtn?.addEventListener("click", async () => {
+    const textToCopy = stageId?.textContent?.trim() || "";
+    if (!textToCopy) return;
+
+    const showCopiedTooltip = () => {
+      if (!copyTip) return;
+      copyTip.classList.add("is-active");
+      clearTimeout(copyTimer);
+      copyTimer = setTimeout(() => {
+        copyTip.classList.remove("is-active");
+      }, 2000);
+    };
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      showCopiedTooltip();
+    } catch {
+      const ta = document.createElement("textarea");
+      ta.value = textToCopy;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showCopiedTooltip();
+    }
+  });
+
+  const handleOpenLightbox = () => lightbox?.open(activeCard);
+  expandBtn?.addEventListener("click", handleOpenLightbox);
+  stageImage?.addEventListener("click", handleOpenLightbox);
+  stageImage?.style.setProperty("cursor", "pointer");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initStageNavigation();
   initContactForm();
-  initCertificates();
+  const credentialLightbox = initCredentialLightbox();
+  initCredentialShowcase({
+    sectionId: "view-certificates",
+    prefix: "cert",
+    lightbox: credentialLightbox,
+  });
+  initCredentialShowcase({
+    sectionId: "view-hackathons",
+    prefix: "hack",
+    lightbox: credentialLightbox,
+  });
 });
