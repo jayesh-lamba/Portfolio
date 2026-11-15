@@ -97,7 +97,7 @@ function initNavbar() {
 // ==========================================================================
 
 function initStageNavigation() {
-  const VIEW_ORDER = ["home", "about", "skills", "projects", "contact"];
+  const VIEW_ORDER = ["home", "about", "skills", "projects", "certificates", "contact"];
   const root = document.documentElement;
   const stage = document.getElementById("main-content");
   const sections = new Map(
@@ -1110,8 +1110,171 @@ function initContactForm() {
   });
 }
 
+// ==========================================================================
+// 4. Interactive Certifications Showcase & Lightbox Preview
+// ==========================================================================
+
+function initCertificates() {
+  const stagePane = document.getElementById("cert-stage-pane");
+  const stageBadge = document.getElementById("cert-stage-badge");
+  const stageIssuer = document.getElementById("cert-stage-issuer");
+  const stageDate = document.getElementById("cert-stage-date");
+  const stageTitle = document.getElementById("cert-stage-title");
+  const stageImage = document.getElementById("cert-stage-image");
+  const stageId = document.getElementById("cert-stage-id");
+  const copyBtn = document.getElementById("cert-copy-btn");
+  const copyTip = document.getElementById("cert-copied-tip");
+  const verifyLink = document.getElementById("cert-verify-link");
+  const docLink = document.getElementById("cert-doc-link");
+  const expandBtn = document.getElementById("cert-expand-btn");
+
+  const cards = Array.from(document.querySelectorAll(".cert-card"));
+  const lightbox = document.getElementById("cert-lightbox");
+  const lightboxBackdrop = document.getElementById("cert-lightbox-backdrop");
+  const lightboxCloseBtn = document.getElementById("lightbox-close-btn");
+  const lightboxIssuer = document.getElementById("lightbox-cert-issuer");
+  const lightboxTitle = document.getElementById("lightbox-cert-title");
+  const lightboxImage = document.getElementById("lightbox-cert-image");
+  const lightboxVerifyBtn = document.getElementById("lightbox-verify-btn");
+  const lightboxDocBtn = document.getElementById("lightbox-doc-btn");
+
+  let activeCard = cards[0] || null;
+  let copyTimer = 0;
+  let lastFocusBeforeModal = null;
+
+  function selectCertificate(card, { openModalOnMobile = false } = {}) {
+    if (!card) return;
+    activeCard = card;
+
+    const certId = card.dataset.cert || "";
+    const title = card.dataset.title || "";
+    const issuer = card.dataset.issuer || "";
+    const issuerTheme = card.dataset.issuerTheme || "#4285F4";
+    const date = card.dataset.date || "";
+    const idVal = card.dataset.id || "";
+    const verifyUrl = card.dataset.verify || "#";
+    const previewSrc = card.dataset.previewSrc || "";
+    const docSrc = card.dataset.docSrc || "";
+
+    for (const c of cards) {
+      const isCurrent = c === card;
+      c.classList.toggle("is-active", isCurrent);
+      c.querySelector(".cert-card-select-btn")?.setAttribute("aria-pressed", isCurrent ? "true" : "false");
+    }
+
+    if (stageBadge) {
+      stageBadge.style.setProperty("--issuer-theme", issuerTheme);
+    }
+    if (stageIssuer) stageIssuer.textContent = issuer;
+    if (stageDate) stageDate.textContent = date;
+    if (stageTitle) stageTitle.textContent = title;
+    if (stageId) stageId.textContent = idVal;
+    if (stageImage && previewSrc) {
+      stageImage.src = previewSrc;
+      stageImage.alt = `Certificate preview for ${title}`;
+    }
+    if (verifyLink) verifyLink.href = verifyUrl;
+    if (docLink) docLink.href = docSrc;
+
+    // Mobile viewport handling
+    if (window.innerWidth < 900 && openModalOnMobile) {
+      openLightbox();
+    }
+  }
+
+  for (const card of cards) {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest("a")) return; // Let direct verify links open naturally
+      selectCertificate(card, { openModalOnMobile: true });
+    });
+  }
+
+  // Copy Credential ID with Accessible Tooltip Feedback
+  copyBtn?.addEventListener("click", async () => {
+    const textToCopy = stageId?.textContent?.trim() || "";
+    if (!textToCopy) return;
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      if (copyTip) {
+        copyTip.classList.add("is-active");
+        clearTimeout(copyTimer);
+        copyTimer = setTimeout(() => {
+          copyTip.classList.remove("is-active");
+        }, 2000);
+      }
+    } catch {
+      // Fallback
+      const ta = document.createElement("textarea");
+      ta.value = textToCopy;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      if (copyTip) {
+        copyTip.classList.add("is-active");
+        clearTimeout(copyTimer);
+        copyTimer = setTimeout(() => {
+          copyTip.classList.remove("is-active");
+        }, 2000);
+      }
+    }
+  });
+
+  // Lightbox Modal Controls
+  function openLightbox() {
+    if (!lightbox || !activeCard) return;
+    lastFocusBeforeModal = document.activeElement;
+
+    const title = activeCard.dataset.title || "";
+    const issuer = activeCard.dataset.issuer || "";
+    const verifyUrl = activeCard.dataset.verify || "#";
+    const previewSrc = activeCard.dataset.previewSrc || "";
+    const docSrc = activeCard.dataset.docSrc || "";
+
+    if (lightboxIssuer) lightboxIssuer.textContent = issuer;
+    if (lightboxTitle) lightboxTitle.textContent = title;
+    if (lightboxImage && previewSrc) {
+      lightboxImage.src = previewSrc;
+      lightboxImage.alt = `High resolution preview of ${title}`;
+    }
+    if (lightboxVerifyBtn) lightboxVerifyBtn.href = verifyUrl;
+    if (lightboxDocBtn) lightboxDocBtn.href = docSrc;
+
+    lightbox.hidden = false;
+    lightbox.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(() => {
+      lightboxCloseBtn?.focus();
+    });
+  }
+
+  function closeLightbox() {
+    if (!lightbox || lightbox.hidden) return;
+    lightbox.hidden = true;
+    lightbox.setAttribute("aria-hidden", "true");
+    if (lastFocusBeforeModal && typeof lastFocusBeforeModal.focus === "function") {
+      lastFocusBeforeModal.focus();
+    }
+  }
+
+  expandBtn?.addEventListener("click", openLightbox);
+  stageImage?.addEventListener("click", openLightbox);
+  stageImage?.style.setProperty("cursor", "pointer");
+
+  lightboxCloseBtn?.addEventListener("click", closeLightbox);
+  lightboxBackdrop?.addEventListener("click", closeLightbox);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && lightbox && !lightbox.hidden) {
+      e.preventDefault();
+      closeLightbox();
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initStageNavigation();
   initContactForm();
+  initCertificates();
 });

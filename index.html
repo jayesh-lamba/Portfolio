@@ -48,6 +48,7 @@
           <li><button type="button" class="nav-link" data-nav="about">About me</button></li>
           <li><button type="button" class="nav-link" data-nav="skills">Skills</button></li>
           <li><button type="button" class="nav-link" data-nav="projects">Projects</button></li>
+          <li><button type="button" class="nav-link" data-nav="certificates">Certifications</button></li>
           <li><button type="button" class="nav-link nav-cta" data-nav="contact">CONTACT ME</button></li>
         </ul>
       </nav>
@@ -58,6 +59,7 @@
     <!-- Persistent GPU-animated big black parallelogram UI element -->
     <div class="stage-parallelogram" aria-hidden="true">
       <div class="parallelogram-surface"></div>
+      <div class="parallelogram-yellow-curtain"></div>
     </div>
 
     <!-- Persistent GPU-animated golden liquid overlay for Projects page -->
@@ -129,9 +131,8 @@
             <li><strong>EY Techathon 6.0 (Round 2)</strong> — Pitched solution deck across 2 evaluation rounds</li>
             <li>
               <strong>Certifications:</strong>
-              <a href="https://www.coursera.org/account/accomplishments/verify/SGEHWY5K73ES" target="_blank" rel="noopener noreferrer">Google Networking</a>,
-              <a href="https://courses.ibmcep.cognitiveclass.ai/certificates/2dec1dacd9474d2a80f8476412777680" target="_blank" rel="noopener noreferrer">IBM Blockchain</a>,
-              <a href="https://ethnus.com/certverify" target="_blank" rel="noopener noreferrer">Ethnus Salesforce</a>, Intellipaat PCP-SDE, NPTEL Cloud
+              Google Networking, IBM Blockchain, Ethnus Salesforce, Intellipaat PCP-SDE, Microsoft SQL &amp; Data Science —
+              <button type="button" class="text-link" data-nav="certificates" style="background:none;border:none;padding:0;color:#fcba03;text-decoration:underline;cursor:pointer;font-weight:700;">View all 7 verified certificates &rarr;</button>
             </li>
           </ul>
 
@@ -371,7 +372,321 @@
       </aside>
     </section>
 
-    <!-- View 5: Contact Me -->
+    <!-- View 5: Certifications -->
+    <section id="view-certificates" class="view-section" data-view="certificates" data-view-side="right" data-title="Certifications &amp; Credentials — Jayesh" aria-labelledby="certificates-heading" hidden>
+      <div class="view-grid view-grid--certificates">
+        
+        <!-- Left: Interactive Certificate Preview Stage -->
+        <div class="pane pane--cert-stage" id="cert-stage-pane">
+          <div class="cert-stage-header">
+            <span class="cert-badge" id="cert-stage-badge" style="--issuer-theme: #4285F4;">
+              <span class="cert-badge-dot"></span>
+              <span id="cert-stage-issuer">Google</span>
+            </span>
+            <span class="cert-stage-date" id="cert-stage-date">Dec 26, 2023</span>
+          </div>
+
+          <h2 id="cert-stage-title" class="cert-stage-title">The Bits and Bytes of Computer Networking</h2>
+
+          <!-- Certificate Display Frame -->
+          <div class="cert-frame-wrapper" id="cert-frame-wrapper">
+            <div class="cert-frame" id="cert-frame">
+              <div class="cert-frame-glass"></div>
+              <img
+                id="cert-stage-image"
+                class="cert-stage-image"
+                src="assets/images/certificates/cert-google-networking.jpg"
+                alt="Certificate preview for The Bits and Bytes of Computer Networking"
+                width="1200"
+                height="850"
+                loading="eager"
+              >
+              <button type="button" class="cert-expand-btn" id="cert-expand-btn" aria-label="Open high-resolution fullscreen preview">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+                </svg>
+                <span>Full View</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Credential Meta & Actions -->
+          <div class="cert-meta-box">
+            <div class="cert-id-group">
+              <span class="cert-id-label">CREDENTIAL ID</span>
+              <div class="cert-id-value-wrap">
+                <code id="cert-stage-id" class="cert-stage-id">SGEHWY5K73ES</code>
+                <button type="button" id="cert-copy-btn" class="cert-copy-btn" title="Copy Credential ID" aria-label="Copy Credential ID">
+                  <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                  <span class="copied-tooltip" id="cert-copied-tip">Copied!</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="cert-actions-group">
+              <a id="cert-verify-link" href="https://coursera.org/verify/SGEHWY5K73ES" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--primary">
+                <span>Verify Credential</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              <a id="cert-doc-link" href="assets/certificates/google%20bites%20and%20bytes%20certificate.png" target="_blank" rel="noopener noreferrer" class="cert-action-btn cert-action-btn--secondary">
+                <span>Original File</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Scrollable Certificate Directory / Cards -->
+        <div class="pane pane--cert-list">
+          <div class="cert-list-header">
+            <p class="section-eyebrow">VERIFIED CREDENTIALS &amp; SKILLS</p>
+            <h1 id="certificates-heading" class="section-title" tabindex="-1">Certifications</h1>
+            <p class="section-lead">
+              Official accreditations from Google, IBM, Salesforce, and Intellipaat in Networking, Cloud, Blockchain, Databases, and Software Engineering.
+            </p>
+          </div>
+
+          <div class="cert-cards-stack">
+            <!-- 1. Google Networking -->
+            <article class="cert-card is-active" data-cert="google-networking"
+              data-title="The Bits and Bytes of Computer Networking"
+              data-issuer="Google"
+              data-issuer-theme="#4285F4"
+              data-date="Dec 26, 2023"
+              data-id="SGEHWY5K73ES"
+              data-verify="https://coursera.org/verify/SGEHWY5K73ES"
+              data-preview-src="assets/images/certificates/cert-google-networking.jpg"
+              data-doc-src="assets/certificates/google%20bites%20and%20bytes%20certificate.png"
+              data-skills="Networking · TCP/IP · DNS · Routing · Subnets">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-google-networking.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #4285F4;">Google</span>
+                    <span class="cert-card-date">Dec 26, 2023</span>
+                  </div>
+                  <h3 class="cert-card-title">The Bits and Bytes of Computer Networking</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>SGEHWY5K73ES</code></span>
+                    <span class="cert-card-skills">TCP/IP, Routing &amp; DNS</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="true">Preview &rarr;</button>
+                    <a href="https://coursera.org/verify/SGEHWY5K73ES" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 2. IBM Blockchain -->
+            <article class="cert-card" data-cert="ibm-blockchain"
+              data-title="Blockchain Developer (CEAPBCD1IN)"
+              data-issuer="IBM"
+              data-issuer-theme="#0f62fe"
+              data-date="Apr 5, 2025"
+              data-id="2dec1dacd9474d2a80f8476412777680"
+              data-verify="https://courses.ibmcep.cognitiveclass.ai/certificates/2dec1dacd9474d2a80f8476412777680"
+              data-preview-src="assets/images/certificates/cert-ibm-blockchain.jpg"
+              data-doc-src="assets/certificates/jayesh%20ibm1.pdf"
+              data-skills="Smart Contracts · Hyperledger Fabric · Consensus · Distributed Ledgers">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-ibm-blockchain.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #0f62fe;">IBM</span>
+                    <span class="cert-card-date">Apr 5, 2025</span>
+                  </div>
+                  <h3 class="cert-card-title">Blockchain Developer (CEAPBCD1IN)</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>2dec1dacd9474d2a80f8476412777680</code></span>
+                    <span class="cert-card-skills">Hyperledger &amp; Smart Contracts</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://courses.ibmcep.cognitiveclass.ai/certificates/2dec1dacd9474d2a80f8476412777680" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 3. Salesforce Developer -->
+            <article class="cert-card" data-cert="salesforce-developer"
+              data-title="Salesforce Developer Certification Program"
+              data-issuer="Salesforce / Ethnus"
+              data-issuer-theme="#00a1e0"
+              data-date="Apr 25, 2025"
+              data-id="335BRBBL (Reg: 22BCE11526)"
+              data-verify="https://ethnus.com/certverify"
+              data-preview-src="assets/images/certificates/cert-salesforce-developer.jpg"
+              data-doc-src="assets/certificates/Salesforce%20Developer%20Certification%20Program.pdf"
+              data-skills="Apex Code · Lightning Web Components · SOQL · CRM Architecture">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-salesforce-developer.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #00a1e0;">Salesforce</span>
+                    <span class="cert-card-date">Apr 25, 2025</span>
+                  </div>
+                  <h3 class="cert-card-title">Salesforce Developer Certification Program</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>335BRBBL</code></span>
+                    <span class="cert-card-skills">Apex, LWC &amp; SOQL</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://ethnus.com/certverify" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 4. Intellipaat PCP-SDE -->
+            <article class="cert-card" data-cert="intellipaat-sde"
+              data-title="Professional Certification in Software Development Engineering (PCP - SDE)"
+              data-issuer="Intellipaat"
+              data-issuer-theme="#f37021"
+              data-date="Oct 16, 2026"
+              data-id="31679-1000168-271865"
+              data-verify="https://intellipaat.com/"
+              data-preview-src="assets/images/certificates/cert-intellipaat-sde.jpg"
+              data-doc-src="assets/certificates/intellipaat-certificate.pdf"
+              data-skills="DSA · System Design · Full-Stack SDE · Cloud Systems">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-intellipaat-sde.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #f37021;">Intellipaat</span>
+                    <span class="cert-card-date">Oct 16, 2026</span>
+                  </div>
+                  <h3 class="cert-card-title">Professional Certification in SDE (PCP - SDE)</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>31679-1000168-271865</code></span>
+                    <span class="cert-card-skills">DSA &amp; System Design</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://intellipaat.com/" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 5. Intellipaat MS SQL -->
+            <article class="cert-card" data-cert="intellipaat-mssql"
+              data-title="Microsoft SQL Certification Training"
+              data-issuer="Intellipaat"
+              data-issuer-theme="#0078d4"
+              data-date="Jun 2, 2025"
+              data-id="31679-2853-271865"
+              data-verify="https://intellipaat.com/"
+              data-preview-src="assets/images/certificates/cert-intellipaat-mssql.jpg"
+              data-doc-src="assets/certificates/intellipaat-certificate%20(4).pdf"
+              data-skills="Microsoft SQL Server · T-SQL · Indexing · Stored Procedures">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-intellipaat-mssql.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #0078d4;">Intellipaat</span>
+                    <span class="cert-card-date">Jun 2, 2025</span>
+                  </div>
+                  <h3 class="cert-card-title">Microsoft SQL Certification Training</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>31679-2853-271865</code></span>
+                    <span class="cert-card-skills">T-SQL &amp; Server Admin</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://intellipaat.com/" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 6. Intellipaat SQL Course -->
+            <article class="cert-card" data-cert="intellipaat-sql"
+              data-title="SQL Course"
+              data-issuer="Intellipaat"
+              data-issuer-theme="#0284c7"
+              data-date="May 31, 2025"
+              data-id="31679-913167-271865"
+              data-verify="https://intellipaat.com/"
+              data-preview-src="assets/images/certificates/cert-intellipaat-sql.jpg"
+              data-doc-src="assets/certificates/intellipaat-certificate%20(2).pdf"
+              data-skills="Relational DB · Complex Joins · Aggregations · Subqueries">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-intellipaat-sql.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #0284c7;">Intellipaat</span>
+                    <span class="cert-card-date">May 31, 2025</span>
+                  </div>
+                  <h3 class="cert-card-title">SQL Course</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>31679-913167-271865</code></span>
+                    <span class="cert-card-skills">Relational DB &amp; Queries</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://intellipaat.com/" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <!-- 7. Intellipaat Data Science -->
+            <article class="cert-card" data-cert="intellipaat-datascience"
+              data-title="Data Science Course"
+              data-issuer="Intellipaat"
+              data-issuer-theme="#10b981"
+              data-date="Apr 6, 2025"
+              data-id="31679-912380-271865"
+              data-verify="https://intellipaat.com/"
+              data-preview-src="assets/images/certificates/cert-intellipaat-datascience.jpg"
+              data-doc-src="assets/certificates/intellipaat-certificate%20(3).pdf"
+              data-skills="Python · Pandas · NumPy · EDA · Statistical Modeling">
+              <div class="cert-card-layout">
+                <div class="cert-card-thumb">
+                  <img src="assets/images/certificates/cert-intellipaat-datascience.jpg" alt="" loading="lazy" width="82" height="58">
+                </div>
+                <div class="cert-card-main">
+                  <div class="cert-card-header">
+                    <span class="cert-card-issuer" style="--issuer-color: #10b981;">Intellipaat</span>
+                    <span class="cert-card-date">Apr 6, 2025</span>
+                  </div>
+                  <h3 class="cert-card-title">Data Science Course</h3>
+                  <div class="cert-card-id-row">
+                    <span class="cert-card-id-badge">ID: <code>31679-912380-271865</code></span>
+                    <span class="cert-card-skills">Python &amp; ML Modeling</span>
+                  </div>
+                  <div class="cert-card-footer">
+                    <button type="button" class="cert-card-select-btn" aria-pressed="false">Preview &rarr;</button>
+                    <a href="https://intellipaat.com/" target="_blank" rel="noopener noreferrer" class="cert-card-verify-link">Verify &nearr;</a>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- View 6: Contact Me -->
     <section id="view-contact" class="view-section" data-view="contact" data-view-side="right" data-title="Contact Me — Jayesh" aria-labelledby="contact-heading" hidden>
       <div class="view-grid">
         <div class="pane pane--light">
@@ -436,5 +751,26 @@
       </div>
     </section>
   </main>
+
+  <!-- Interactive Certificate Lightbox Modal -->
+  <div id="cert-lightbox" class="cert-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Certificate Full View" hidden>
+    <div class="cert-lightbox-backdrop" id="cert-lightbox-backdrop"></div>
+    <div class="cert-lightbox-container">
+      <div class="cert-lightbox-toolbar">
+        <div class="cert-lightbox-info">
+          <span id="lightbox-cert-issuer" class="lightbox-badge">Google</span>
+          <span id="lightbox-cert-title" class="lightbox-title">The Bits and Bytes of Computer Networking</span>
+        </div>
+        <div class="cert-lightbox-actions">
+          <a id="lightbox-verify-btn" href="https://coursera.org/verify/SGEHWY5K73ES" target="_blank" rel="noopener noreferrer" class="lightbox-btn lightbox-btn--verify">Verify &nearr;</a>
+          <a id="lightbox-doc-btn" href="assets/certificates/google%20bites%20and%20bytes%20certificate.png" target="_blank" rel="noopener noreferrer" class="lightbox-btn">Original File &nearr;</a>
+          <button type="button" id="lightbox-close-btn" class="lightbox-close-btn" aria-label="Close certificate preview">&times;</button>
+        </div>
+      </div>
+      <div class="cert-lightbox-body">
+        <img id="lightbox-cert-image" src="assets/images/certificates/cert-google-networking.jpg" alt="High resolution certificate preview">
+      </div>
+    </div>
+  </div>
 </body>
 </html>
