@@ -399,25 +399,6 @@ function initStageNavigation() {
     }
   };
 
-  const CHAT_CONTACTS = [
-    { id: "sourabh", name: "Sourabh", status: "Online", online: true, initial: "S", gradient: "linear-gradient(135deg, #6366f1 0%, #a855f7 100%)" },
-    { id: "priyanshu", name: "Priyanshu", status: "Online", online: true, initial: "P", gradient: "linear-gradient(135deg, #10b981 0%, #059669 100%)" },
-    { id: "aman", name: "Aman", status: "Away", away: true, initial: "A", gradient: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)" },
-    { id: "nikhil", name: "Nikhil", status: "Offline", initial: "N", gradient: "linear-gradient(135deg, #64748b 0%, #475569 100%)" },
-    { id: "sakshi", name: "Sakshi", status: "Online", online: true, initial: "S", gradient: "linear-gradient(135deg, #ec4899 0%, #be185d 100%)" }
-  ];
-
-  let currentChatContact = CHAT_CONTACTS[0];
-  let chatMessagesStore = [
-    { id: 1, sender: "them", text: "Hey! Are you free now?", time: "10:42 AM" },
-    { id: 2, sender: "me", text: "Yes, working on the new feature.", time: "10:43 AM" },
-    { id: 3, sender: "them", text: "Looks great! \uD83D\uDD25", time: "10:44 AM" },
-    { id: 4, sender: "me", text: "Let's deploy it today.", time: "10:45 AM" }
-  ];
-
-  let carousel3dAngle = 0;
-  let carousel3dInterval = null;
-
   let laptopTargetX = 0;
   let laptopTargetY = 0;
   let laptopCurrentX = 0;
@@ -502,443 +483,45 @@ function initStageNavigation() {
   }
 
   function renderLaptopContent(projectId) {
-    if (!laptopScreenContent) return;
-
+    const card = projectCards.find((c) => c.dataset.project === projectId);
     const conf = PROJECT_CONFIG[projectId] || PROJECT_CONFIG.peekafuture;
+    const title = card?.querySelector(".project-select-btn")?.textContent?.trim() || "Project";
+    const previewSrc = card?.dataset.previewSrc || `assets/images/preview-${projectId}.jpg`;
+    const previewUrl = card?.dataset.previewUrl || "live.demo";
+    const cardLink = card?.querySelector("a.card-link");
+    const href = cardLink?.href || "#";
+    const label = card?.dataset.previewLabel || "Open Live Demo";
+
     if (laptopDevice) {
       laptopDevice.style.setProperty("--theme-color", conf.themeColor);
       laptopDevice.style.setProperty("--glow-color", conf.glowColor);
     }
     if (laptopCameraLed) {
       laptopCameraLed.style.backgroundColor = conf.themeColor;
-      laptopCameraLed.style.boxShadow = "0 0 5px " + conf.themeColor;
+      laptopCameraLed.style.boxShadow = "0 0 6px " + conf.themeColor;
     }
 
-    if (projectId === "chat") {
-      renderChatAppView();
-    } else if (projectId === "peekafuture") {
-      renderPeekafutureView();
-    } else if (projectId === "gallery") {
-      renderGalleryView();
-    } else if (projectId === "parallax") {
-      renderParallaxView();
-    } else if (projectId === "carousel3d") {
-      renderCarousel3dView();
-    } else {
-      renderPeekafutureView();
+    const img = document.getElementById("laptop-page-image");
+    const urlText = document.getElementById("laptop-url-text");
+    const extLink = document.getElementById("laptop-external-link");
+    const pill = document.getElementById("laptop-live-overlay-pill");
+
+    if (img) {
+      img.src = previewSrc;
+      img.alt = "Real frontpage of " + title;
+    }
+    if (urlText) {
+      urlText.textContent = previewUrl;
+    }
+    if (extLink) {
+      extLink.href = href;
+    }
+    if (pill) {
+      pill.href = href;
+      const textSpan = pill.querySelector("span");
+      if (textSpan) textSpan.textContent = label;
     }
   }
-
-  function renderChatAppView() {
-    laptopScreenContent.innerHTML = `
-      <div class="preview-chat">
-        <aside class="chat-sidebar" aria-label="Chats">
-          <div class="chat-sidebar-header">
-            <span class="chat-app-title">ChatApp</span>
-            <span class="chat-online-pulse" title="Socket.IO Live"></span>
-          </div>
-          <div class="chat-search-wrap">
-            <div class="chat-search-bar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <span>Search...</span>
-            </div>
-          </div>
-          <div class="chat-contacts-list" id="chat-contacts-container"></div>
-        </aside>
-
-        <section class="chat-main-area" aria-label="Conversation">
-          <header class="chat-header">
-            <div class="chat-header-user">
-              <div class="chat-header-avatar" id="chat-header-avatar">${currentChatContact.initial}</div>
-              <div class="chat-header-meta">
-                <div class="chat-header-name" id="chat-header-name">${currentChatContact.name}</div>
-                <div class="chat-header-sub" id="chat-header-sub"><span></span>${currentChatContact.status}</div>
-              </div>
-            </div>
-            <div class="chat-header-actions">
-              <button type="button" class="chat-icon-btn" title="Video Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></button>
-              <button type="button" class="chat-icon-btn" title="Voice Call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></button>
-              <button type="button" class="chat-icon-btn" title="Options"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="1.5"></circle><circle cx="19" cy="12" r="1.5"></circle><circle cx="5" cy="12" r="1.5"></circle></svg></button>
-            </div>
-          </header>
-
-          <div class="chat-messages-flow" id="chat-messages-flow"></div>
-
-          <form class="chat-input-form" id="chat-form">
-            <div class="chat-input-wrapper">
-              <input type="text" id="chat-input-field" class="chat-text-input" placeholder="Type a message..." autocomplete="off">
-              <button type="button" class="chat-emoji-btn" title="Insert Emoji">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
-              </button>
-            </div>
-            <button type="submit" class="chat-send-btn" title="Send message">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
-            </button>
-          </form>
-        </section>
-      </div>
-    `;
-
-    renderChatContacts();
-    renderChatMessagesFlow();
-
-    const form = document.getElementById("chat-form");
-    form?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const input = document.getElementById("chat-input-field");
-      if (!input) return;
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = "";
-
-      chatMessagesStore.push({
-        id: Date.now(),
-        sender: "me",
-        text: text,
-        time: "Now"
-      });
-      renderChatMessagesFlow();
-
-      setTimeout(() => {
-        const replies = [
-          "Sub-50ms Socket.IO sync is live on Render! \uD83D\uDE80",
-          "Merged PR into main. Auth tokens active! \u2705",
-          "Looking slick! 99.9% uptime verified \uD83D\uDD25",
-          "Received! All 12 REST endpoints responding in 32ms \u26A1"
-        ];
-        const reply = replies[Math.floor(Math.random() * replies.length)];
-        chatMessagesStore.push({
-          id: Date.now() + 1,
-          sender: "them",
-          text: reply,
-          time: "Now"
-        });
-        renderChatMessagesFlow();
-      }, 650);
-    });
-  }
-
-  function renderChatContacts() {
-    const listEl = document.getElementById("chat-contacts-container");
-    if (!listEl) return;
-    listEl.innerHTML = CHAT_CONTACTS.map((c) => {
-      const activeClass = c.id === currentChatContact.id ? "is-active" : "";
-      const dotClass = c.online ? "chat-contact-dot--online" : c.away ? "chat-contact-dot--away" : "chat-contact-dot--offline";
-      return `
-        <div class="chat-contact-item ${activeClass}" data-contact-id="${c.id}">
-          <div class="chat-avatar-wrap" style="background: ${c.gradient}">
-            ${c.initial}
-            <span class="chat-contact-dot ${dotClass}"></span>
-          </div>
-          <div class="chat-contact-info">
-            <div class="chat-contact-name">${c.name}</div>
-            <div class="chat-contact-status">${c.status}</div>
-          </div>
-        </div>
-      `;
-    }).join("");
-
-    const items = listEl.querySelectorAll(".chat-contact-item");
-    for (const item of items) {
-      item.addEventListener("click", () => {
-        const cId = item.dataset.contactId;
-        const found = CHAT_CONTACTS.find((x) => x.id === cId);
-        if (found) {
-          currentChatContact = found;
-          const nameEl = document.getElementById("chat-header-name");
-          const avatarEl = document.getElementById("chat-header-avatar");
-          const subEl = document.getElementById("chat-header-sub");
-          if (nameEl) nameEl.textContent = found.name;
-          if (avatarEl) {
-            avatarEl.textContent = found.initial;
-            avatarEl.style.background = found.gradient;
-          }
-          if (subEl) subEl.innerHTML = "<span></span>" + found.status;
-          renderChatContacts();
-        }
-      });
-    }
-  }
-
-  function renderChatMessagesFlow() {
-    const flowEl = document.getElementById("chat-messages-flow");
-    if (!flowEl) return;
-    flowEl.innerHTML = chatMessagesStore.map((m) => {
-      const isMe = m.sender === "me";
-      const rowClass = isMe ? "chat-message-row chat-message-row--me" : "chat-message-row";
-      const bubbleClass = isMe ? "chat-bubble chat-bubble--me" : "chat-bubble chat-bubble--them";
-      return `
-        <div class="${rowClass}">
-          <div class="${bubbleClass}">
-            <span>${m.text}</span>
-          </div>
-        </div>
-      `;
-    }).join("");
-    flowEl.scrollTop = flowEl.scrollHeight;
-  }
-
-  function renderPeekafutureView() {
-    laptopScreenContent.innerHTML = `
-      <div class="preview-peekafuture">
-        <div class="pf-topbar">
-          <div class="pf-brand">Peekafuture &mdash; AI Career Platform</div>
-          <span class="pf-badge-fastapi">FASTAPI + FIREBASE</span>
-        </div>
-
-        <div class="pf-main-grid">
-          <div class="pf-score-card">
-            <div class="pf-gauge-wrap">
-              <svg class="pf-gauge-svg" viewBox="0 0 36 36">
-                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255, 255, 255, 0.1)" stroke-width="3" />
-                <path id="pf-gauge-progress" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#a78bfa" stroke-width="3.2" stroke-dasharray="94, 100" stroke-linecap="round" />
-              </svg>
-              <div class="pf-gauge-center">
-                <span class="pf-gauge-num" id="pf-score-num">94%</span>
-                <span class="pf-gauge-lbl">ATS SCORE</span>
-              </div>
-            </div>
-            <div class="pf-score-meta">
-              <h4>Target: Senior Full Stack Engineer</h4>
-              <p>15 of 16 core competencies matched</p>
-              <div class="pf-skills-chips">
-                <span class="pf-chip">FastAPI</span>
-                <span class="pf-chip">React</span>
-                <span class="pf-chip">TypeScript</span>
-                <span class="pf-chip">Firebase</span>
-                <span class="pf-chip">Pydantic</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="pf-telemetry-card">
-            <div class="pf-log-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>FastAPI latency &lt; 25ms (sub-50ms target)</span>
-            </div>
-            <div class="pf-log-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Pydantic v2 schemas strictly validated</span>
-            </div>
-            <div class="pf-log-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-              <span>Firebase Auth session active (-30% latency)</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="pf-action-row">
-          <span>Target Job: AI &amp; Full Stack Platform Engineer</span>
-          <button type="button" class="pf-btn-scan" id="pf-scan-btn">Simulate AI Scan &rarr;</button>
-        </div>
-      </div>
-    `;
-
-    const scanBtn = document.getElementById("pf-scan-btn");
-    const gaugePath = document.getElementById("pf-gauge-progress");
-    const scoreNum = document.getElementById("pf-score-num");
-
-    scanBtn?.addEventListener("click", () => {
-      if (!gaugePath || !scoreNum) return;
-      gaugePath.style.transition = "none";
-      gaugePath.setAttribute("stroke-dasharray", "0, 100");
-      scoreNum.textContent = "0%";
-      void gaugePath.offsetWidth;
-      gaugePath.style.transition = "stroke-dasharray 1s cubic-bezier(0.16, 1, 0.3, 1)";
-      gaugePath.setAttribute("stroke-dasharray", "98, 100");
-      let count = 0;
-      const counter = setInterval(() => {
-        count += 2;
-        if (count >= 98) {
-          count = 98;
-          clearInterval(counter);
-        }
-        scoreNum.textContent = count + "%";
-      }, 20);
-    });
-  }
-
-  function renderGalleryView() {
-    laptopScreenContent.innerHTML = `
-      <div class="preview-gallery">
-        <div class="gal-header">
-          <div class="gal-title">My Gallery &mdash; Visual Showcase</div>
-          <div class="gal-filter-pills">
-            <button type="button" class="gal-pill is-active" data-filter="all">All</button>
-            <button type="button" class="gal-pill" data-filter="ui">UI/UX</button>
-            <button type="button" class="gal-pill" data-filter="3d">3D Art</button>
-            <button type="button" class="gal-pill" data-filter="code">Code</button>
-          </div>
-        </div>
-        <div class="gal-grid" id="gal-grid">
-          <div class="gal-card" data-cat="3d">
-            <div class="gal-card-thumb gal-card-thumb--1">&#x1F30C;</div>
-            <div class="gal-card-info">
-              <span class="gal-card-name">Cosmic Voyage 3D</span>
-              <span class="gal-card-likes">&#x2605; 142</span>
-            </div>
-          </div>
-          <div class="gal-card" data-cat="ui">
-            <div class="gal-card-thumb gal-card-thumb--2">&#x1F4F1;</div>
-            <div class="gal-card-info">
-              <span class="gal-card-name">Minimalist UI Kit</span>
-              <span class="gal-card-likes">&#x2605; 98</span>
-            </div>
-          </div>
-          <div class="gal-card" data-cat="3d">
-            <div class="gal-card-thumb gal-card-thumb--3">&#x1F52E;</div>
-            <div class="gal-card-info">
-              <span class="gal-card-name">Glass Sphere Physics</span>
-              <span class="gal-card-likes">&#x2605; 210</span>
-            </div>
-          </div>
-          <div class="gal-card" data-cat="code">
-            <div class="gal-card-thumb gal-card-thumb--4">&#x26A1;</div>
-            <div class="gal-card-info">
-              <span class="gal-card-name">Shader Animations</span>
-              <span class="gal-card-likes">&#x2605; 175</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    `;
-
-    const pills = laptopScreenContent.querySelectorAll(".gal-pill");
-    const cards = laptopScreenContent.querySelectorAll(".gal-card");
-
-    for (const pill of pills) {
-      pill.addEventListener("click", () => {
-        pills.forEach((p) => p.classList.remove("is-active"));
-        pill.classList.add("is-active");
-        const filter = pill.dataset.filter;
-        cards.forEach((card) => {
-          const match = filter === "all" || card.dataset.cat === filter;
-          card.style.display = match ? "flex" : "none";
-        });
-      });
-    }
-
-    for (const card of cards) {
-      card.addEventListener("click", () => {
-        const likesEl = card.querySelector(".gal-card-likes");
-        if (likesEl) {
-          const current = parseInt(likesEl.textContent.replace(/[^0-9]/g, ""), 10) || 100;
-          likesEl.textContent = "\u2605 " + (current + 1);
-        }
-      });
-    }
-  }
-
-  function renderParallaxView() {
-    laptopScreenContent.innerHTML = `
-      <div class="preview-parallax" id="par-container">
-        <div class="par-controls">
-          <span class="par-label">Adventure Time Parallax</span>
-          <span class="par-label" style="background: rgba(0,0,0,0.5);">Depth Parallax Active</span>
-        </div>
-        <div class="par-cloud par-cloud--1" id="par-cloud-1"></div>
-        <div class="par-cloud par-cloud--2" id="par-cloud-2"></div>
-        <div class="par-mountains" id="par-mountains"></div>
-        <div class="par-foreground" id="par-fg">
-          <div class="par-character-badge">Finn &amp; Jake &mdash; Land of Ooo</div>
-        </div>
-      </div>
-    `;
-
-    const container = document.getElementById("par-container");
-    const cloud1 = document.getElementById("par-cloud-1");
-    const cloud2 = document.getElementById("par-cloud-2");
-    const mountains = document.getElementById("par-mountains");
-    const fg = document.getElementById("par-fg");
-
-    container?.addEventListener("mousemove", (e) => {
-      const rect = container.getBoundingClientRect();
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-
-      if (cloud1) cloud1.style.transform = "translate(" + (nx * 8).toFixed(1) + "px, " + (ny * 4).toFixed(1) + "px)";
-      if (cloud2) cloud2.style.transform = "translate(" + (nx * -10).toFixed(1) + "px, " + (ny * 5).toFixed(1) + "px)";
-      if (mountains) mountains.style.transform = "translate(" + (nx * 14).toFixed(1) + "px, " + (ny * 6).toFixed(1) + "px)";
-      if (fg) fg.style.transform = "translate(" + (nx * -18).toFixed(1) + "px, " + (ny * -4).toFixed(1) + "px)";
-    });
-
-    container?.addEventListener("mouseleave", () => {
-      [cloud1, cloud2, mountains, fg].forEach((el) => {
-        if (el) el.style.transform = "translate(0, 0)";
-      });
-    });
-  }
-
-  function renderCarousel3dView() {
-    carousel3dAngle = 0;
-    clearInterval(carousel3dInterval);
-
-    laptopScreenContent.innerHTML = `
-      <div class="preview-carousel3d">
-        <div class="c3d-title-bar">
-          <span>3D ROTATING CAROUSEL</span>
-          <span id="c3d-deg-lbl">Angle: 0&deg;</span>
-        </div>
-
-        <div class="c3d-ring-stage" id="c3d-ring">
-          <div class="c3d-card" style="transform: rotateY(0deg) translateZ(80px);">
-            <div class="c3d-card-num">01</div>
-            <div class="c3d-card-label">Pure CSS 3D Depth</div>
-          </div>
-          <div class="c3d-card" style="transform: rotateY(72deg) translateZ(80px);">
-            <div class="c3d-card-num">02</div>
-            <div class="c3d-card-label">Matrix Perspective</div>
-          </div>
-          <div class="c3d-card" style="transform: rotateY(144deg) translateZ(80px);">
-            <div class="c3d-card-num">03</div>
-            <div class="c3d-card-label">Hardware Acceleration</div>
-          </div>
-          <div class="c3d-card" style="transform: rotateY(216deg) translateZ(80px);">
-            <div class="c3d-card-num">04</div>
-            <div class="c3d-card-label">Keyframe Fluidity</div>
-          </div>
-          <div class="c3d-card" style="transform: rotateY(288deg) translateZ(80px);">
-            <div class="c3d-card-num">05</div>
-            <div class="c3d-card-label">Responsive Cylinder</div>
-          </div>
-        </div>
-
-        <div class="c3d-controls">
-          <button type="button" class="c3d-btn" id="c3d-prev-btn">&larr; Prev</button>
-          <button type="button" class="c3d-btn" id="c3d-auto-btn">Auto-Spin</button>
-          <button type="button" class="c3d-btn" id="c3d-next-btn">Next &rarr;</button>
-        </div>
-      </div>
-    `;
-
-    const ring = document.getElementById("c3d-ring");
-    const degLbl = document.getElementById("c3d-deg-lbl");
-    const prevBtn = document.getElementById("c3d-prev-btn");
-    const nextBtn = document.getElementById("c3d-next-btn");
-    const autoBtn = document.getElementById("c3d-auto-btn");
-
-    function rotateRing(delta) {
-      carousel3dAngle += delta;
-      if (ring) ring.style.transform = "rotateY(" + carousel3dAngle + "deg)";
-      if (degLbl) degLbl.innerHTML = "Angle: " + ((carousel3dAngle % 360 + 360) % 360) + "&deg;";
-    }
-
-    prevBtn?.addEventListener("click", () => rotateRing(-72));
-    nextBtn?.addEventListener("click", () => rotateRing(72));
-
-    let autoSpin = false;
-    autoBtn?.addEventListener("click", () => {
-      autoSpin = !autoSpin;
-      if (autoSpin) {
-        autoBtn.textContent = "Stop Spin";
-        carousel3dInterval = setInterval(() => rotateRing(72), 1600);
-      } else {
-        autoBtn.textContent = "Auto-Spin";
-        clearInterval(carousel3dInterval);
-      }
-    });
-  }
-
 
   function closeProjectPreview({ restoreFocus = false, drainLiquid = false } = {}) {
     const returnTarget = restoreFocus ? lastTriggerBtn : null;
@@ -946,7 +529,6 @@ function initStageNavigation() {
     root.removeAttribute("data-project-preview");
 
     stopLaptopPhysics();
-    clearInterval(carousel3dInterval);
 
     for (const card of projectCards) {
       card.classList.remove("is-selected");

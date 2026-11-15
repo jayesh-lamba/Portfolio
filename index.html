@@ -10,8 +10,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261115c">
-  <script type="module" src="script.js?v=20261115c"></script>
+  <link rel="stylesheet" href="styles.css?v=20261115d">
+  <script type="module" src="script.js?v=20261115d"></script>
 </head>
 <body>
   <a href="#home-heading" class="skip-link visually-hidden" id="skip-to-main">Skip to main content</a>
@@ -306,7 +306,44 @@
 
                     <!-- Screen Content Viewport -->
                     <div class="laptop-screen-content" id="laptop-screen-content">
-                      <!-- Rendered live by script.js -->
+                      <div class="laptop-browser-bar">
+                        <div class="laptop-browser-dots" aria-hidden="true">
+                          <span class="dot dot--red"></span>
+                          <span class="dot dot--yellow"></span>
+                          <span class="dot dot--green"></span>
+                        </div>
+                        <div class="laptop-browser-url">
+                          <svg class="url-lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                          </svg>
+                          <span id="laptop-url-text">peekafuture.pages.dev</span>
+                        </div>
+                        <a id="laptop-external-link" href="https://peekafuture.pages.dev/" target="_blank" rel="noopener noreferrer" class="laptop-browser-external" title="Open live project in new tab">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                            <polyline points="15 3 21 3 21 9"></polyline>
+                            <line x1="10" y1="14" x2="21" y2="3"></line>
+                          </svg>
+                        </a>
+                      </div>
+
+                      <div class="laptop-page-viewport">
+                        <img
+                          id="laptop-page-image"
+                          class="laptop-page-image"
+                          src="assets/images/preview-peekafuture.jpg"
+                          alt="Real frontpage of Peekafuture — AI Career Platform"
+                          loading="eager"
+                          decoding="async"
+                          width="1280"
+                          height="800"
+                        >
+                        <a id="laptop-live-overlay-pill" href="https://peekafuture.pages.dev/" target="_blank" rel="noopener noreferrer" class="laptop-live-pill">
+                          <span>Open Live Demo</span>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"></line><polyline points="7 7 17 7 17 17"></polyline></svg>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
