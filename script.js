@@ -385,6 +385,10 @@ function initStageNavigation() {
       themeColor: "#3b82f6",
       glowColor: "rgba(59, 130, 246, 0.45)"
     },
+    spectrumplay: {
+      themeColor: "#14b8a6",
+      glowColor: "rgba(20, 184, 166, 0.45)"
+    },
     srms: {
       themeColor: "#6366f1",
       glowColor: "rgba(99, 102, 241, 0.45)"
