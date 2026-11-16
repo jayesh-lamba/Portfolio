@@ -377,13 +377,21 @@ function initStageNavigation() {
 
   // Project Config & Theme Colors
   const PROJECT_CONFIG = {
+    peekafuture: {
+      themeColor: "#8b5cf6",
+      glowColor: "rgba(139, 92, 246, 0.45)"
+    },
     chat: {
       themeColor: "#3b82f6",
       glowColor: "rgba(59, 130, 246, 0.45)"
     },
-    peekafuture: {
-      themeColor: "#8b5cf6",
-      glowColor: "rgba(139, 92, 246, 0.45)"
+    srms: {
+      themeColor: "#6366f1",
+      glowColor: "rgba(99, 102, 241, 0.45)"
+    },
+    deboard: {
+      themeColor: "#0ea5e9",
+      glowColor: "rgba(14, 165, 233, 0.45)"
     },
     gallery: {
       themeColor: "#06b6d4",
@@ -647,6 +655,87 @@ function initStageNavigation() {
   previewCloseBtn?.addEventListener("click", () => {
     closeProjectPreview({ restoreFocus: true });
   });
+
+  // Project Category Classification & Toolbar Filtering
+  const projectsFilterBar = document.querySelector("#view-projects .projects-filter-bar");
+  const projectFilterBtns = Array.from(document.querySelectorAll("#view-projects .projects-filter-btn[data-proj-filter]"));
+  const projectCategoryGroups = Array.from(document.querySelectorAll("#view-projects .projects-category-group[data-category-group]"));
+  const projectsCatalog = document.getElementById("projects-catalog");
+  const projectsLightPane = document.querySelector("#view-projects .pane--light");
+
+  function applyProjectCategoryFilter(filter) {
+    const nextFilter = filter || "all";
+
+    for (const btn of projectFilterBtns) {
+      const pressed = btn.dataset.projFilter === nextFilter;
+      btn.setAttribute("aria-pressed", pressed ? "true" : "false");
+    }
+
+    if (projectsCatalog) {
+      projectsCatalog.dataset.activeFilter = nextFilter;
+    }
+
+    for (const group of projectCategoryGroups) {
+      group.hidden = nextFilter !== "all" && group.dataset.categoryGroup !== nextFilter;
+    }
+
+    if (projectsLightPane && projectsLightPane.scrollTop > 0) {
+      projectsLightPane.scrollTo({ top: 0, behavior: "auto" });
+    }
+
+    if (activePreviewId && nextFilter !== "all") {
+      const activeCard = projectCards.find((c) => c.dataset.project === activePreviewId);
+      if (activeCard && activeCard.dataset.category !== nextFilter) {
+        const firstVisible = projectCards.find((c) => c.dataset.category === nextFilter);
+        if (firstVisible) {
+          openProjectPreview(firstVisible);
+        }
+      }
+    }
+  }
+
+  for (const btn of projectFilterBtns) {
+    btn.addEventListener("click", () => {
+      applyProjectCategoryFilter(btn.dataset.projFilter || "all");
+    });
+  }
+
+  // Roving-tabindex keyboard fallback when native focusgroup is unsupported
+  if (projectsFilterBar && projectFilterBtns.length && !("focusGroup" in HTMLElement.prototype)) {
+    projectFilterBtns.forEach((b, i) => {
+      b.tabIndex = i === 0 ? 0 : -1;
+    });
+
+    projectsFilterBar.addEventListener("focusin", ({ target }) => {
+      if (projectFilterBtns.includes(target)) {
+        projectFilterBtns.forEach((b) => {
+          b.tabIndex = b === target ? 0 : -1;
+        });
+      }
+    });
+
+    projectsFilterBar.addEventListener("keydown", (event) => {
+      const idx = projectFilterBtns.indexOf(document.activeElement);
+      if (idx === -1) return;
+
+      const rtl = getComputedStyle(projectsFilterBar).direction === "rtl";
+      const steps = { ArrowRight: rtl ? -1 : 1, ArrowLeft: rtl ? 1 : -1 };
+      let nextIdx = -1;
+
+      if (event.key in steps) {
+        nextIdx = (idx + steps[event.key] + projectFilterBtns.length) % projectFilterBtns.length;
+      } else if (event.key === "Home") {
+        nextIdx = 0;
+      } else if (event.key === "End") {
+        nextIdx = projectFilterBtns.length - 1;
+      }
+
+      if (nextIdx >= 0) {
+        event.preventDefault();
+        projectFilterBtns[nextIdx].focus();
+      }
+    });
+  }
 
   desktopMediaQuery.addEventListener("change", () => {
     if (currentView === "projects") {

@@ -11,8 +11,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@300;400;600&family=Raleway:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=20261115r">
-  <script type="module" src="script.js?v=20261115r"></script>
+  <link rel="stylesheet" href="styles.css?v=20261116c">
+  <script type="module" src="script.js?v=20261116c"></script>
 </head>
 <body>
   <a href="#home-heading" class="skip-link visually-hidden" id="skip-to-main">Skip to main content</a>
@@ -235,47 +235,121 @@
         <div class="pane pane--dark pane--empty" aria-hidden="true"></div>
 
         <div class="pane pane--light">
-          <p class="section-eyebrow">SELECTED WORK</p>
-          <h1 id="projects-heading" class="section-title" tabindex="-1">Projects &amp; Builds</h1>
+          <div class="projects-header-top">
+            <div class="projects-heading-group">
+              <p class="section-eyebrow">SELECTED WORK &middot; 7 BUILDS</p>
+              <h1 id="projects-heading" class="section-title" tabindex="-1">Projects &amp; Builds</h1>
+            </div>
 
-          <div class="projects-grid">
-            <article class="info-card info-card--featured" data-project="peekafuture" data-preview-src="assets/images/preview-peekafuture.jpg" data-preview-url="peekafuture.pages.dev" data-preview-label="Open Live Demo">
-              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Peekafuture — AI Career Platform</button></h3>
-              <p class="info-meta">React · TypeScript · FastAPI · Firebase</p>
-              <p>Typed schema validation &amp; Firebase Auth (-20% runtime UI errors, -25% request failures, -30% auth latency).</p>
-              <a href="https://peekafuture.pages.dev/" target="_blank" rel="noopener noreferrer" class="card-link">Open Live Demo &rarr;</a>
-            </article>
+            <div class="projects-filter-bar" role="toolbar" focusgroup="toolbar wrap" aria-label="Filter projects by category" aria-controls="projects-catalog">
+              <button type="button" class="projects-filter-btn" data-proj-filter="all" aria-pressed="true">
+                All <span class="proj-filter-count">7</span>
+              </button>
+              <button type="button" class="projects-filter-btn" data-proj-filter="fullstack" aria-pressed="false">
+                Full Stack <span class="proj-filter-count">2</span>
+              </button>
+              <button type="button" class="projects-filter-btn" data-proj-filter="dashboard" aria-pressed="false">
+                Backend Dashboards + Frontend <span class="proj-filter-count">2</span>
+              </button>
+              <button type="button" class="projects-filter-btn" data-proj-filter="frontend" aria-pressed="false">
+                Frontend Projects <span class="proj-filter-count">3</span>
+              </button>
+            </div>
+          </div>
 
-            <article class="info-card" data-project="chat" data-preview-src="assets/images/preview-chat.jpg?v=20261115f" data-preview-url="jayesh-lamba.github.io/Real-Time-Chat-App" data-preview-label="Open Live Demo">
-              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Real-Time Chat Application</button></h3>
-              <p class="info-meta">React · Node · Socket.IO · WebRTC · E2EE</p>
-              <p>X25519 end-to-end encrypted messenger with sub-20ms Socket.IO sync, WebRTC calling &amp; 24h ephemeral stories.</p>
-              <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
-                <a href="https://jayesh-lamba.github.io/Real-Time-Chat-App/" target="_blank" rel="noopener noreferrer" class="card-link">Open Live Demo &rarr;</a>
-                <a href="https://github.com/jayesh-lamba/Real-Time-Chat-App" target="_blank" rel="noopener noreferrer" class="card-link" style="opacity:0.78;">GitHub Repo &nearr;</a>
+          <div class="projects-catalog" id="projects-catalog" data-active-filter="all">
+            <section class="projects-category-group" data-category-group="fullstack" aria-labelledby="cat-fullstack-heading">
+              <div class="projects-category-header">
+                <span class="projects-category-dot projects-category-dot--fullstack" aria-hidden="true"></span>
+                <h2 id="cat-fullstack-heading" class="projects-category-title">Full Stack</h2>
+                <span class="projects-category-count">2</span>
               </div>
-            </article>
+              <div class="projects-grid">
+                <article class="info-card" data-project="peekafuture" data-category="fullstack" data-preview-src="assets/images/preview-peekafuture.jpg" data-preview-url="peekafuture.pages.dev" data-preview-label="Open Live Demo">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Peekafuture</button></h3>
+                  <p class="info-meta">React &middot; TypeScript &middot; FastAPI &middot; Firebase</p>
+                  <p>AI career platform with typed validation &amp; Firebase Auth.</p>
+                  <div class="card-actions">
+                    <a href="https://peekafuture.pages.dev/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                  </div>
+                </article>
 
-            <article class="info-card" data-project="gallery" data-preview-src="assets/images/preview-gallery.jpg" data-preview-url="my-photo-gallery-nine.vercel.app" data-preview-label="Visit Live Site">
-              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">My Gallery — Visual Showcase</button></h3>
-              <p class="info-meta">CSS Grid · Lazy Previews</p>
-              <p>Responsive gallery cutting initial load by 600ms.</p>
-              <a href="https://my-photo-gallery-nine.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Visit Live Site &rarr;</a>
-            </article>
+                <article class="info-card" data-project="chat" data-category="fullstack" data-preview-src="assets/images/preview-chat.jpg?v=20261115f" data-preview-url="jayesh-lamba.github.io/Real-Time-Chat-App" data-preview-label="Open Live Demo">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Chat App</button></h3>
+                  <p class="info-meta">React &middot; Node &middot; Socket.IO &middot; WebRTC</p>
+                  <p>E2EE messenger with Socket.IO sync, WebRTC calls &amp; stories.</p>
+                  <div class="card-actions">
+                    <a href="https://jayesh-lamba.github.io/Real-Time-Chat-App/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                    <a href="https://github.com/jayesh-lamba/Real-Time-Chat-App" target="_blank" rel="noopener noreferrer" class="card-repo-link">GitHub &nearr;</a>
+                  </div>
+                </article>
+              </div>
+            </section>
 
-            <article class="info-card" data-project="parallax" data-preview-src="assets/images/preview-parallax.jpg" data-preview-url="adventure-web-page-zgc9.vercel.app" data-preview-label="Visit Live Site">
-              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Adventure Time Parallax</button></h3>
-              <p class="info-meta">Layered Depth · Parallax CSS</p>
-              <p>Mobile-first parallax depth (+12% engagement conversion).</p>
-              <a href="https://adventure-web-page-zgc9.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Visit Live Site &rarr;</a>
-            </article>
+            <section class="projects-category-group" data-category-group="dashboard" aria-labelledby="cat-dashboard-heading">
+              <div class="projects-category-header">
+                <span class="projects-category-dot projects-category-dot--dashboard" aria-hidden="true"></span>
+                <h2 id="cat-dashboard-heading" class="projects-category-title">Backend Dashboards + Frontend</h2>
+                <span class="projects-category-count">2</span>
+              </div>
+              <div class="projects-grid">
+                <article class="info-card" data-project="srms" data-category="dashboard" data-preview-src="assets/images/preview-srms.jpg?v=20261116a" data-preview-url="student-result-management-system.jayeshanand160.workers.dev" data-preview-label="Open Live Demo">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Student Result Management System</button></h3>
+                  <p class="info-meta">Java &middot; OOP &middot; Analytics Portal &amp; CLI</p>
+                  <p>Java grading engine &amp; portal with cohort analytics &amp; CLI.</p>
+                  <div class="card-actions">
+                    <a href="https://student-result-management-system.jayeshanand160.workers.dev/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                    <a href="https://github.com/jayesh-lamba/StudentResultManagementSystem" target="_blank" rel="noopener noreferrer" class="card-repo-link">GitHub &nearr;</a>
+                  </div>
+                </article>
 
-            <article class="info-card" data-project="carousel3d" data-preview-src="assets/images/preview-carousel3d.jpg" data-preview-url="3-d-frontend-work.vercel.app" data-preview-label="Visit Live Site">
-              <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">3D Rotating Carousel</button></h3>
-              <p class="info-meta">Pure CSS · 3D Perspective</p>
-              <p>Smooth pure-CSS perspective and keyframe showcase.</p>
-              <a href="https://3-d-frontend-work.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Visit Live Site &rarr;</a>
-            </article>
+                <article class="info-card" data-project="deboard" data-category="dashboard" data-preview-src="assets/images/preview-deboard.jpg?v=20261116a" data-preview-url="de-board-intellypatt-dashboard.jayeshanand160.workers.dev" data-preview-label="Open Live Demo">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">DeBoard Analytics</button></h3>
+                  <p class="info-meta">React &middot; TypeScript &middot; Express &middot; Recharts</p>
+                  <p>Role-based executive telemetry dashboard with charts &amp; CSV.</p>
+                  <div class="card-actions">
+                    <a href="https://de-board-intellypatt-dashboard.jayeshanand160.workers.dev/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                    <a href="https://github.com/jayesh-lamba/De-board-Intellypatt-Dashboard" target="_blank" rel="noopener noreferrer" class="card-repo-link">GitHub &nearr;</a>
+                  </div>
+                </article>
+              </div>
+            </section>
+
+            <section class="projects-category-group" data-category-group="frontend" aria-labelledby="cat-frontend-heading">
+              <div class="projects-category-header">
+                <span class="projects-category-dot projects-category-dot--frontend" aria-hidden="true"></span>
+                <h2 id="cat-frontend-heading" class="projects-category-title">Frontend Projects</h2>
+                <span class="projects-category-count">3</span>
+              </div>
+              <div class="projects-grid projects-grid--frontend">
+                <article class="info-card" data-project="gallery" data-category="frontend" data-preview-src="assets/images/preview-gallery.jpg" data-preview-url="my-photo-gallery-nine.vercel.app" data-preview-label="Visit Live Site">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">My Gallery</button></h3>
+                  <p class="info-meta">CSS Grid &middot; Lazy Previews</p>
+                  <p>Responsive photo showcase cutting initial load by 600ms.</p>
+                  <div class="card-actions">
+                    <a href="https://my-photo-gallery-nine.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                  </div>
+                </article>
+
+                <article class="info-card" data-project="parallax" data-category="frontend" data-preview-src="assets/images/preview-parallax.jpg" data-preview-url="adventure-web-page-zgc9.vercel.app" data-preview-label="Visit Live Site">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">Adventure Time Parallax Webpage</button></h3>
+                  <p class="info-meta">Layered Depth &middot; Parallax CSS</p>
+                  <p>Multi-layer parallax scene page (+12% engagement).</p>
+                  <div class="card-actions">
+                    <a href="https://adventure-web-page-zgc9.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                  </div>
+                </article>
+
+                <article class="info-card" data-project="carousel3d" data-category="frontend" data-preview-src="assets/images/preview-carousel3d.jpg" data-preview-url="3-d-frontend-work.vercel.app" data-preview-label="Visit Live Site">
+                  <h3><button type="button" class="project-select-btn" aria-pressed="false" aria-controls="project-preview">3D Rotating Carousel</button></h3>
+                  <p class="info-meta">Pure CSS &middot; 3D Perspective</p>
+                  <p>Hardware-accelerated pure CSS 3D spatial ring showcase.</p>
+                  <div class="card-actions">
+                    <a href="https://3-d-frontend-work.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">Live Demo &rarr;</a>
+                  </div>
+                </article>
+              </div>
+            </section>
           </div>
         </div>
       </div>
